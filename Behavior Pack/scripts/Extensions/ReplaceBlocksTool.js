@@ -39,8 +39,8 @@ export default function(uiSession) {
                 y: 0,
                 z: 0,
             },
-            blockType: "minecraft:stone",
-            replaceWith: "minecraft:stone",
+            blockType: Server.MinecraftBlockTypes.stone,
+            replaceWith: Server.MinecraftBlockTypes.stone,
         }
     );
 
