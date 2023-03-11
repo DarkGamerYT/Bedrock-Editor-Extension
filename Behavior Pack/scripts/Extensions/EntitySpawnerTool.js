@@ -101,13 +101,6 @@ export default function(uiSession) {
         
         previewSelection.pushVolume(Editor.SelectionBlockVolumeAction.add, blockVolume);
         uiSession.scratchStorage.lastVolumePlaced = blockVolume.boundingBox;
-        if (settings.hollow &&
-            blockVolume.boundingBox.spanX > 2 &&
-            blockVolume.boundingBox.spanY > 2 &&
-            blockVolume.boundingBox.spanZ > 2) {
-            const subtractBlockVolume = new Editor.BlockVolume({ x: from.x, y: from.y + 1, z: from.z }, { x: to.x, y: to.y - 1, z: to.z });
-            previewSelection.pushVolume(Editor.SelectionBlockVolumeAction.subtract, subtractBlockVolume);
-        };
     };
     
     tool.registerMouseButtonBinding(
