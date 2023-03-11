@@ -48,14 +48,14 @@ export default function(uiSession) {
     const settings = Editor.createPaneBindingObject(
         pane,
         {
-            strctureName: "",
+            structureName: "",
             rotation: "0_degrees",
         }
     );
     
     pane.addString(
         settings,
-        "strctureName",
+        "structureName",
         {
             titleAltText: "Structure Name",
         },
