@@ -4,9 +4,9 @@ import { Color } from "../utils";
 export default (uiSession) => {
     const tool = uiSession.toolRail.addTool(
         {
-            displayString: "Block Replace (Ctrl + R)",
+            displayString: "Structure Saver (CTRL + SHIFT + P)",
             tooltip: "",
-            icon: "pack://textures/editor/replace.png?filtering=point",
+            icon: "pack://textures/editor/structure_saver.png?filtering=point",
         },
     );
     
@@ -16,13 +16,14 @@ export default (uiSession) => {
     currentCursorState.targetMode = Editor.CursorTargetMode.Block;
     currentCursorState.visible = true;
     uiSession.scratchStorage = {
-        spawnerCursorState: currentCursorState,
+        currentCursorState,
     };
     let lastAnchorPosition = { x: 0, y: 0, z: 0 };
     
     const pane = uiSession.createPropertyPane(
         {
-            titleAltText: "Block Replace",
+            titleAltText: "Structure Saver",
+            width: 40,
         },
     );
 
@@ -39,8 +40,8 @@ export default (uiSession) => {
                 y: 0,
                 z: 0,
             },
-            blockType: Server.MinecraftBlockTypes.stone,
-            replaceWith: Server.MinecraftBlockTypes.stone,
+            structureName: "",
+            includeEntities: true,
         }
     );
 
@@ -197,9 +198,9 @@ export default (uiSession) => {
             minX: 1,
             minY: 1,
             minZ: 1,
-            maxX: 100,
-            maxY: 100,
-            maxZ: 100,
+            maxX: 64,
+            maxY: 384,
+            maxZ: 64,
             onChange: onOriginOrSizeChange,
         }
     );
@@ -269,7 +270,7 @@ export default (uiSession) => {
     tool.onModalToolActivation.subscribe(
         eventData => {
             if (eventData.isActiveTool) {
-                uiSession.extensionContext.cursor.setState(uiSession.scratchStorage.spawnerCursorState);
+                uiSession.extensionContext.cursor.setState(uiSession.scratchStorage.currentCursorState);
                 onTickRefresh(uiSession, tool);
             }
         },
@@ -285,24 +286,23 @@ export default (uiSession) => {
                 },
             },
         ),
-        Editor.KeyboardKey.KEY_R,
-        Editor.InputModifier.Control,
+        Editor.KeyboardKey.KEY_P,
+        Editor.InputModifier.Control | Editor.InputModifier.Shift,
     );
     
-    pane.addBlockPicker(
+    pane.addString(
         settings,
-        "blockType",
+        "structureName",
         {
-            titleAltText: "Block Type",
+            titleAltText: "Structure Name",
         },
     );
-    
-    pane.addBlockPicker(
+
+    pane.addBool(
         settings,
-        "replaceWith",
-        {
-            titleAltText: "Replace With",
-        },
+        "includeEntities", {
+            titleAltText: "Include Entities",
+        }
     );
 
     pane.addButtonAndBindAction(
@@ -317,28 +317,37 @@ export default (uiSession) => {
                         return;
                     };
 
-                    uiSession.extensionContext.transactionManager.openTransaction("replaceBlock");
-                    const bounds = uiSession.extensionContext.selectionManager.selection.boundingBox;
-                    uiSession.extensionContext.transactionManager.trackBlockChangeArea(bounds.min, bounds.max);
-                    await Editor.executeLargeOperation(uiSession.extensionContext.selectionManager.selection, (blockLocation) => {
-                        const block = dimension.getBlock(blockLocation);
-                        if (block) {
-                            block.isWaterlogged = false;
-                            if(block?.typeId == settings.blockType.id) block.setType(settings.replaceWith);
-                        };
-                    })
-                        .catch(e => {
-                        console.error(e);
-                        uiSession.extensionContext.transactionManager.discardOpenTransaction();
-                    })
-                        .then(() => {
-                        uiSession.extensionContext.transactionManager.commitOpenTransaction();
-                    });
+                    const {x: minX, y: minY, z: minZ } = uiSession.extensionContext.selectionManager.selection.boundingBox.min;
+                    const {x: maxX, y: maxY, z: maxZ } = uiSession.extensionContext.selectionManager.selection.boundingBox.max;
+                    if(settings.structureName.trim().length == 0) return;
+                    player.dimension.runCommandAsync(
+                        "structure save "
+                        + settings.structureName
+                        + " "
+                        + minX
+                        + " "
+                        + minY
+                        + " "
+                        + minZ
+                        + " "
+                        + maxX
+                        + " "
+                        + maxY
+                        + " "
+                        + maxZ
+                        + " "
+                        + settings.includeEntities
+                        + " disk"
+                    );
+
+                    player.sendMessage("Structure Saved.");
+
+                    uiSession.extensionContext.selectionManager.selection.clear();
                 },
             },
         ),
         {
-            titleAltText: "Replace",
+            titleAltText: "Save",
         },
     );
 

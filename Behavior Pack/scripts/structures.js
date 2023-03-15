@@ -4,7 +4,7 @@
  * Vanilla Structure integration for this extension was provided by SmokeyStack
  */
 
-export let structures = [
+export const Structures = [
     "ancient_city:city/entrance/entrance_connector",
     "ancient_city:city/entrance/entrance_path_1",
     "ancient_city:city/entrance/entrance_path_2",
@@ -745,4 +745,4 @@ export let structures = [
     "village:taiga/streets/turn_01",
     "village:taiga/town_centers/taiga_meeting_point_1",
     "village:taiga/town_centers/taiga_meeting_point_2"
-]
+];

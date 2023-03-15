@@ -2,7 +2,7 @@ import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
 import * as EditorUtilities from "../editor-utilities";
 import { Color } from "../utils";
-export default function(uiSession) {
+export default (uiSession) => {
     const tool = uiSession.toolRail.addTool(
         {
             displayString: "Cube (CTRL + B)",
@@ -80,19 +80,23 @@ export default function(uiSession) {
             titleAltText: "Hollow",
         }
     );
-    pane.addBool(settings, "face", {
-        titleAltText: "Face Mode",
-        onChange: (_obj, _property, _oldValue, _newValue) => {
-            if (uiSession.scratchStorage === undefined) {
-                console.error('Cylinder storage was not initialized.');
-                return;
-            }
-            uiSession.scratchStorage.currentCursorState.targetMode = settings.face
-                ? Editor.CursorTargetMode.Face
-                : Editor.CursorTargetMode.Block;
-            uiSession.extensionContext.cursor.setState(uiSession.scratchStorage.currentCursorState);
-        },
-    });
+    pane.addBool(
+        settings,
+        "face",
+        {
+            titleAltText: "Face Mode",
+            onChange: (_obj, _property, _oldValue, _newValue) => {
+                if (uiSession.scratchStorage === undefined) {
+                    console.error('Cube storage was not initialized.');
+                    return;
+                }
+                uiSession.scratchStorage.currentCursorState.targetMode = settings.face
+                    ? Editor.CursorTargetMode.Face
+                    : Editor.CursorTargetMode.Block;
+                uiSession.extensionContext.cursor.setState(uiSession.scratchStorage.currentCursorState);
+            },
+        }
+    );
     pane.addBlockPicker(
         settings,
         "blockType",

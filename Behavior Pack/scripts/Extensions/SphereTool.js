@@ -1,7 +1,8 @@
 import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
 import { Color } from "../utils";
-export default function(uiSession) {
+import { Mesh } from "../mesh";
+export default (uiSession) => {
     const tool = uiSession.toolRail.addTool(
         {
             displayString: "Sphere (CTRL + SHIFT + S)",
@@ -118,10 +119,9 @@ export default function(uiSession) {
             && uiSession.scratchStorage.lastCursorPosition?.y == uiSession.extensionContext.cursor.position.y
             && uiSession.scratchStorage.lastCursorPosition?.z == uiSession.extensionContext.cursor.position.z
         ) return;
-
-        const pyramid = drawSphere(location.x, location.y, location.z, settings.size, settings.hollow);
-        for (const blockLocation of pyramid) {
-            const blockVolume = new Editor.BlockVolume(blockLocation, blockLocation);
+        
+        const sphere = drawSphere(location.x, location.y, location.z, settings.size, settings.hollow);
+        for (const blockVolume of sphere.calculateVolumes()) {
             previewSelection.pushVolume(Editor.SelectionBlockVolumeAction.add, blockVolume);
         };
 
@@ -172,15 +172,14 @@ export default function(uiSession) {
 };
 
 function drawSphere(x, y, z, radius, hollow = false) {
-	const blockLocations = [];
-	let diameter = radius * 2;
+	const mesh = new Mesh();
 	for (let xOffset = -radius; xOffset <= radius; xOffset++) {
 		for (let yOffset = -radius; yOffset <= radius; yOffset++) {
 			for (let zOffset = -radius; zOffset <= radius; zOffset++) {
 				let distance = Math.sqrt(xOffset * xOffset + yOffset * yOffset + zOffset * zOffset);
 
 				if (distance <= radius && (!hollow || distance >= radius - 1)) {
-					blockLocations.push(
+					mesh.add(
 						{
 							x: x + xOffset,
 							y: y + yOffset,
@@ -192,5 +191,5 @@ function drawSphere(x, y, z, radius, hollow = false) {
 		};
 	};
 
-	return blockLocations;
+	return mesh;
 };

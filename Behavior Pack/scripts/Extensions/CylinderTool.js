@@ -1,7 +1,8 @@
 import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
 import { Color } from "../utils";
-export default function(uiSession) {
+import { Mesh } from "../mesh";
+export default (uiSession) => {
     const tool = uiSession.toolRail.addTool(
         {
             displayString: "Cylinder (CTRL + SHIFT + C)",
@@ -131,8 +132,7 @@ export default function(uiSession) {
         ) return;
 
         const cylinder = drawCylinder(location.x, location.y, location.z, settings.size, settings.height, settings.hollow);
-        for (const blockLocation of cylinder) {
-            const blockVolume = new Editor.BlockVolume(blockLocation, blockLocation);
+        for (const blockVolume of cylinder.calculateVolumes()) {
             previewSelection.pushVolume(Editor.SelectionBlockVolumeAction.add, blockVolume);
         };
 
@@ -183,7 +183,7 @@ export default function(uiSession) {
 };
 
 function drawCylinder(x, y, z, radius, height, hollow = false) {
-	const blockLocations = [];
+	const mesh = new Mesh();
 	for (let i = 0; i < height; i++) {
 		let centerX = x;
 		let centerY = y + i;
@@ -210,7 +210,7 @@ function drawCylinder(x, y, z, radius, height, hollow = false) {
 						)
 					)
 				) {
-					blockLocations.push(
+					mesh.add(
 						{
 							x: centerX + j,
 							y: centerY,
@@ -222,5 +222,5 @@ function drawCylinder(x, y, z, radius, height, hollow = false) {
 		};
 	};
 
-	return blockLocations;
+	return mesh;
 };
