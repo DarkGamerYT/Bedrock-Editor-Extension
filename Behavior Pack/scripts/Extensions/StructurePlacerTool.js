@@ -1,5 +1,6 @@
 import * as Editor from "@minecraft/server-editor";
 import { Color } from "../utils";
+import { structures } from "../structures"
 export default function(uiSession) {
     const tool = uiSession.toolRail.addTool(
         {
@@ -42,6 +43,7 @@ export default function(uiSession) {
     const pane = uiSession.createPropertyPane(
         {
             titleAltText: "Structure Placer",
+            width: 100,
         },
     );
     
@@ -50,6 +52,7 @@ export default function(uiSession) {
         {
             structureName: "",
             rotation: "0_degrees",
+            vanilla_structure: "ancient_city:city/entrance/entrance_connector",
         }
     );
     
@@ -58,6 +61,15 @@ export default function(uiSession) {
         "structureName",
         {
             titleAltText: "Structure Name",
+        },
+    );
+
+    pane.addDropdown(
+        settings,
+        "vanilla_structure",
+        {
+            titleAltText: "Vanilla Structure",
+            dropdownItems: structures.map((str)=>({value:str,displayAltText:str})),
         },
     );
 
@@ -101,9 +113,9 @@ export default function(uiSession) {
                             const player = uiSession.extensionContext.player;
                             if(settings.strctureName.trim().length == 0) return;
                             player.dimension.runCommandAsync(
-                                "structure load "
+                                "structure load \""
                                 + settings.strctureName
-                                + " "
+                                + "\" "
                                 + uiSession.extensionContext.cursor.position.x
                                 + " "
                                 + (uiSession.extensionContext.cursor.position.y + 1)
