@@ -4,745 +4,740 @@
  * Vanilla Structure integration for this extension was provided by SmokeyStack
  */
 
-export const Structures = [
-    "ancient_city:city/entrance/entrance_connector",
-    "ancient_city:city/entrance/entrance_path_1",
-    "ancient_city:city/entrance/entrance_path_2",
-    "ancient_city:city/entrance/entrance_path_3",
-    "ancient_city:city/entrance/entrance_path_4",
-    "ancient_city:city/entrance/entrance_path_5",
-    "ancient_city:city_center/city_center_1",
-    "ancient_city:city_center/city_center_2",
-    "ancient_city:city_center/city_center_3",
-    "ancient_city:city_center/walls/bottom_1",
-    "ancient_city:city_center/walls/bottom_2",
-    "ancient_city:city_center/walls/bottom_left_corner",
-    "ancient_city:city_center/walls/bottom_right_corner",
-    "ancient_city:city_center/walls/bottom_right_corner_1",
-    "ancient_city:city_center/walls/bottom_right_corner_2",
-    "ancient_city:city_center/walls/left",
-    "ancient_city:city_center/walls/right",
-    "ancient_city:city_center/walls/top",
-    "ancient_city:city_center/walls/top_left_corner",
-    "ancient_city:city_center/walls/top_right_corner",
-    "ancient_city:barracks",
-    "ancient_city:camp_1",
-    "ancient_city:camp_2",
-    "ancient_city:camp_3",
-    "ancient_city:chamber_1",
-    "ancient_city:chamber_2",
-    "ancient_city:chamber_3",
-    "ancient_city:ice_box_1",
-    "ancient_city:large_pillar_1",
-    "ancient_city:large_ruin_1",
-    "ancient_city:medium_pillar_1",
-    "ancient_city:medium_ruin_1",
-    "ancient_city:medium_ruin_2",
-    "ancient_city:sauna_1",
-    "ancient_city:small_ruin_1",
-    "ancient_city:small_ruin_2",
-    "ancient_city:small_statue",
-    "ancient_city:tall_ruin_1",
-    "ancient_city:tall_ruin_2",
-    "ancient_city:tall_ruin_3",
-    "ancient_city:tall_ruin_4",
-    "ancient_city:walls/intact_corner_wall_1",
-    "ancient_city:walls/intact_horizontal_wall_1",
-    "ancient_city:walls/intact_horizontal_wall_2",
-    "ancient_city:walls/intact_horizontal_wall_bridge",
-    "ancient_city:walls/intact_horizontal_wall_passage_1",
-    "ancient_city:walls/intact_horizontal_wall_stairs_1",
-    "ancient_city:walls/intact_horizontal_wall_stairs_2",
-    "ancient_city:walls/intact_horizontal_wall_stairs_3",
-    "ancient_city:walls/intact_horizontal_wall_stairs_4",
-    "ancient_city:walls/intact_intersection_wall_1",
-    "ancient_city:walls/intact_lshape_wall_1",
-    "ancient_city:walls/ruined_corner_wall_1",
-    "ancient_city:walls/ruined_corner_wall_2",
-    "ancient_city:walls/ruined_horizontal_wall_stairs_1",
-    "ancient_city:walls/ruined_horizontal_wall_stairs_2",
-    "ancient_city:walls/ruined_horizontal_wall_stairs_3",
-    "ancient_city:walls/ruined_horizontal_wall_stairs_4",
-    "bastion:jigsaw_test",
-    "bastion:blocks/air",
-    "bastion:blocks/gold",
-    "bastion:bridge/bridge_pieces/bridge",
-    "bastion:bridge/connectors/back_bridge_bottom",
-    "bastion:bridge/connectors/back_bridge_top",
-    "bastion:bridge/legs/leg_0",
-    "bastion:bridge/legs/leg_1",
-    "bastion:bridge/ramparts/rampart_0",
-    "bastion:bridge/ramparts/rampart_1",
-    "bastion:bridge/rampart_plates/plate_0",
-    "bastion:bridge/starting_pieces/entrance",
-    "bastion:bridge/starting_pieces/entrance_base",
-    "bastion:bridge/starting_pieces/entrance_face",
-    "bastion:bridge/walls/wall_base_0",
-    "bastion:bridge/walls/wall_base_1",
-    "bastion:hoglin_stable/air_base",
-    "bastion:hoglin_stable/connectors/end_post_connector",
-    "bastion:hoglin_stable/large_stables/inner_0",
-    "bastion:hoglin_stable/large_stables/inner_1",
-    "bastion:hoglin_stable/large_stables/inner_2",
-    "bastion:hoglin_stable/large_stables/inner_3",
-    "bastion:hoglin_stable/large_stables/inner_4",
-    "bastion:hoglin_stable/large_stables/outer_0",
-    "bastion:hoglin_stable/large_stables/outer_1",
-    "bastion:hoglin_stable/large_stables/outer_2",
-    "bastion:hoglin_stable/large_stables/outer_3",
-    "bastion:hoglin_stable/large_stables/outer_4",
-    "bastion:hoglin_stable/posts/end_post",
-    "bastion:hoglin_stable/posts/stair_post",
-    "bastion:hoglin_stable/ramparts/ramparts_1",
-    "bastion:hoglin_stable/ramparts/ramparts_2",
-    "bastion:hoglin_stable/ramparts/ramparts_3",
-    "bastion:hoglin_stable/rampart_plates/rampart_plate_1",
-    "bastion:hoglin_stable/small_stables/inner_0",
-    "bastion:hoglin_stable/small_stables/inner_1",
-    "bastion:hoglin_stable/small_stables/inner_2",
-    "bastion:hoglin_stable/small_stables/inner_3",
-    "bastion:hoglin_stable/small_stables/outer_0",
-    "bastion:hoglin_stable/small_stables/outer_1",
-    "bastion:hoglin_stable/small_stables/outer_2",
-    "bastion:hoglin_stable/small_stables/outer_3",
-    "bastion:hoglin_stable/stairs/stairs_1_0",
-    "bastion:hoglin_stable/stairs/stairs_1_1",
-    "bastion:hoglin_stable/stairs/stairs_1_2",
-    "bastion:hoglin_stable/stairs/stairs_1_3",
-    "bastion:hoglin_stable/stairs/stairs_1_4",
-    "bastion:hoglin_stable/stairs/stairs_2_0",
-    "bastion:hoglin_stable/stairs/stairs_2_1",
-    "bastion:hoglin_stable/stairs/stairs_2_2",
-    "bastion:hoglin_stable/stairs/stairs_2_3",
-    "bastion:hoglin_stable/stairs/stairs_2_4",
-    "bastion:hoglin_stable/stairs/stairs_3_0",
-    "bastion:hoglin_stable/stairs/stairs_3_1",
-    "bastion:hoglin_stable/stairs/stairs_3_2",
-    "bastion:hoglin_stable/stairs/stairs_3_3",
-    "bastion:hoglin_stable/stairs/stairs_3_4",
-    "bastion:hoglin_stable/starting_pieces/stairs_0_mirrored",
-    "bastion:hoglin_stable/starting_pieces/stairs_1_mirrored",
-    "bastion:hoglin_stable/starting_pieces/stairs_2_mirrored",
-    "bastion:hoglin_stable/starting_pieces/stairs_3_mirrored",
-    "bastion:hoglin_stable/starting_pieces/stairs_4_mirrored",
-    "bastion:hoglin_stable/starting_pieces/starting_stairs_0",
-    "bastion:hoglin_stable/starting_pieces/starting_stairs_1",
-    "bastion:hoglin_stable/starting_pieces/starting_stairs_2",
-    "bastion:hoglin_stable/starting_pieces/starting_stairs_3",
-    "bastion:hoglin_stable/starting_pieces/starting_stairs_4",
-    "bastion:hoglin_stable/walls/side_wall_0",
-    "bastion:hoglin_stable/walls/side_wall_1",
-    "bastion:hoglin_stable/walls/wall_base",
-    "bastion:mobs/crossbow_piglin",
-    "bastion:mobs/empty",
-    "bastion:mobs/hoglin",
-    "bastion:mobs/melee_piglin",
-    "bastion:mobs/melee_piglin_always",
-    "bastion:mobs/sword_piglin",
-    "bastion:treasure/big_air_full",
-    "bastion:treasure/bases/centers__center_0",
-    "bastion:treasure/bases/centers__center_1",
-    "bastion:treasure/bases/centers__center_2",
-    "bastion:treasure/bases/centers__center_3",
-    "bastion:treasure/bases/lava_basin",
-    "bastion:treasure/brains/center_brain",
-    "bastion:treasure/connectors/center_to_wall_middle",
-    "bastion:treasure/connectors/center_to_wall_top",
-    "bastion:treasure/connectors/center_to_wall_top_entrance",
-    "bastion:treasure/corners/bottom__corner_0",
-    "bastion:treasure/corners/bottom__corner_1",
-    "bastion:treasure/corners/edges__bottom",
-    "bastion:treasure/corners/edges__middle",
-    "bastion:treasure/corners/edges__top",
-    "bastion:treasure/corners/middle__corner_0",
-    "bastion:treasure/corners/middle__corner_1",
-    "bastion:treasure/corners/top__corner_0",
-    "bastion:treasure/corners/top__corner_1",
-    "bastion:treasure/entrances/entrance_0",
-    "bastion:treasure/extensions/empty",
-    "bastion:treasure/extensions/fire_room",
-    "bastion:treasure/extensions/house_0",
-    "bastion:treasure/extensions/house_1",
-    "bastion:treasure/extensions/large_bridge_0",
-    "bastion:treasure/extensions/large_bridge_1",
-    "bastion:treasure/extensions/large_bridge_2",
-    "bastion:treasure/extensions/large_bridge_3",
-    "bastion:treasure/extensions/roofed_bridge",
-    "bastion:treasure/extensions/small_bridge_0",
-    "bastion:treasure/extensions/small_bridge_1",
-    "bastion:treasure/extensions/small_bridge_2",
-    "bastion:treasure/extensions/small_bridge_3",
-    "bastion:treasure/ramparts/bottom_wall_0",
-    "bastion:treasure/ramparts/lava_basin",
-    "bastion:treasure/ramparts/lava_basin_main",
-    "bastion:treasure/ramparts/lava_basin_side",
-    "bastion:treasure/ramparts/mid_wall_main",
-    "bastion:treasure/ramparts/mid_wall_side",
-    "bastion:treasure/ramparts/top_wall",
-    "bastion:treasure/roofs/center_roof",
-    "bastion:treasure/roofs/corner_roof",
-    "bastion:treasure/roofs/wall_roof",
-    "bastion:treasure/stairs/lower_stairs",
-    "bastion:treasure/walls/bottom__wall_0",
-    "bastion:treasure/walls/bottom__wall_1",
-    "bastion:treasure/walls/bottom__wall_2",
-    "bastion:treasure/walls/bottom__wall_3",
-    "bastion:treasure/walls/entrance_wall",
-    "bastion:treasure/walls/lava_wall",
-    "bastion:treasure/walls/mid__wall_0",
-    "bastion:treasure/walls/mid__wall_1",
-    "bastion:treasure/walls/mid__wall_2",
-    "bastion:treasure/walls/outer__bottom_corner",
-    "bastion:treasure/walls/outer__medium_outer_wall",
-    "bastion:treasure/walls/outer__mid_corner",
-    "bastion:treasure/walls/outer__outer_wall",
-    "bastion:treasure/walls/outer__tall_outer_wall",
-    "bastion:treasure/walls/outer__top_corner",
-    "bastion:treasure/walls/top__main_entrance",
-    "bastion:treasure/walls/top__wall_0",
-    "bastion:treasure/walls/top__wall_1",
-    "bastion:units/air_base",
-    "bastion:units/center_pieces/center_0",
-    "bastion:units/center_pieces/center_1",
-    "bastion:units/center_pieces/center_2",
-    "bastion:units/edges/edge_0",
-    "bastion:units/fillers/stage_0",
-    "bastion:units/pathways/pathway_0",
-    "bastion:units/pathways/pathway_wall_0",
-    "bastion:units/ramparts/ramparts_0",
-    "bastion:units/ramparts/ramparts_1",
-    "bastion:units/ramparts/ramparts_2",
-    "bastion:units/rampart_plates/plate_0",
-    "bastion:units/stages/rot__stage_1_0",
-    "bastion:units/stages/stage_0_0",
-    "bastion:units/stages/stage_0_1",
-    "bastion:units/stages/stage_0_2",
-    "bastion:units/stages/stage_0_3",
-    "bastion:units/stages/stage_1_0",
-    "bastion:units/stages/stage_1_1",
-    "bastion:units/stages/stage_1_2",
-    "bastion:units/stages/stage_1_3",
-    "bastion:units/stages/stage_2_0",
-    "bastion:units/stages/stage_2_1",
-    "bastion:units/stages/stage_3_0",
-    "bastion:units/stages/stage_3_1",
-    "bastion:units/stages/stage_3_2",
-    "bastion:units/stages/stage_3_3",
-    "bastion:units/walls/connected_wall",
-    "bastion:units/walls/wall_base",
-    "bastion:units/wall_units/edge_0",
-    "bastion:units/wall_units/edge_0_large",
-    "bastion:units/wall_units/unit_0",
-    "coralcrust:crust1",
-    "coralcrust:crust2",
-    "coralcrust:crust3",
-    "coralcrust:crust4",
-    "coralcrust:crust5",
-    "coralcrust:outcropping1",
-    "coralcrust:outcropping2",
-    "coralcrust:outcropping3",
-    "coralcrust:outcropping4",
-    "coralcrust:outcropping5",
-    "coralcrust:outcropping6",
-    "endcity:base_floor",
-    "endcity:base_roof",
-    "endcity:bridge_end",
-    "endcity:bridge_gentle_stairs",
-    "endcity:bridge_piece",
-    "endcity:bridge_steep_stairs",
-    "endcity:fat_tower_base",
-    "endcity:fat_tower_middle",
-    "endcity:fat_tower_top",
-    "endcity:second_floor",
-    "endcity:second_floor_2",
-    "endcity:second_roof",
-    "endcity:ship",
-    "endcity:third_floor",
-    "endcity:third_floor_b",
-    "endcity:third_floor_c",
-    "endcity:third_roof",
-    "endcity:tower_base",
-    "endcity:tower_floor",
-    "endcity:tower_piece",
-    "endcity:tower_top",
-    "fossils:fossil_skull_01",
-    "fossils:fossil_skull_02",
-    "fossils:fossil_skull_03",
-    "fossils:fossil_skull_04",
-    "fossils:fossil_spine_01",
-    "fossils:fossil_spine_02",
-    "fossils:fossil_spine_03",
-    "fossils:fossil_spine_04",
-    "igloo:igloo_bottom",
-    "igloo:igloo_middle",
-    "igloo:igloo_top_no_trapdoor",
-    "igloo:igloo_top_trapdoor",
-    "mansion:1x1_a1",
-    "mansion:1x1_a2",
-    "mansion:1x1_a3",
-    "mansion:1x1_a4",
-    "mansion:1x1_a5",
-    "mansion:1x1_as1",
-    "mansion:1x1_as2",
-    "mansion:1x1_as3",
-    "mansion:1x1_as4",
-    "mansion:1x1_b1",
-    "mansion:1x1_b2",
-    "mansion:1x1_b3",
-    "mansion:1x1_b4",
-    "mansion:1x1_b5",
-    "mansion:1x2_a1",
-    "mansion:1x2_a2",
-    "mansion:1x2_a3",
-    "mansion:1x2_a4",
-    "mansion:1x2_a5",
-    "mansion:1x2_a6",
-    "mansion:1x2_a7",
-    "mansion:1x2_a8",
-    "mansion:1x2_a9",
-    "mansion:1x2_b1",
-    "mansion:1x2_b2",
-    "mansion:1x2_b3",
-    "mansion:1x2_b4",
-    "mansion:1x2_b5",
-    "mansion:1x2_c1",
-    "mansion:1x2_c2",
-    "mansion:1x2_c3",
-    "mansion:1x2_c4",
-    "mansion:1x2_c_stairs",
-    "mansion:1x2_d1",
-    "mansion:1x2_d2",
-    "mansion:1x2_d3",
-    "mansion:1x2_d4",
-    "mansion:1x2_d5",
-    "mansion:1x2_d_stairs",
-    "mansion:1x2_s1",
-    "mansion:1x2_s2",
-    "mansion:1x2_se1",
-    "mansion:2x2_a1",
-    "mansion:2x2_a2",
-    "mansion:2x2_a3",
-    "mansion:2x2_a4",
-    "mansion:2x2_b1",
-    "mansion:2x2_b2",
-    "mansion:2x2_b3",
-    "mansion:2x2_b4",
-    "mansion:2x2_b5",
-    "mansion:2x2_s1",
-    "mansion:carpet_east",
-    "mansion:carpet_north",
-    "mansion:carpet_south",
-    "mansion:carpet_south_2",
-    "mansion:carpet_west",
-    "mansion:carpet_west_2",
-    "mansion:corridor_floor",
-    "mansion:corridor_floor_2",
-    "mansion:entrance",
-    "mansion:indoors_door",
-    "mansion:indoors_door_2",
-    "mansion:indoors_wall",
-    "mansion:indoors_wall_2",
-    "mansion:roof",
-    "mansion:roof_corner",
-    "mansion:roof_front",
-    "mansion:roof_inner_corner",
-    "mansion:small_wall",
-    "mansion:small_wall_corner",
-    "mansion:wall_corner",
-    "mansion:wall_flat",
-    "mansion:wall_window",
-    "nether_fossils:fossil_1",
-    "nether_fossils:fossil_10",
-    "nether_fossils:fossil_11",
-    "nether_fossils:fossil_12",
-    "nether_fossils:fossil_13",
-    "nether_fossils:fossil_14",
-    "nether_fossils:fossil_2",
-    "nether_fossils:fossil_3",
-    "nether_fossils:fossil_4",
-    "nether_fossils:fossil_5",
-    "nether_fossils:fossil_6",
-    "nether_fossils:fossil_7",
-    "nether_fossils:fossil_8",
-    "nether_fossils:fossil_9",
-    "pillageroutpost:feature_cage1",
-    "pillageroutpost:feature_cage2",
-    "pillageroutpost:feature_cage_with_allays",
-    "pillageroutpost:feature_logs",
-    "pillageroutpost:feature_targets",
-    "pillageroutpost:feature_tent1",
-    "pillageroutpost:feature_tent2",
-    "pillageroutpost:watchtower",
-    "pillageroutpost:watchtower_overgrown",
-    "ruin:big_ruin1_brick",
-    "ruin:big_ruin1_cracked",
-    "ruin:big_ruin1_mossy",
-    "ruin:big_ruin2_brick",
-    "ruin:big_ruin2_cracked",
-    "ruin:big_ruin2_mossy",
-    "ruin:big_ruin3_brick",
-    "ruin:big_ruin3_cracked",
-    "ruin:big_ruin3_mossy",
-    "ruin:big_ruin8_brick",
-    "ruin:big_ruin8_cracked",
-    "ruin:big_ruin8_mossy",
-    "ruin:big_ruin_warm4",
-    "ruin:big_ruin_warm5",
-    "ruin:big_ruin_warm6",
-    "ruin:big_ruin_warm7",
-    "ruin:ruin1_brick",
-    "ruin:ruin1_cracked",
-    "ruin:ruin1_mossy",
-    "ruin:ruin2_brick",
-    "ruin:ruin2_cracked",
-    "ruin:ruin2_mossy",
-    "ruin:ruin3_brick",
-    "ruin:ruin3_cracked",
-    "ruin:ruin3_mossy",
-    "ruin:ruin4",
-    "ruin:ruin4_brick",
-    "ruin:ruin4_cracked",
-    "ruin:ruin4_mossy",
-    "ruin:ruin5_brick",
-    "ruin:ruin5_cracked",
-    "ruin:ruin5_mossy",
-    "ruin:ruin6_brick",
-    "ruin:ruin6_cracked",
-    "ruin:ruin6_mossy",
-    "ruin:ruin7_brick",
-    "ruin:ruin7_cracked",
-    "ruin:ruin7_mossy",
-    "ruin:ruin8_brick",
-    "ruin:ruin8_cracked",
-    "ruin:ruin8_mossy",
-    "ruin:ruin_warm1",
-    "ruin:ruin_warm2",
-    "ruin:ruin_warm3",
-    "ruin:ruin_warm4",
-    "ruin:ruin_warm5",
-    "ruin:ruin_warm6",
-    "ruin:ruin_warm7",
-    "ruin:ruin_warm8",
-    "ruined_portal:giant_portal_1",
-    "ruined_portal:giant_portal_2",
-    "ruined_portal:giant_portal_3",
-    "ruined_portal:portal_1",
-    "ruined_portal:portal_10",
-    "ruined_portal:portal_2",
-    "ruined_portal:portal_3",
-    "ruined_portal:portal_4",
-    "ruined_portal:portal_5",
-    "ruined_portal:portal_6",
-    "ruined_portal:portal_7",
-    "ruined_portal:portal_8",
-    "ruined_portal:portal_9",
-    "shipwreck:swrightsideupbackhalf",
-    "shipwreck:swrightsideupbackhalfdegraded",
-    "shipwreck:swrightsideupfronthalf",
-    "shipwreck:swrightsideupfronthalfdegraded",
-    "shipwreck:swrightsideupfull",
-    "shipwreck:swrightsideupfulldegraded",
-    "shipwreck:swsidewaysbackhalf",
-    "shipwreck:swsidewaysbackhalfdegraded",
-    "shipwreck:swsidewaysfronthalf",
-    "shipwreck:swsidewaysfronthalfdegraded",
-    "shipwreck:swsidewaysfull",
-    "shipwreck:swsidewaysfulldegraded",
-    "shipwreck:swupsidedownbackhalf",
-    "shipwreck:swupsidedownbackhalfdegraded",
-    "shipwreck:swupsidedownfronthalf",
-    "shipwreck:swupsidedownfronthalfdegraded",
-    "shipwreck:swupsidedownfull",
-    "shipwreck:swupsidedownfulldegraded",
-    "shipwreck:swwithmast",
-    "shipwreck:swwithmastdegraded",
-    "village:common/villager",
-    "village:common/well_bottom",
-    "village:common/animals/cat",
-    "village:common/animals/cows_1",
-    "village:common/animals/horses_1",
-    "village:common/animals/horses_2",
-    "village:common/animals/pigs_1",
-    "village:common/animals/sheep_1",
-    "village:desert/desert_lamp_1",
-    "village:desert/houses/desert_animal_pen_1",
-    "village:desert/houses/desert_animal_pen_2",
-    "village:desert/houses/desert_armorer_1",
-    "village:desert/houses/desert_butcher_shop_1",
-    "village:desert/houses/desert_cartographer_house_1",
-    "village:desert/houses/desert_farm_1",
-    "village:desert/houses/desert_farm_2",
-    "village:desert/houses/desert_fisher_1",
-    "village:desert/houses/desert_fletcher_house_1",
-    "village:desert/houses/desert_large_farm_1",
-    "village:desert/houses/desert_library_1",
-    "village:desert/houses/desert_mason_1",
-    "village:desert/houses/desert_medium_house_1",
-    "village:desert/houses/desert_medium_house_2",
-    "village:desert/houses/desert_shepherd_house_1",
-    "village:desert/houses/desert_small_house_1",
-    "village:desert/houses/desert_small_house_2",
-    "village:desert/houses/desert_small_house_3",
-    "village:desert/houses/desert_small_house_4",
-    "village:desert/houses/desert_small_house_5",
-    "village:desert/houses/desert_small_house_6",
-    "village:desert/houses/desert_small_house_7",
-    "village:desert/houses/desert_small_house_8",
-    "village:desert/houses/desert_tannery_1",
-    "village:desert/houses/desert_temple_1",
-    "village:desert/houses/desert_temple_2",
-    "village:desert/houses/desert_tool_smith_1",
-    "village:desert/houses/desert_weaponsmith_1",
-    "village:desert/streets/corner_01",
-    "village:desert/streets/corner_02",
-    "village:desert/streets/crossroad_01",
-    "village:desert/streets/crossroad_02",
-    "village:desert/streets/crossroad_03",
-    "village:desert/streets/square_01",
-    "village:desert/streets/square_02",
-    "village:desert/streets/straight_01",
-    "village:desert/streets/straight_02",
-    "village:desert/streets/straight_03",
-    "village:desert/streets/turn_01",
-    "village:desert/terminators/terminator_01",
-    "village:desert/terminators/terminator_02",
-    "village:desert/town_centers/desert_meeting_point_1",
-    "village:desert/town_centers/desert_meeting_point_2",
-    "village:desert/town_centers/desert_meeting_point_3",
-    "village:plains/plains_lamp_1",
-    "village:plains/houses/plains_accessory_1",
-    "village:plains/houses/plains_animal_pen_1",
-    "village:plains/houses/plains_animal_pen_2",
-    "village:plains/houses/plains_animal_pen_3",
-    "village:plains/houses/plains_armorer_house_1",
-    "village:plains/houses/plains_big_house_1",
-    "village:plains/houses/plains_butcher_shop_1",
-    "village:plains/houses/plains_butcher_shop_2",
-    "village:plains/houses/plains_cartographer_1",
-    "village:plains/houses/plains_fisher_cottage_1",
-    "village:plains/houses/plains_fletcher_house_1",
-    "village:plains/houses/plains_large_farm_1",
-    "village:plains/houses/plains_library_1",
-    "village:plains/houses/plains_library_2",
-    "village:plains/houses/plains_masons_house_1",
-    "village:plains/houses/plains_medium_house_1",
-    "village:plains/houses/plains_medium_house_2",
-    "village:plains/houses/plains_meeting_point_4",
-    "village:plains/houses/plains_meeting_point_5",
-    "village:plains/houses/plains_shepherds_house_1",
-    "village:plains/houses/plains_small_farm_1",
-    "village:plains/houses/plains_small_house_1",
-    "village:plains/houses/plains_small_house_2",
-    "village:plains/houses/plains_small_house_3",
-    "village:plains/houses/plains_small_house_4",
-    "village:plains/houses/plains_small_house_5",
-    "village:plains/houses/plains_small_house_6",
-    "village:plains/houses/plains_small_house_7",
-    "village:plains/houses/plains_small_house_8",
-    "village:plains/houses/plains_stable_1",
-    "village:plains/houses/plains_stable_2",
-    "village:plains/houses/plains_tannery_1",
-    "village:plains/houses/plains_temple_3",
-    "village:plains/houses/plains_temple_4",
-    "village:plains/houses/plains_tool_smith_1",
-    "village:plains/houses/plains_weaponsmith_1",
-    "village:plains/streets/corner_01",
-    "village:plains/streets/corner_02",
-    "village:plains/streets/corner_03",
-    "village:plains/streets/crossroad_01",
-    "village:plains/streets/crossroad_02",
-    "village:plains/streets/crossroad_03",
-    "village:plains/streets/crossroad_04",
-    "village:plains/streets/crossroad_05",
-    "village:plains/streets/crossroad_06",
-    "village:plains/streets/straight_01",
-    "village:plains/streets/straight_02",
-    "village:plains/streets/straight_03",
-    "village:plains/streets/straight_04",
-    "village:plains/streets/straight_05",
-    "village:plains/streets/straight_06",
-    "village:plains/streets/turn_01",
-    "village:plains/terminators/terminator_01",
-    "village:plains/terminators/terminator_02",
-    "village:plains/terminators/terminator_03",
-    "village:plains/terminators/terminator_04",
-    "village:plains/town_centers/plains_fountain_01",
-    "village:plains/town_centers/plains_meeting_point_1",
-    "village:plains/town_centers/plains_meeting_point_2",
-    "village:plains/town_centers/plains_meeting_point_3",
-    "village:plains/villagers/armorer",
-    "village:plains/villagers/butcher",
-    "village:plains/villagers/cartographer",
-    "village:plains/villagers/cleric",
-    "village:plains/villagers/farmer",
-    "village:plains/villagers/fishermen",
-    "village:plains/villagers/fletcher",
-    "village:plains/villagers/leatherworker",
-    "village:plains/villagers/librarian",
-    "village:plains/villagers/nitwit",
-    "village:plains/villagers/shepherd",
-    "village:plains/villagers/toolsmith",
-    "village:plains/villagers/unemployed",
-    "village:plains/villagers/weaponsmith",
-    "village:savanna/savanna_lamp_post_01",
-    "village:savanna/houses/savanna_animal_pen_1",
-    "village:savanna/houses/savanna_animal_pen_2",
-    "village:savanna/houses/savanna_animal_pen_3",
-    "village:savanna/houses/savanna_armorer_1",
-    "village:savanna/houses/savanna_butchers_shop_1",
-    "village:savanna/houses/savanna_butchers_shop_2",
-    "village:savanna/houses/savanna_cartographer_1",
-    "village:savanna/houses/savanna_fisher_cottage_1",
-    "village:savanna/houses/savanna_fletcher_house_1",
-    "village:savanna/houses/savanna_large_farm_1",
-    "village:savanna/houses/savanna_large_farm_2",
-    "village:savanna/houses/savanna_library_1",
-    "village:savanna/houses/savanna_mason_1",
-    "village:savanna/houses/savanna_medium_house_1",
-    "village:savanna/houses/savanna_medium_house_2",
-    "village:savanna/houses/savanna_shepherd_1",
-    "village:savanna/houses/savanna_small_farm",
-    "village:savanna/houses/savanna_small_house_1",
-    "village:savanna/houses/savanna_small_house_2",
-    "village:savanna/houses/savanna_small_house_3",
-    "village:savanna/houses/savanna_small_house_4",
-    "village:savanna/houses/savanna_small_house_5",
-    "village:savanna/houses/savanna_small_house_6",
-    "village:savanna/houses/savanna_small_house_7",
-    "village:savanna/houses/savanna_small_house_8",
-    "village:savanna/houses/savanna_tannery_1",
-    "village:savanna/houses/savanna_temple_1",
-    "village:savanna/houses/savanna_temple_2",
-    "village:savanna/houses/savanna_tool_smith_1",
-    "village:savanna/houses/savanna_weaponsmith_1",
-    "village:savanna/houses/savanna_weaponsmith_2",
-    "village:savanna/streets/corner_01",
-    "village:savanna/streets/corner_03",
-    "village:savanna/streets/crossroad_02",
-    "village:savanna/streets/crossroad_03",
-    "village:savanna/streets/crossroad_04",
-    "village:savanna/streets/crossroad_05",
-    "village:savanna/streets/crossroad_06",
-    "village:savanna/streets/crossroad_07",
-    "village:savanna/streets/split_01",
-    "village:savanna/streets/split_02",
-    "village:savanna/streets/straight_02",
-    "village:savanna/streets/straight_04",
-    "village:savanna/streets/straight_05",
-    "village:savanna/streets/straight_06",
-    "village:savanna/streets/straight_08",
-    "village:savanna/streets/straight_09",
-    "village:savanna/streets/straight_10",
-    "village:savanna/streets/straight_11",
-    "village:savanna/streets/turn_01",
-    "village:savanna/terminators/terminator_05",
-    "village:savanna/town_centers/savanna_meeting_point_1",
-    "village:savanna/town_centers/savanna_meeting_point_2",
-    "village:savanna/town_centers/savanna_meeting_point_3",
-    "village:savanna/town_centers/savanna_meeting_point_4",
-    "village:snowy/snowy_lamp_post_01",
-    "village:snowy/snowy_lamp_post_02",
-    "village:snowy/snowy_lamp_post_03",
-    "village:snowy/houses/snowy_animal_pen_1",
-    "village:snowy/houses/snowy_animal_pen_2",
-    "village:snowy/houses/snowy_armorer_house_1",
-    "village:snowy/houses/snowy_armorer_house_2",
-    "village:snowy/houses/snowy_butchers_shop_1",
-    "village:snowy/houses/snowy_butchers_shop_2",
-    "village:snowy/houses/snowy_cartographer_house_1",
-    "village:snowy/houses/snowy_farm_1",
-    "village:snowy/houses/snowy_farm_2",
-    "village:snowy/houses/snowy_fisher_cottage",
-    "village:snowy/houses/snowy_fletcher_house_1",
-    "village:snowy/houses/snowy_library_1",
-    "village:snowy/houses/snowy_masons_house_1",
-    "village:snowy/houses/snowy_masons_house_2",
-    "village:snowy/houses/snowy_medium_house_1",
-    "village:snowy/houses/snowy_medium_house_2",
-    "village:snowy/houses/snowy_medium_house_3",
-    "village:snowy/houses/snowy_shepherds_house_1",
-    "village:snowy/houses/snowy_small_house_1",
-    "village:snowy/houses/snowy_small_house_2",
-    "village:snowy/houses/snowy_small_house_3",
-    "village:snowy/houses/snowy_small_house_4",
-    "village:snowy/houses/snowy_small_house_5",
-    "village:snowy/houses/snowy_small_house_6",
-    "village:snowy/houses/snowy_small_house_7",
-    "village:snowy/houses/snowy_small_house_8",
-    "village:snowy/houses/snowy_tannery_1",
-    "village:snowy/houses/snowy_temple_1",
-    "village:snowy/houses/snowy_tool_smith_1",
-    "village:snowy/houses/snowy_weapon_smith_1",
-    "village:snowy/streets/corner_01",
-    "village:snowy/streets/corner_02",
-    "village:snowy/streets/corner_03",
-    "village:snowy/streets/crossroad_01",
-    "village:snowy/streets/crossroad_02",
-    "village:snowy/streets/crossroad_03",
-    "village:snowy/streets/crossroad_04",
-    "village:snowy/streets/crossroad_05",
-    "village:snowy/streets/crossroad_06",
-    "village:snowy/streets/square_01",
-    "village:snowy/streets/straight_01",
-    "village:snowy/streets/straight_02",
-    "village:snowy/streets/straight_03",
-    "village:snowy/streets/straight_04",
-    "village:snowy/streets/straight_06",
-    "village:snowy/streets/straight_08",
-    "village:snowy/streets/turn_01",
-    "village:snowy/town_centers/snowy_meeting_point_1",
-    "village:snowy/town_centers/snowy_meeting_point_2",
-    "village:snowy/town_centers/snowy_meeting_point_3",
-    "village:taiga/taiga_decoration_1",
-    "village:taiga/taiga_decoration_2",
-    "village:taiga/taiga_decoration_3",
-    "village:taiga/taiga_decoration_4",
-    "village:taiga/taiga_decoration_5",
-    "village:taiga/taiga_lamp_post_1",
-    "village:taiga/houses/taiga_animal_pen_1",
-    "village:taiga/houses/taiga_armorer_house_1",
-    "village:taiga/houses/taiga_armorer_house_2",
-    "village:taiga/houses/taiga_butcher_shop_1",
-    "village:taiga/houses/taiga_cartographer_house_1",
-    "village:taiga/houses/taiga_decoration_1",
-    "village:taiga/houses/taiga_fisher_cottage_1",
-    "village:taiga/houses/taiga_fletcher_house_1",
-    "village:taiga/houses/taiga_lamp_post_1",
-    "village:taiga/houses/taiga_large_farm_1",
-    "village:taiga/houses/taiga_large_farm_2",
-    "village:taiga/houses/taiga_library_1",
-    "village:taiga/houses/taiga_masons_house_1",
-    "village:taiga/houses/taiga_medium_house_1",
-    "village:taiga/houses/taiga_medium_house_2",
-    "village:taiga/houses/taiga_medium_house_3",
-    "village:taiga/houses/taiga_medium_house_4",
-    "village:taiga/houses/taiga_shepherds_house_1",
-    "village:taiga/houses/taiga_small_farm_1",
-    "village:taiga/houses/taiga_small_house_1",
-    "village:taiga/houses/taiga_small_house_2",
-    "village:taiga/houses/taiga_small_house_3",
-    "village:taiga/houses/taiga_small_house_4",
-    "village:taiga/houses/taiga_small_house_5",
-    "village:taiga/houses/taiga_tannery_1",
-    "village:taiga/houses/taiga_temple_1",
-    "village:taiga/houses/taiga_tool_smith_1",
-    "village:taiga/houses/taiga_weaponsmith_1",
-    "village:taiga/houses/taiga_weaponsmith_2",
-    "village:taiga/streets/corner_01",
-    "village:taiga/streets/corner_02",
-    "village:taiga/streets/corner_03",
-    "village:taiga/streets/crossroad_01",
-    "village:taiga/streets/crossroad_02",
-    "village:taiga/streets/crossroad_04",
-    "village:taiga/streets/crossroad_05",
-    "village:taiga/streets/crossroad_06",
-    "village:taiga/streets/straight_01",
-    "village:taiga/streets/straight_02",
-    "village:taiga/streets/straight_03",
-    "village:taiga/streets/straight_04",
-    "village:taiga/streets/straight_05",
-    "village:taiga/streets/straight_06",
-    "village:taiga/streets/turn_01",
-    "village:taiga/town_centers/taiga_meeting_point_1",
-    "village:taiga/town_centers/taiga_meeting_point_2"
-];
+export const Structures = new Map();
+
+Structures.set("ancient_city/city/entrance/entrance_connector", [30, 15, 39]);
+Structures.set("ancient_city/city/entrance/entrance_path_1", [35, 15, 39]);
+Structures.set("ancient_city/city/entrance/entrance_path_2", [35, 15, 39]);
+Structures.set("ancient_city/city/entrance/entrance_path_3", [35, 15, 39]);
+Structures.set("ancient_city/city/entrance/entrance_path_4", [35, 15, 39]);
+Structures.set("ancient_city/city/entrance/entrance_path_5", [35, 15, 39]);
+Structures.set("ancient_city/city_center/city_center_1", [18, 31, 41]);
+Structures.set("ancient_city/city_center/city_center_2", [18, 31, 41]);
+Structures.set("ancient_city/city_center/city_center_3", [18, 31, 41]);
+Structures.set("ancient_city/city_center/walls/bottom_1", [14, 24, 41]);
+Structures.set("ancient_city/city_center/walls/bottom_2", [14, 24, 41]);
+Structures.set("ancient_city/city_center/walls/bottom_left_corner", [14, 24, 14]);
+Structures.set("ancient_city/city_center/walls/bottom_right_corner", [14, 24, 14]);
+Structures.set("ancient_city/city_center/walls/bottom_right_corner_1", [14, 24, 14]);
+Structures.set("ancient_city/city_center/walls/bottom_right_corner_2", [14, 24, 14]);
+Structures.set("ancient_city/city_center/walls/left", [18, 24, 14]);
+Structures.set("ancient_city/city_center/walls/right", [18, 24, 14]);
+Structures.set("ancient_city/city_center/walls/top", [14, 24, 41]);
+Structures.set("ancient_city/city_center/walls/top_left_corner", [14, 24, 14]);
+Structures.set("ancient_city/city_center/walls/top_right_corner", [14, 24, 14]);
+Structures.set("ancient_city/structures/barracks", [21, 12, 17]);
+Structures.set("ancient_city/structures/camp_1", [17, 5, 17]);
+Structures.set("ancient_city/structures/camp_2", [17, 5, 17]);
+Structures.set("ancient_city/structures/camp_3", [17, 5, 17]);
+Structures.set("ancient_city/structures/chamber_1", [19, 10, 15]);
+Structures.set("ancient_city/structures/chamber_2", [12, 6, 11]);
+Structures.set("ancient_city/structures/chamber_3", [10, 6, 11]);
+Structures.set("ancient_city/structures/ice_box_1", [19, 10, 15]);
+Structures.set("ancient_city/structures/large_pillar_1", [6, 15, 6]);
+Structures.set("ancient_city/structures/large_ruin_1", [17, 5, 17]);
+Structures.set("ancient_city/structures/medium_pillar_1", [7, 11, 8]);
+Structures.set("ancient_city/structures/medium_ruin_1", [8, 5, 13]);
+Structures.set("ancient_city/structures/medium_ruin_2", [16, 5, 11]);
+Structures.set("ancient_city/structures/sauna_1", [29, 10, 37]);
+Structures.set("ancient_city/structures/small_ruin_1", [7, 5, 8]);
+Structures.set("ancient_city/structures/small_ruin_2", [8, 5, 4]);
+Structures.set("ancient_city/structures/small_statue", [10, 8, 8]);
+Structures.set("ancient_city/structures/tall_ruin_1", [17, 23, 17]);
+Structures.set("ancient_city/structures/tall_ruin_2", [17, 23, 17]);
+Structures.set("ancient_city/structures/tall_ruin_3", [17, 23, 17]);
+Structures.set("ancient_city/structures/tall_ruin_4", [17, 23, 17]);
+Structures.set("ancient_city/walls/intact_corner_wall_1", [21, 15, 21]);
+Structures.set("ancient_city/walls/intact_horizontal_wall_1", [18, 15, 21]);
+Structures.set("ancient_city/walls/intact_horizontal_wall_2", [18, 15, 21]);
+Structures.set("ancient_city/walls/intact_horizontal_wall_bridge", [18, 15, 21]);
+Structures.set("ancient_city/walls/intact_horizontal_wall_passage_1", [18, 15, 21]);
+Structures.set("ancient_city/walls/intact_horizontal_wall_stairs_1", [18, 15, 21]);
+Structures.set("ancient_city/walls/intact_horizontal_wall_stairs_2", [18, 15, 21]);
+Structures.set("ancient_city/walls/intact_horizontal_wall_stairs_3", [18, 15, 21]);
+Structures.set("ancient_city/walls/intact_horizontal_wall_stairs_4", [18, 15, 21]);
+Structures.set("ancient_city/walls/intact_intersection_wall_1", [21, 15, 21]);
+Structures.set("ancient_city/walls/intact_lshape_wall_1", [21, 15, 21]);
+Structures.set("ancient_city/walls/ruined_corner_wall_1", [21, 15, 21]);
+Structures.set("ancient_city/walls/ruined_corner_wall_2", [21, 15, 21]);
+Structures.set("ancient_city/walls/ruined_horizontal_wall_stairs_1", [18, 15, 21]);
+Structures.set("ancient_city/walls/ruined_horizontal_wall_stairs_2", [18, 15, 21]);
+Structures.set("ancient_city/walls/ruined_horizontal_wall_stairs_3", [18, 15, 21]);
+Structures.set("ancient_city/walls/ruined_horizontal_wall_stairs_4", [18, 15, 21]);
+Structures.set("bastion:jigsaw_test", [10, 5, 15]);
+Structures.set("bastion:blocks/air", [1, 1, 1]);
+Structures.set("bastion:blocks/gold", [1, 1, 1]);
+Structures.set("bastion:bridge/bridge_pieces/bridge", [31, 19, 16]);
+Structures.set("bastion:bridge/connectors/back_bridge_bottom", [8, 8, 19]);
+Structures.set("bastion:bridge/connectors/back_bridge_top", [8, 11, 19]);
+Structures.set("bastion:bridge/legs/leg_0", [3, 22, 3]);
+Structures.set("bastion:bridge/legs/leg_1", [3, 22, 3]);
+Structures.set("bastion:bridge/ramparts/rampart_0", [16, 22, 16]);
+Structures.set("bastion:bridge/ramparts/rampart_1", [16, 32, 16]);
+Structures.set("bastion:bridge/rampart_plates/plate_0", [2, 19, 16]);
+Structures.set("bastion:bridge/starting_pieces/entrance", [17, 32, 32]);
+Structures.set("bastion:bridge/starting_pieces/entrance_base", [16, 32, 32]);
+Structures.set("bastion:bridge/starting_pieces/entrance_face", [5, 24, 32]);
+Structures.set("bastion:bridge/walls/wall_base_0", [16, 24, 16]);
+Structures.set("bastion:bridge/walls/wall_base_1", [16, 24, 16]);
+Structures.set("bastion:hoglin_stable/air_base", [30, 24, 48]);
+Structures.set("bastion:hoglin_stable/connectors/end_post_connector", [2, 2, 22]);
+Structures.set("bastion:hoglin_stable/large_stables/inner_0", [14, 6, 8]);
+Structures.set("bastion:hoglin_stable/large_stables/inner_1", [14, 6, 8]);
+Structures.set("bastion:hoglin_stable/large_stables/inner_2", [14, 6, 8]);
+Structures.set("bastion:hoglin_stable/large_stables/inner_3", [14, 6, 8]);
+Structures.set("bastion:hoglin_stable/large_stables/inner_4", [14, 6, 8]);
+Structures.set("bastion:hoglin_stable/large_stables/outer_0", [14, 6, 8]);
+Structures.set("bastion:hoglin_stable/large_stables/outer_1", [14, 6, 8]);
+Structures.set("bastion:hoglin_stable/large_stables/outer_2", [14, 6, 8]);
+Structures.set("bastion:hoglin_stable/large_stables/outer_3", [14, 6, 8]);
+Structures.set("bastion:hoglin_stable/large_stables/outer_4", [14, 6, 8]);
+Structures.set("bastion:hoglin_stable/posts/end_post", [2, 24, 2]);
+Structures.set("bastion:hoglin_stable/posts/stair_post", [2, 24, 10]);
+Structures.set("bastion:hoglin_stable/ramparts/ramparts_1", [16, 32, 16]);
+Structures.set("bastion:hoglin_stable/ramparts/ramparts_2", [16, 21, 16]);
+Structures.set("bastion:hoglin_stable/ramparts/ramparts_3", [16, 12, 16]);
+Structures.set("bastion:hoglin_stable/rampart_plates/rampart_plate_1", [2, 19, 16]);
+Structures.set("bastion:hoglin_stable/small_stables/inner_0", [12, 6, 8]);
+Structures.set("bastion:hoglin_stable/small_stables/inner_1", [12, 6, 8]);
+Structures.set("bastion:hoglin_stable/small_stables/inner_2", [12, 6, 8]);
+Structures.set("bastion:hoglin_stable/small_stables/inner_3", [12, 6, 8]);
+Structures.set("bastion:hoglin_stable/small_stables/outer_0", [12, 6, 8]);
+Structures.set("bastion:hoglin_stable/small_stables/outer_1", [12, 6, 8]);
+Structures.set("bastion:hoglin_stable/small_stables/outer_2", [12, 6, 8]);
+Structures.set("bastion:hoglin_stable/small_stables/outer_3", [12, 6, 8]);
+Structures.set("bastion:hoglin_stable/stairs/stairs_1_0", [14, 6, 16]);
+Structures.set("bastion:hoglin_stable/stairs/stairs_1_1", [14, 6, 16]);
+Structures.set("bastion:hoglin_stable/stairs/stairs_1_2", [14, 6, 16]);
+Structures.set("bastion:hoglin_stable/stairs/stairs_1_3", [14, 6, 16]);
+Structures.set("bastion:hoglin_stable/stairs/stairs_1_4", [14, 6, 16]);
+Structures.set("bastion:hoglin_stable/stairs/stairs_2_0", [14, 6, 16]);
+Structures.set("bastion:hoglin_stable/stairs/stairs_2_1", [14, 6, 16]);
+Structures.set("bastion:hoglin_stable/stairs/stairs_2_2", [14, 6, 16]);
+Structures.set("bastion:hoglin_stable/stairs/stairs_2_3", [14, 6, 16]);
+Structures.set("bastion:hoglin_stable/stairs/stairs_2_4", [14, 6, 16]);
+Structures.set("bastion:hoglin_stable/stairs/stairs_3_0", [14, 6, 16]);
+Structures.set("bastion:hoglin_stable/stairs/stairs_3_1", [14, 6, 16]);
+Structures.set("bastion:hoglin_stable/stairs/stairs_3_2", [14, 6, 16]);
+Structures.set("bastion:hoglin_stable/stairs/stairs_3_3", [14, 6, 16]);
+Structures.set("bastion:hoglin_stable/stairs/stairs_3_4", [14, 6, 16]);
+Structures.set("bastion:hoglin_stable/starting_pieces/stairs_0_mirrored", [15, 6, 16]);
+Structures.set("bastion:hoglin_stable/starting_pieces/stairs_1_mirrored", [15, 6, 16]);
+Structures.set("bastion:hoglin_stable/starting_pieces/stairs_2_mirrored", [15, 6, 16]);
+Structures.set("bastion:hoglin_stable/starting_pieces/stairs_3_mirrored", [15, 6, 16]);
+Structures.set("bastion:hoglin_stable/starting_pieces/stairs_4_mirrored", [15, 6, 16]);
+Structures.set("bastion:hoglin_stable/starting_pieces/starting_stairs_0", [15, 6, 16]);
+Structures.set("bastion:hoglin_stable/starting_pieces/starting_stairs_1", [15, 6, 16]);
+Structures.set("bastion:hoglin_stable/starting_pieces/starting_stairs_2", [15, 6, 16]);
+Structures.set("bastion:hoglin_stable/starting_pieces/starting_stairs_3", [15, 6, 16]);
+Structures.set("bastion:hoglin_stable/starting_pieces/starting_stairs_4", [15, 6, 16]);
+Structures.set("bastion:hoglin_stable/walls/side_wall_0", [16, 24, 16]);
+Structures.set("bastion:hoglin_stable/walls/side_wall_1", [16, 24, 16]);
+Structures.set("bastion:hoglin_stable/walls/wall_base", [16, 24, 16]);
+Structures.set("bastion:mobs/empty", [1, 1, 1]);
+Structures.set("bastion:treasure/big_air_full", [38, 48, 38]);
+Structures.set("bastion:treasure/bases/centers__center_0", [7, 6, 8]);
+Structures.set("bastion:treasure/bases/centers__center_1", [7, 6, 8]);
+Structures.set("bastion:treasure/bases/centers__center_2", [7, 6, 8]);
+Structures.set("bastion:treasure/bases/centers__center_3", [7, 6, 8]);
+Structures.set("bastion:treasure/bases/lava_basin", [24, 11, 24]);
+Structures.set("bastion:treasure/brains/center_brain", [2, 35, 2]);
+Structures.set("bastion:treasure/connectors/center_to_wall_middle", [11, 1, 1]);
+Structures.set("bastion:treasure/connectors/center_to_wall_top", [11, 1, 1]);
+Structures.set("bastion:treasure/connectors/center_to_wall_top_entrance", [11, 1, 1]);
+Structures.set("bastion:treasure/corners/bottom__corner_0", [5, 16, 5]);
+Structures.set("bastion:treasure/corners/bottom__corner_1", [5, 16, 5]);
+Structures.set("bastion:treasure/corners/edges__bottom", [2, 16, 2]);
+Structures.set("bastion:treasure/corners/edges__middle", [2, 15, 2]);
+Structures.set("bastion:treasure/corners/edges__top", [2, 17, 2]);
+Structures.set("bastion:treasure/corners/middle__corner_0", [5, 15, 5]);
+Structures.set("bastion:treasure/corners/middle__corner_1", [5, 15, 5]);
+Structures.set("bastion:treasure/corners/top__corner_0", [5, 15, 5]);
+Structures.set("bastion:treasure/corners/top__corner_1", [5, 15, 5]);
+Structures.set("bastion:treasure/entrances/entrance_0", [19, 18, 20]);
+Structures.set("bastion:treasure/extensions/empty", [1, 1, 1]);
+Structures.set("bastion:treasure/extensions/fire_room", [10, 10, 10]);
+Structures.set("bastion:treasure/extensions/house_0", [5, 12, 10]);
+Structures.set("bastion:treasure/extensions/house_1", [5, 12, 10]);
+Structures.set("bastion:treasure/extensions/large_bridge_0", [4, 2, 7]);
+Structures.set("bastion:treasure/extensions/large_bridge_1", [4, 2, 5]);
+Structures.set("bastion:treasure/extensions/large_bridge_2", [4, 2, 11]);
+Structures.set("bastion:treasure/extensions/large_bridge_3", [4, 2, 16]);
+Structures.set("bastion:treasure/extensions/roofed_bridge", [10, 6, 4]);
+Structures.set("bastion:treasure/extensions/small_bridge_0", [3, 2, 4]);
+Structures.set("bastion:treasure/extensions/small_bridge_1", [3, 2, 7]);
+Structures.set("bastion:treasure/extensions/small_bridge_2", [3, 2, 5]);
+Structures.set("bastion:treasure/extensions/small_bridge_3", [3, 2, 16]);
+Structures.set("bastion:treasure/ramparts/bottom_wall_0", [16, 24, 14]);
+Structures.set("bastion:treasure/ramparts/lava_basin", [19, 36, 14]);
+Structures.set("bastion:treasure/ramparts/lava_basin_main", [19, 36, 14]);
+Structures.set("bastion:treasure/ramparts/lava_basin_side", [19, 36, 14]);
+Structures.set("bastion:treasure/ramparts/mid_wall_main", [17, 32, 14]);
+Structures.set("bastion:treasure/ramparts/mid_wall_side", [17, 31, 14]);
+Structures.set("bastion:treasure/ramparts/top_wall", [17, 18, 14]);
+Structures.set("bastion:treasure/roofs/center_roof", [24, 2, 24]);
+Structures.set("bastion:treasure/roofs/corner_roof", [5, 2, 5]);
+Structures.set("bastion:treasure/roofs/wall_roof", [5, 2, 24]);
+Structures.set("bastion:treasure/stairs/lower_stairs", [2, 5, 5]);
+Structures.set("bastion:treasure/walls/bottom__wall_0", [5, 16, 24]);
+Structures.set("bastion:treasure/walls/bottom__wall_1", [5, 16, 24]);
+Structures.set("bastion:treasure/walls/bottom__wall_2", [5, 16, 24]);
+Structures.set("bastion:treasure/walls/bottom__wall_3", [5, 16, 24]);
+Structures.set("bastion:treasure/walls/entrance_wall", [2, 17, 24]);
+Structures.set("bastion:treasure/walls/lava_wall", [2, 36, 14]);
+Structures.set("bastion:treasure/walls/mid__wall_0", [5, 15, 24]);
+Structures.set("bastion:treasure/walls/mid__wall_1", [5, 15, 24]);
+Structures.set("bastion:treasure/walls/mid__wall_2", [5, 15, 24]);
+Structures.set("bastion:treasure/walls/outer__bottom_corner", [2, 16, 5]);
+Structures.set("bastion:treasure/walls/outer__medium_outer_wall", [2, 16, 24]);
+Structures.set("bastion:treasure/walls/outer__mid_corner", [5, 15, 2]);
+Structures.set("bastion:treasure/walls/outer__outer_wall", [2, 15, 24]);
+Structures.set("bastion:treasure/walls/outer__tall_outer_wall", [2, 17, 24]);
+Structures.set("bastion:treasure/walls/outer__top_corner", [2, 17, 5]);
+Structures.set("bastion:treasure/walls/top__main_entrance", [5, 15, 24]);
+Structures.set("bastion:treasure/walls/top__wall_0", [5, 15, 24]);
+Structures.set("bastion:treasure/walls/top__wall_1", [5, 15, 24]);
+Structures.set("bastion:units/air_base", [46, 24, 46]);
+Structures.set("bastion:units/center_pieces/center_0", [11, 7, 11]);
+Structures.set("bastion:units/center_pieces/center_1", [11, 8, 11]);
+Structures.set("bastion:units/center_pieces/center_2", [11, 8, 11]);
+Structures.set("bastion:units/edges/edge_0", [12, 7, 8]);
+Structures.set("bastion:units/fillers/stage_0", [12, 7, 8]);
+Structures.set("bastion:units/pathways/pathway_0", [3, 2, 2]);
+Structures.set("bastion:units/pathways/pathway_wall_0", [3, 2, 2]);
+Structures.set("bastion:units/ramparts/ramparts_0", [16, 32, 16]);
+Structures.set("bastion:units/ramparts/ramparts_1", [16, 22, 16]);
+Structures.set("bastion:units/ramparts/ramparts_2", [16, 12, 16]);
+Structures.set("bastion:units/rampart_plates/plate_0", [5, 19, 16]);
+Structures.set("bastion:units/stages/rot__stage_1_0", [12, 7, 8]);
+Structures.set("bastion:units/stages/stage_0_0", [12, 7, 8]);
+Structures.set("bastion:units/stages/stage_0_1", [12, 7, 8]);
+Structures.set("bastion:units/stages/stage_0_2", [12, 7, 8]);
+Structures.set("bastion:units/stages/stage_0_3", [12, 7, 8]);
+Structures.set("bastion:units/stages/stage_1_0", [12, 7, 8]);
+Structures.set("bastion:units/stages/stage_1_1", [12, 7, 8]);
+Structures.set("bastion:units/stages/stage_1_2", [12, 7, 8]);
+Structures.set("bastion:units/stages/stage_1_3", [12, 7, 8]);
+Structures.set("bastion:units/stages/stage_2_0", [12, 7, 8]);
+Structures.set("bastion:units/stages/stage_2_1", [12, 7, 8]);
+Structures.set("bastion:units/stages/stage_3_0", [12, 3, 8]);
+Structures.set("bastion:units/stages/stage_3_1", [12, 3, 8]);
+Structures.set("bastion:units/stages/stage_3_2", [12, 3, 8]);
+Structures.set("bastion:units/stages/stage_3_3", [12, 3, 8]);
+Structures.set("bastion:units/walls/connected_wall", [16, 24, 16]);
+Structures.set("bastion:units/walls/wall_base", [16, 24, 16]);
+Structures.set("bastion:units/wall_units/edge_0", [12, 7, 9]);
+Structures.set("bastion:units/wall_units/edge_0_large", [12, 7, 9]);
+Structures.set("bastion:units/wall_units/unit_0", [12, 7, 8]);
+Structures.set("coralcrust:crust1", [13, 6, 13]);
+Structures.set("coralcrust:crust2", [15, 7, 14]);
+Structures.set("coralcrust:crust3", [10, 6, 11]);
+Structures.set("coralcrust:crust4", [8, 5, 9]);
+Structures.set("coralcrust:crust5", [8, 8, 12]);
+Structures.set("coralcrust:outcropping1", [11, 5, 6]);
+Structures.set("coralcrust:outcropping2", [14, 11, 7]);
+Structures.set("coralcrust:outcropping3", [8, 4, 9]);
+Structures.set("coralcrust:outcropping4", [6, 7, 6]);
+Structures.set("coralcrust:outcropping5", [5, 6, 6]);
+Structures.set("coralcrust:outcropping6", [12, 3, 12]);
+Structures.set("endcity:base_floor", [10, 4, 10]);
+Structures.set("endcity:base_roof", [12, 2, 12]);
+Structures.set("endcity:bridge_end", [5, 6, 2]);
+Structures.set("endcity:bridge_gentle_stairs", [5, 7, 8]);
+Structures.set("endcity:bridge_piece", [5, 6, 4]);
+Structures.set("endcity:bridge_steep_stairs", [5, 7, 4]);
+Structures.set("endcity:fat_tower_base", [13, 4, 13]);
+Structures.set("endcity:fat_tower_middle", [13, 8, 13]);
+Structures.set("endcity:fat_tower_top", [17, 6, 17]);
+Structures.set("endcity:second_floor", [12, 8, 12]);
+Structures.set("endcity:second_floor_2", [12, 8, 12]);
+Structures.set("endcity:second_roof", [14, 2, 14]);
+Structures.set("endcity:ship", [13, 24, 29]);
+Structures.set("endcity:third_floor", [14, 8, 14]);
+Structures.set("endcity:third_floor_b", [14, 8, 14]);
+Structures.set("endcity:third_floor_c", [14, 8, 14]);
+Structures.set("endcity:third_roof", [16, 2, 16]);
+Structures.set("endcity:tower_base", [7, 7, 7]);
+Structures.set("endcity:tower_floor", [7, 4, 7]);
+Structures.set("endcity:tower_piece", [7, 4, 7]);
+Structures.set("endcity:tower_top", [9, 5, 9]);
+Structures.set("fossils:fossil_skull_01", [6, 5, 7]);
+Structures.set("fossils:fossil_skull_02", [7, 5, 5]);
+Structures.set("fossils:fossil_skull_03", [5, 4, 5]);
+Structures.set("fossils:fossil_skull_04", [4, 4, 4]);
+Structures.set("fossils:fossil_spine_01", [3, 3, 13]);
+Structures.set("fossils:fossil_spine_02", [5, 4, 13]);
+Structures.set("fossils:fossil_spine_03", [7, 4, 13]);
+Structures.set("fossils:fossil_spine_04", [9, 5, 13]);
+Structures.set("igloo:igloo_bottom", [7, 6, 9]);
+Structures.set("igloo:igloo_middle", [3, 3, 3]);
+Structures.set("igloo:igloo_top_no_trapdoor", [7, 5, 8]);
+Structures.set("igloo:igloo_top_trapdoor", [7, 5, 8]);
+Structures.set("mansion:1x1_a1", [7, 8, 7]);
+Structures.set("mansion:1x1_a2", [7, 8, 7]);
+Structures.set("mansion:1x1_a3", [7, 8, 7]);
+Structures.set("mansion:1x1_a4", [7, 8, 7]);
+Structures.set("mansion:1x1_a5", [7, 8, 7]);
+Structures.set("mansion:1x1_as1", [7, 8, 7]);
+Structures.set("mansion:1x1_as2", [7, 8, 7]);
+Structures.set("mansion:1x1_as3", [7, 8, 7]);
+Structures.set("mansion:1x1_as4", [7, 8, 7]);
+Structures.set("mansion:1x1_b1", [7, 11, 7]);
+Structures.set("mansion:1x1_b2", [7, 11, 7]);
+Structures.set("mansion:1x1_b3", [7, 11, 7]);
+Structures.set("mansion:1x1_b4", [7, 11, 7]);
+Structures.set("mansion:1x1_b5", [7, 11, 7]);
+Structures.set("mansion:1x2_a1", [7, 8, 15]);
+Structures.set("mansion:1x2_a2", [7, 8, 15]);
+Structures.set("mansion:1x2_a3", [7, 8, 15]);
+Structures.set("mansion:1x2_a4", [7, 8, 15]);
+Structures.set("mansion:1x2_a5", [7, 8, 15]);
+Structures.set("mansion:1x2_a6", [7, 8, 15]);
+Structures.set("mansion:1x2_a7", [7, 8, 15]);
+Structures.set("mansion:1x2_a8", [7, 8, 15]);
+Structures.set("mansion:1x2_a9", [7, 8, 15]);
+Structures.set("mansion:1x2_b1", [7, 8, 15]);
+Structures.set("mansion:1x2_b2", [7, 8, 15]);
+Structures.set("mansion:1x2_b3", [7, 8, 15]);
+Structures.set("mansion:1x2_b4", [7, 8, 15]);
+Structures.set("mansion:1x2_b5", [7, 8, 15]);
+Structures.set("mansion:1x2_c1", [7, 11, 15]);
+Structures.set("mansion:1x2_c2", [7, 11, 15]);
+Structures.set("mansion:1x2_c3", [7, 11, 15]);
+Structures.set("mansion:1x2_c4", [7, 11, 15]);
+Structures.set("mansion:1x2_c_stairs", [7, 22, 15]);
+Structures.set("mansion:1x2_d1", [7, 11, 15]);
+Structures.set("mansion:1x2_d2", [7, 11, 15]);
+Structures.set("mansion:1x2_d3", [7, 11, 15]);
+Structures.set("mansion:1x2_d4", [7, 11, 15]);
+Structures.set("mansion:1x2_d5", [7, 11, 15]);
+Structures.set("mansion:1x2_d_stairs", [7, 22, 15]);
+Structures.set("mansion:1x2_s1", [7, 8, 15]);
+Structures.set("mansion:1x2_s2", [7, 8, 15]);
+Structures.set("mansion:1x2_se1", [7, 11, 15]);
+Structures.set("mansion:2x2_a1", [15, 8, 15]);
+Structures.set("mansion:2x2_a2", [15, 8, 15]);
+Structures.set("mansion:2x2_a3", [15, 8, 15]);
+Structures.set("mansion:2x2_a4", [15, 8, 15]);
+Structures.set("mansion:2x2_b1", [15, 11, 15]);
+Structures.set("mansion:2x2_b2", [15, 11, 15]);
+Structures.set("mansion:2x2_b3", [15, 11, 15]);
+Structures.set("mansion:2x2_b4", [15, 11, 15]);
+Structures.set("mansion:2x2_b5", [15, 11, 15]);
+Structures.set("mansion:2x2_s1", [15, 11, 15]);
+Structures.set("mansion:carpet_east", [2, 1, 5]);
+Structures.set("mansion:carpet_north", [5, 1, 2]);
+Structures.set("mansion:carpet_south", [8, 8, 3]);
+Structures.set("mansion:carpet_south_2", [8, 11, 3]);
+Structures.set("mansion:carpet_west", [3, 8, 8]);
+Structures.set("mansion:carpet_west_2", [3, 11, 8]);
+Structures.set("mansion:corridor_floor", [7, 8, 7]);
+Structures.set("mansion:corridor_floor_2", [7, 11, 7]);
+Structures.set("mansion:entrance", [21, 19, 16]);
+Structures.set("mansion:indoors_door", [1, 8, 8]);
+Structures.set("mansion:indoors_door_2", [1, 11, 8]);
+Structures.set("mansion:indoors_wall", [1, 8, 8]);
+Structures.set("mansion:indoors_wall_2", [1, 11, 8]);
+Structures.set("mansion:roof", [8, 1, 8]);
+Structures.set("mansion:roof_corner", [4, 4, 4]);
+Structures.set("mansion:roof_front", [4, 4, 8]);
+Structures.set("mansion:roof_inner_corner", [4, 4, 4]);
+Structures.set("mansion:small_wall", [2, 4, 8]);
+Structures.set("mansion:small_wall_corner", [2, 4, 2]);
+Structures.set("mansion:wall_corner", [9, 8, 2]);
+Structures.set("mansion:wall_flat", [2, 8, 8]);
+Structures.set("mansion:wall_window", [2, 8, 8]);
+Structures.set("nether_fossils:fossil_1", [4, 4, 5]);
+Structures.set("nether_fossils:fossil_10", [3, 7, 1]);
+Structures.set("nether_fossils:fossil_11", [5, 5, 7]);
+Structures.set("nether_fossils:fossil_12", [4, 4, 3]);
+Structures.set("nether_fossils:fossil_13", [4, 5, 6]);
+Structures.set("nether_fossils:fossil_14", [7, 7, 6]);
+Structures.set("nether_fossils:fossil_2", [5, 1, 5]);
+Structures.set("nether_fossils:fossil_3", [3, 4, 2]);
+Structures.set("nether_fossils:fossil_4", [3, 4, 1]);
+Structures.set("nether_fossils:fossil_5", [2, 5, 1]);
+Structures.set("nether_fossils:fossil_6", [7, 5, 5]);
+Structures.set("nether_fossils:fossil_7", [4, 6, 5]);
+Structures.set("nether_fossils:fossil_8", [3, 5, 1]);
+Structures.set("nether_fossils:fossil_9", [3, 5, 5]);
+Structures.set("pillageroutpost:feature_cage1", [6, 5, 6]);
+Structures.set("pillageroutpost:feature_cage2", [6, 5, 6]);
+Structures.set("pillageroutpost:feature_cage_with_allays", [7, 4, 7]);
+Structures.set("pillageroutpost:feature_logs", [6, 3, 7]);
+Structures.set("pillageroutpost:feature_targets", [3, 3, 7]);
+Structures.set("pillageroutpost:feature_tent1", [6, 5, 7]);
+Structures.set("pillageroutpost:feature_tent2", [6, 5, 7]);
+Structures.set("pillageroutpost:watchtower", [15, 21, 15]);
+Structures.set("pillageroutpost:watchtower_overgrown", [15, 21, 15]);
+Structures.set("ruin:big_ruin1_brick", [16, 16, 16]);
+Structures.set("ruin:big_ruin1_cracked", [16, 16, 16]);
+Structures.set("ruin:big_ruin1_mossy", [16, 16, 16]);
+Structures.set("ruin:big_ruin2_brick", [16, 16, 16]);
+Structures.set("ruin:big_ruin2_cracked", [16, 16, 16]);
+Structures.set("ruin:big_ruin2_mossy", [16, 16, 16]);
+Structures.set("ruin:big_ruin3_brick", [16, 16, 16]);
+Structures.set("ruin:big_ruin3_cracked", [16, 16, 16]);
+Structures.set("ruin:big_ruin3_mossy", [16, 16, 16]);
+Structures.set("ruin:big_ruin8_brick", [16, 16, 16]);
+Structures.set("ruin:big_ruin8_cracked", [16, 16, 16]);
+Structures.set("ruin:big_ruin8_mossy", [16, 16, 16]);
+Structures.set("ruin:big_ruin_warm4", [16, 16, 16]);
+Structures.set("ruin:big_ruin_warm5", [16, 16, 16]);
+Structures.set("ruin:big_ruin_warm6", [16, 16, 16]);
+Structures.set("ruin:big_ruin_warm7", [16, 16, 16]);
+Structures.set("ruin:ruin1_brick", [6, 7, 7]);
+Structures.set("ruin:ruin1_cracked", [6, 7, 7]);
+Structures.set("ruin:ruin1_mossy", [6, 7, 7]);
+Structures.set("ruin:ruin2_brick", [6, 7, 7]);
+Structures.set("ruin:ruin2_cracked", [6, 7, 7]);
+Structures.set("ruin:ruin2_mossy", [6, 7, 7]);
+Structures.set("ruin:ruin3_brick", [6, 7, 7]);
+Structures.set("ruin:ruin3_cracked", [6, 7, 7]);
+Structures.set("ruin:ruin3_mossy", [6, 7, 7]);
+Structures.set("ruin:ruin4", [6, 7, 7]);
+Structures.set("ruin:ruin4_brick", [6, 7, 7]);
+Structures.set("ruin:ruin4_cracked", [6, 7, 7]);
+Structures.set("ruin:ruin4_mossy", [6, 7, 7]);
+Structures.set("ruin:ruin5_brick", [6, 7, 7]);
+Structures.set("ruin:ruin5_cracked", [6, 7, 7]);
+Structures.set("ruin:ruin5_mossy", [6, 7, 7]);
+Structures.set("ruin:ruin6_brick", [6, 7, 7]);
+Structures.set("ruin:ruin6_cracked", [6, 7, 7]);
+Structures.set("ruin:ruin6_mossy", [6, 7, 7]);
+Structures.set("ruin:ruin7_brick", [6, 7, 7]);
+Structures.set("ruin:ruin7_cracked", [6, 7, 7]);
+Structures.set("ruin:ruin7_mossy", [6, 7, 7]);
+Structures.set("ruin:ruin8_brick", [6, 7, 7]);
+Structures.set("ruin:ruin8_cracked", [6, 7, 7]);
+Structures.set("ruin:ruin8_mossy", [6, 7, 7]);
+Structures.set("ruin:ruin_warm1", [6, 7, 7]);
+Structures.set("ruin:ruin_warm2", [6, 7, 7]);
+Structures.set("ruin:ruin_warm3", [6, 7, 7]);
+Structures.set("ruin:ruin_warm4", [6, 7, 7]);
+Structures.set("ruin:ruin_warm5", [6, 7, 7]);
+Structures.set("ruin:ruin_warm6", [6, 7, 7]);
+Structures.set("ruin:ruin_warm7", [6, 7, 7]);
+Structures.set("ruin:ruin_warm8", [6, 7, 7]);
+Structures.set("ruined_portal:giant_portal_1", [11, 17, 16]);
+Structures.set("ruined_portal:giant_portal_2", [11, 16, 16]);
+Structures.set("ruined_portal:giant_portal_3", [16, 16, 16]);
+Structures.set("ruined_portal:portal_1", [6, 10, 6]);
+Structures.set("ruined_portal:portal_10", [12, 8, 10]);
+Structures.set("ruined_portal:portal_2", [9, 12, 9]);
+Structures.set("ruined_portal:portal_3", [8, 9, 9]);
+Structures.set("ruined_portal:portal_4", [8, 9, 9]);
+Structures.set("ruined_portal:portal_5", [10, 10, 7]);
+Structures.set("ruined_portal:portal_6", [5, 7, 7]);
+Structures.set("ruined_portal:portal_7", [9, 7, 9]);
+Structures.set("ruined_portal:portal_8", [14, 9, 9]);
+Structures.set("ruined_portal:portal_9", [10, 8, 9]);
+Structures.set("shipwreck:swrightsideupbackhalf", [9, 9, 16]);
+Structures.set("shipwreck:swrightsideupbackhalfdegraded", [9, 9, 16]);
+Structures.set("shipwreck:swrightsideupfronthalf", [9, 9, 24]);
+Structures.set("shipwreck:swrightsideupfronthalfdegraded", [9, 9, 24]);
+Structures.set("shipwreck:swrightsideupfull", [9, 9, 28]);
+Structures.set("shipwreck:swrightsideupfulldegraded", [9, 9, 28]);
+Structures.set("shipwreck:swsidewaysbackhalf", [9, 9, 17]);
+Structures.set("shipwreck:swsidewaysbackhalfdegraded", [9, 9, 17]);
+Structures.set("shipwreck:swsidewaysfronthalf", [9, 9, 24]);
+Structures.set("shipwreck:swsidewaysfronthalfdegraded", [9, 9, 24]);
+Structures.set("shipwreck:swsidewaysfull", [9, 9, 28]);
+Structures.set("shipwreck:swsidewaysfulldegraded", [9, 9, 28]);
+Structures.set("shipwreck:swupsidedownbackhalf", [9, 9, 16]);
+Structures.set("shipwreck:swupsidedownbackhalfdegraded", [9, 9, 16]);
+Structures.set("shipwreck:swupsidedownfronthalf", [9, 9, 22]);
+Structures.set("shipwreck:swupsidedownfronthalfdegraded", [9, 9, 22]);
+Structures.set("shipwreck:swupsidedownfull", [9, 9, 28]);
+Structures.set("shipwreck:swupsidedownfulldegraded", [9, 9, 28]);
+Structures.set("shipwreck:swwithmast", [9, 21, 28]);
+Structures.set("shipwreck:swwithmastdegraded", [9, 21, 28]);
+Structures.set("village:common/villager", [1, 2, 1]);
+Structures.set("village:common/well_bottom", [4, 3, 4]);
+Structures.set("village:common/animals/cat", [1, 3, 1]);
+Structures.set("village:common/animals/cows_1", [1, 3, 1]);
+Structures.set("village:common/animals/horses_1", [1, 3, 1]);
+Structures.set("village:common/animals/horses_2", [1, 3, 1]);
+Structures.set("village:common/animals/pigs_1", [1, 3, 1]);
+Structures.set("village:common/animals/sheep_1", [1, 3, 1]);
+Structures.set("village:desert/desert_lamp_1", [1, 4, 1]);
+Structures.set("village:desert/houses/desert_animal_pen_1", [10, 5, 7]);
+Structures.set("village:desert/houses/desert_animal_pen_2", [10, 5, 8]);
+Structures.set("village:desert/houses/desert_armorer_1", [7, 7, 7]);
+Structures.set("village:desert/houses/desert_butcher_shop_1", [8, 5, 8]);
+Structures.set("village:desert/houses/desert_cartographer_house_1", [7, 7, 7]);
+Structures.set("village:desert/houses/desert_farm_1", [5, 3, 7]);
+Structures.set("village:desert/houses/desert_farm_2", [10, 3, 7]);
+Structures.set("village:desert/houses/desert_fisher_1", [8, 7, 11]);
+Structures.set("village:desert/houses/desert_fletcher_house_1", [6, 12, 12]);
+Structures.set("village:desert/houses/desert_large_farm_1", [11, 5, 13]);
+Structures.set("village:desert/houses/desert_library_1", [9, 7, 5]);
+Structures.set("village:desert/houses/desert_mason_1", [7, 5, 8]);
+Structures.set("village:desert/houses/desert_medium_house_1", [6, 7, 7]);
+Structures.set("village:desert/houses/desert_medium_house_2", [11, 9, 7]);
+Structures.set("village:desert/houses/desert_shepherd_house_1", [11, 6, 5]);
+Structures.set("village:desert/houses/desert_small_house_1", [5, 6, 5]);
+Structures.set("village:desert/houses/desert_small_house_2", [7, 7, 5]);
+Structures.set("village:desert/houses/desert_small_house_3", [5, 6, 6]);
+Structures.set("village:desert/houses/desert_small_house_4", [5, 5, 5]);
+Structures.set("village:desert/houses/desert_small_house_5", [5, 7, 6]);
+Structures.set("village:desert/houses/desert_small_house_6", [5, 17, 5]);
+Structures.set("village:desert/houses/desert_small_house_7", [8, 6, 7]);
+Structures.set("village:desert/houses/desert_small_house_8", [5, 5, 5]);
+Structures.set("village:desert/houses/desert_tannery_1", [7, 10, 6]);
+Structures.set("village:desert/houses/desert_temple_1", [11, 7, 10]);
+Structures.set("village:desert/houses/desert_temple_2", [10, 7, 12]);
+Structures.set("village:desert/houses/desert_tool_smith_1", [9, 10, 9]);
+Structures.set("village:desert/houses/desert_weaponsmith_1", [10, 6, 7]);
+Structures.set("village:desert/streets/corner_01", [7, 2, 15]);
+Structures.set("village:desert/streets/corner_02", [6, 2, 6]);
+Structures.set("village:desert/streets/crossroad_01", [18, 2, 15]);
+Structures.set("village:desert/streets/crossroad_02", [11, 2, 11]);
+Structures.set("village:desert/streets/crossroad_03", [5, 2, 5]);
+Structures.set("village:desert/streets/square_01", [13, 2, 28]);
+Structures.set("village:desert/streets/square_02", [16, 2, 19]);
+Structures.set("village:desert/streets/straight_01", [15, 2, 12]);
+Structures.set("village:desert/streets/straight_02", [15, 2, 18]);
+Structures.set("village:desert/streets/straight_03", [4, 2, 3]);
+Structures.set("village:desert/streets/turn_01", [4, 2, 4]);
+Structures.set("village:desert/terminators/terminator_01", [3, 2, 3]);
+Structures.set("village:desert/terminators/terminator_02", [3, 2, 3]);
+Structures.set("village:desert/town_centers/desert_meeting_point_1", [17, 6, 9]);
+Structures.set("village:desert/town_centers/desert_meeting_point_2", [12, 6, 12]);
+Structures.set("village:desert/town_centers/desert_meeting_point_3", [15, 6, 15]);
+Structures.set("village:plains/plains_lamp_1", [3, 4, 3]);
+Structures.set("village:plains/houses/plains_accessory_1", [3, 2, 5]);
+Structures.set("village:plains/houses/plains_animal_pen_1", [5, 8, 6]);
+Structures.set("village:plains/houses/plains_animal_pen_2", [7, 7, 11]);
+Structures.set("village:plains/houses/plains_animal_pen_3", [8, 3, 11]);
+Structures.set("village:plains/houses/plains_armorer_house_1", [9, 8, 8]);
+Structures.set("village:plains/houses/plains_big_house_1", [7, 11, 11]);
+Structures.set("village:plains/houses/plains_butcher_shop_1", [11, 8, 12]);
+Structures.set("village:plains/houses/plains_butcher_shop_2", [15, 12, 7]);
+Structures.set("village:plains/houses/plains_cartographer_1", [10, 8, 7]);
+Structures.set("village:plains/houses/plains_fisher_cottage_1", [10, 9, 9]);
+Structures.set("village:plains/houses/plains_fletcher_house_1", [9, 7, 11]);
+Structures.set("village:plains/houses/plains_large_farm_1", [13, 2, 9]);
+Structures.set("village:plains/houses/plains_library_1", [11, 10, 17]);
+Structures.set("village:plains/houses/plains_library_2", [8, 10, 9]);
+Structures.set("village:plains/houses/plains_masons_house_1", [8, 7, 9]);
+Structures.set("village:plains/houses/plains_medium_house_1", [13, 8, 11]);
+Structures.set("village:plains/houses/plains_medium_house_2", [7, 6, 13]);
+Structures.set("village:plains/houses/plains_meeting_point_4", [10, 7, 16]);
+Structures.set("village:plains/houses/plains_meeting_point_5", [10, 6, 11]);
+Structures.set("village:plains/houses/plains_shepherds_house_1", [9, 6, 13]);
+Structures.set("village:plains/houses/plains_small_farm_1", [7, 3, 9]);
+Structures.set("village:plains/houses/plains_small_house_1", [7, 7, 7]);
+Structures.set("village:plains/houses/plains_small_house_2", [7, 7, 7]);
+Structures.set("village:plains/houses/plains_small_house_3", [7, 7, 7]);
+Structures.set("village:plains/houses/plains_small_house_4", [7, 7, 7]);
+Structures.set("village:plains/houses/plains_small_house_5", [9, 11, 9]);
+Structures.set("village:plains/houses/plains_small_house_6", [7, 7, 7]);
+Structures.set("village:plains/houses/plains_small_house_7", [7, 7, 8]);
+Structures.set("village:plains/houses/plains_small_house_8", [9, 9, 9]);
+Structures.set("village:plains/houses/plains_stable_1", [9, 7, 16]);
+Structures.set("village:plains/houses/plains_stable_2", [7, 6, 17]);
+Structures.set("village:plains/houses/plains_tannery_1", [8, 7, 10]);
+Structures.set("village:plains/houses/plains_temple_3", [11, 7, 7]);
+Structures.set("village:plains/houses/plains_temple_4", [10, 13, 7]);
+Structures.set("village:plains/houses/plains_tool_smith_1", [8, 6, 12]);
+Structures.set("village:plains/houses/plains_weaponsmith_1", [8, 8, 11]);
+Structures.set("village:plains/streets/corner_01", [16, 2, 16]);
+Structures.set("village:plains/streets/corner_02", [16, 2, 16]);
+Structures.set("village:plains/streets/corner_03", [4, 2, 4]);
+Structures.set("village:plains/streets/crossroad_01", [16, 2, 16]);
+Structures.set("village:plains/streets/crossroad_02", [16, 2, 16]);
+Structures.set("village:plains/streets/crossroad_03", [16, 2, 16]);
+Structures.set("village:plains/streets/crossroad_04", [4, 2, 5]);
+Structures.set("village:plains/streets/crossroad_05", [5, 2, 5]);
+Structures.set("village:plains/streets/crossroad_06", [5, 2, 5]);
+Structures.set("village:plains/streets/straight_01", [16, 2, 16]);
+Structures.set("village:plains/streets/straight_02", [16, 2, 16]);
+Structures.set("village:plains/streets/straight_03", [13, 2, 11]);
+Structures.set("village:plains/streets/straight_04", [11, 2, 9]);
+Structures.set("village:plains/streets/straight_05", [20, 2, 17]);
+Structures.set("village:plains/streets/straight_06", [21, 2, 18]);
+Structures.set("village:plains/streets/turn_01", [18, 2, 8]);
+Structures.set("village:plains/terminators/terminator_01", [2, 2, 3]);
+Structures.set("village:plains/terminators/terminator_02", [1, 2, 1]);
+Structures.set("village:plains/terminators/terminator_03", [3, 2, 3]);
+Structures.set("village:plains/terminators/terminator_04", [4, 2, 4]);
+Structures.set("village:plains/town_centers/plains_fountain_01", [9, 4, 9]);
+Structures.set("village:plains/town_centers/plains_meeting_point_1", [10, 7, 10]);
+Structures.set("village:plains/town_centers/plains_meeting_point_2", [8, 5, 15]);
+Structures.set("village:plains/town_centers/plains_meeting_point_3", [11, 9, 11]);
+Structures.set("village:plains/villagers/armorer", [1, 2, 1]);
+Structures.set("village:plains/villagers/butcher", [1, 2, 1]);
+Structures.set("village:plains/villagers/cartographer", [1, 2, 1]);
+Structures.set("village:plains/villagers/cleric", [1, 2, 1]);
+Structures.set("village:plains/villagers/farmer", [1, 2, 1]);
+Structures.set("village:plains/villagers/fishermen", [1, 2, 1]);
+Structures.set("village:plains/villagers/fletcher", [1, 2, 1]);
+Structures.set("village:plains/villagers/leatherworker", [1, 2, 1]);
+Structures.set("village:plains/villagers/librarian", [1, 2, 1]);
+Structures.set("village:plains/villagers/nitwit", [1, 2, 1]);
+Structures.set("village:plains/villagers/shepherd", [1, 2, 1]);
+Structures.set("village:plains/villagers/toolsmith", [1, 2, 1]);
+Structures.set("village:plains/villagers/unemployed", [1, 2, 1]);
+Structures.set("village:plains/villagers/weaponsmith", [1, 2, 1]);
+Structures.set("village:savanna/savanna_lamp_post_01", [1, 2, 1]);
+Structures.set("village:savanna/houses/savanna_animal_pen_1", [9, 6, 9]);
+Structures.set("village:savanna/houses/savanna_animal_pen_2", [13, 6, 12]);
+Structures.set("village:savanna/houses/savanna_animal_pen_3", [8, 5, 9]);
+Structures.set("village:savanna/houses/savanna_armorer_1", [7, 7, 7]);
+Structures.set("village:savanna/houses/savanna_butchers_shop_1", [11, 8, 11]);
+Structures.set("village:savanna/houses/savanna_butchers_shop_2", [13, 9, 9]);
+Structures.set("village:savanna/houses/savanna_cartographer_1", [8, 8, 9]);
+Structures.set("village:savanna/houses/savanna_fisher_cottage_1", [8, 11, 9]);
+Structures.set("village:savanna/houses/savanna_fletcher_house_1", [11, 7, 9]);
+Structures.set("village:savanna/houses/savanna_large_farm_1", [9, 3, 9]);
+Structures.set("village:savanna/houses/savanna_large_farm_2", [10, 4, 9]);
+Structures.set("village:savanna/houses/savanna_library_1", [10, 8, 8]);
+Structures.set("village:savanna/houses/savanna_mason_1", [7, 6, 10]);
+Structures.set("village:savanna/houses/savanna_medium_house_1", [8, 8, 15]);
+Structures.set("village:savanna/houses/savanna_medium_house_2", [10, 7, 11]);
+Structures.set("village:savanna/houses/savanna_shepherd_1", [14, 8, 12]);
+Structures.set("village:savanna/houses/savanna_small_farm", [6, 4, 9]);
+Structures.set("village:savanna/houses/savanna_small_house_1", [7, 7, 7]);
+Structures.set("village:savanna/houses/savanna_small_house_2", [7, 7, 7]);
+Structures.set("village:savanna/houses/savanna_small_house_3", [7, 7, 7]);
+Structures.set("village:savanna/houses/savanna_small_house_4", [10, 8, 7]);
+Structures.set("village:savanna/houses/savanna_small_house_5", [7, 10, 7]);
+Structures.set("village:savanna/houses/savanna_small_house_6", [7, 7, 7]);
+Structures.set("village:savanna/houses/savanna_small_house_7", [7, 7, 7]);
+Structures.set("village:savanna/houses/savanna_small_house_8", [6, 7, 7]);
+Structures.set("village:savanna/houses/savanna_tannery_1", [8, 6, 9]);
+Structures.set("village:savanna/houses/savanna_temple_1", [13, 8, 9]);
+Structures.set("village:savanna/houses/savanna_temple_2", [7, 7, 9]);
+Structures.set("village:savanna/houses/savanna_tool_smith_1", [7, 7, 11]);
+Structures.set("village:savanna/houses/savanna_weaponsmith_1", [8, 6, 9]);
+Structures.set("village:savanna/houses/savanna_weaponsmith_2", [9, 7, 13]);
+Structures.set("village:savanna/streets/corner_01", [16, 2, 16]);
+Structures.set("village:savanna/streets/corner_03", [4, 2, 4]);
+Structures.set("village:savanna/streets/crossroad_02", [7, 2, 10]);
+Structures.set("village:savanna/streets/crossroad_03", [16, 2, 16]);
+Structures.set("village:savanna/streets/crossroad_04", [4, 2, 5]);
+Structures.set("village:savanna/streets/crossroad_05", [5, 2, 5]);
+Structures.set("village:savanna/streets/crossroad_06", [5, 2, 5]);
+Structures.set("village:savanna/streets/crossroad_07", [15, 2, 14]);
+Structures.set("village:savanna/streets/split_01", [8, 2, 6]);
+Structures.set("village:savanna/streets/split_02", [14, 2, 9]);
+Structures.set("village:savanna/streets/straight_02", [16, 2, 16]);
+Structures.set("village:savanna/streets/straight_04", [11, 2, 9]);
+Structures.set("village:savanna/streets/straight_05", [20, 2, 17]);
+Structures.set("village:savanna/streets/straight_06", [9, 2, 14]);
+Structures.set("village:savanna/streets/straight_08", [10, 2, 16]);
+Structures.set("village:savanna/streets/straight_09", [23, 2, 16]);
+Structures.set("village:savanna/streets/straight_10", [6, 2, 11]);
+Structures.set("village:savanna/streets/straight_11", [17, 2, 17]);
+Structures.set("village:savanna/streets/turn_01", [19, 2, 11]);
+Structures.set("village:savanna/terminators/terminator_05", [16, 2, 16]);
+Structures.set("village:savanna/town_centers/savanna_meeting_point_1", [14, 5, 12]);
+Structures.set("village:savanna/town_centers/savanna_meeting_point_2", [11, 6, 11]);
+Structures.set("village:savanna/town_centers/savanna_meeting_point_3", [9, 6, 11]);
+Structures.set("village:savanna/town_centers/savanna_meeting_point_4", [9, 6, 9]);
+Structures.set("village:snowy/snowy_lamp_post_01", [3, 4, 1]);
+Structures.set("village:snowy/snowy_lamp_post_02", [2, 4, 1]);
+Structures.set("village:snowy/snowy_lamp_post_03", [3, 4, 3]);
+Structures.set("village:snowy/houses/snowy_animal_pen_1", [8, 4, 9]);
+Structures.set("village:snowy/houses/snowy_animal_pen_2", [9, 3, 8]);
+Structures.set("village:snowy/houses/snowy_armorer_house_1", [8, 8, 7]);
+Structures.set("village:snowy/houses/snowy_armorer_house_2", [7, 8, 7]);
+Structures.set("village:snowy/houses/snowy_butchers_shop_1", [7, 8, 9]);
+Structures.set("village:snowy/houses/snowy_butchers_shop_2", [9, 5, 5]);
+Structures.set("village:snowy/houses/snowy_cartographer_house_1", [7, 7, 11]);
+Structures.set("village:snowy/houses/snowy_farm_1", [6, 6, 7]);
+Structures.set("village:snowy/houses/snowy_farm_2", [7, 3, 9]);
+Structures.set("village:snowy/houses/snowy_fisher_cottage", [9, 8, 7]);
+Structures.set("village:snowy/houses/snowy_fletcher_house_1", [9, 8, 7]);
+Structures.set("village:snowy/houses/snowy_library_1", [13, 10, 7]);
+Structures.set("village:snowy/houses/snowy_masons_house_1", [10, 8, 9]);
+Structures.set("village:snowy/houses/snowy_masons_house_2", [9, 10, 9]);
+Structures.set("village:snowy/houses/snowy_medium_house_1", [7, 6, 8]);
+Structures.set("village:snowy/houses/snowy_medium_house_2", [14, 9, 7]);
+Structures.set("village:snowy/houses/snowy_medium_house_3", [5, 5, 7]);
+Structures.set("village:snowy/houses/snowy_shepherds_house_1", [9, 5, 10]);
+Structures.set("village:snowy/houses/snowy_small_house_1", [7, 5, 6]);
+Structures.set("village:snowy/houses/snowy_small_house_2", [7, 8, 7]);
+Structures.set("village:snowy/houses/snowy_small_house_3", [7, 6, 7]);
+Structures.set("village:snowy/houses/snowy_small_house_4", [8, 5, 7]);
+Structures.set("village:snowy/houses/snowy_small_house_5", [7, 5, 5]);
+Structures.set("village:snowy/houses/snowy_small_house_6", [7, 9, 7]);
+Structures.set("village:snowy/houses/snowy_small_house_7", [6, 7, 7]);
+Structures.set("village:snowy/houses/snowy_small_house_8", [6, 4, 5]);
+Structures.set("village:snowy/houses/snowy_tannery_1", [8, 9, 9]);
+Structures.set("village:snowy/houses/snowy_temple_1", [10, 14, 7]);
+Structures.set("village:snowy/houses/snowy_tool_smith_1", [8, 8, 7]);
+Structures.set("village:snowy/houses/snowy_weapon_smith_1", [9, 7, 10]);
+Structures.set("village:snowy/streets/corner_01", [13, 2, 16]);
+Structures.set("village:snowy/streets/corner_02", [16, 2, 16]);
+Structures.set("village:snowy/streets/corner_03", [4, 2, 4]);
+Structures.set("village:snowy/streets/crossroad_01", [16, 2, 16]);
+Structures.set("village:snowy/streets/crossroad_02", [16, 2, 16]);
+Structures.set("village:snowy/streets/crossroad_03", [16, 2, 17]);
+Structures.set("village:snowy/streets/crossroad_04", [4, 2, 5]);
+Structures.set("village:snowy/streets/crossroad_05", [5, 2, 5]);
+Structures.set("village:snowy/streets/crossroad_06", [5, 2, 5]);
+Structures.set("village:snowy/streets/square_01", [20, 2, 17]);
+Structures.set("village:snowy/streets/straight_01", [16, 2, 16]);
+Structures.set("village:snowy/streets/straight_02", [16, 2, 16]);
+Structures.set("village:snowy/streets/straight_03", [13, 2, 11]);
+Structures.set("village:snowy/streets/straight_04", [11, 2, 9]);
+Structures.set("village:snowy/streets/straight_06", [21, 2, 18]);
+Structures.set("village:snowy/streets/straight_08", [16, 2, 17]);
+Structures.set("village:snowy/streets/turn_01", [18, 2, 8]);
+Structures.set("village:snowy/town_centers/snowy_meeting_point_1", [12, 8, 8]);
+Structures.set("village:snowy/town_centers/snowy_meeting_point_2", [11, 5, 9]);
+Structures.set("village:snowy/town_centers/snowy_meeting_point_3", [7, 7, 7]);
+Structures.set("village:taiga/taiga_decoration_1", [3, 2, 6]);
+Structures.set("village:taiga/taiga_decoration_2", [2, 2, 3]);
+Structures.set("village:taiga/taiga_decoration_3", [1, 2, 2]);
+Structures.set("village:taiga/taiga_decoration_4", [1, 2, 2]);
+Structures.set("village:taiga/taiga_decoration_5", [1, 1, 1]);
+Structures.set("village:taiga/taiga_lamp_post_1", [1, 2, 1]);
+Structures.set("village:taiga/houses/taiga_animal_pen_1", [13, 5, 8]);
+Structures.set("village:taiga/houses/taiga_armorer_house_1", [10, 7, 7]);
+Structures.set("village:taiga/houses/taiga_armorer_house_2", [7, 8, 7]);
+Structures.set("village:taiga/houses/taiga_butcher_shop_1", [11, 7, 9]);
+Structures.set("village:taiga/houses/taiga_cartographer_house_1", [7, 10, 8]);
+Structures.set("village:taiga/houses/taiga_decoration_1", [3, 2, 6]);
+Structures.set("village:taiga/houses/taiga_fisher_cottage_1", [10, 8, 12]);
+Structures.set("village:taiga/houses/taiga_fletcher_house_1", [10, 6, 11]);
+Structures.set("village:taiga/houses/taiga_lamp_post_1", [1, 2, 1]);
+Structures.set("village:taiga/houses/taiga_large_farm_1", [10, 5, 10]);
+Structures.set("village:taiga/houses/taiga_large_farm_2", [8, 4, 9]);
+Structures.set("village:taiga/houses/taiga_library_1", [11, 10, 8]);
+Structures.set("village:taiga/houses/taiga_masons_house_1", [8, 7, 9]);
+Structures.set("village:taiga/houses/taiga_medium_house_1", [8, 12, 8]);
+Structures.set("village:taiga/houses/taiga_medium_house_2", [7, 11, 8]);
+Structures.set("village:taiga/houses/taiga_medium_house_3", [8, 7, 13]);
+Structures.set("village:taiga/houses/taiga_medium_house_4", [9, 7, 9]);
+Structures.set("village:taiga/houses/taiga_shepherds_house_1", [10, 7, 11]);
+Structures.set("village:taiga/houses/taiga_small_farm_1", [7, 4, 8]);
+Structures.set("village:taiga/houses/taiga_small_house_1", [7, 8, 9]);
+Structures.set("village:taiga/houses/taiga_small_house_2", [7, 7, 7]);
+Structures.set("village:taiga/houses/taiga_small_house_3", [7, 7, 7]);
+Structures.set("village:taiga/houses/taiga_small_house_4", [7, 6, 8]);
+Structures.set("village:taiga/houses/taiga_small_house_5", [9, 7, 7]);
+Structures.set("village:taiga/houses/taiga_tannery_1", [9, 6, 9]);
+Structures.set("village:taiga/houses/taiga_temple_1", [13, 14, 11]);
+Structures.set("village:taiga/houses/taiga_tool_smith_1", [11, 6, 8]);
+Structures.set("village:taiga/houses/taiga_weaponsmith_1", [7, 9, 7]);
+Structures.set("village:taiga/houses/taiga_weaponsmith_2", [6, 5, 7]);
+Structures.set("village:taiga/streets/corner_01", [16, 2, 16]);
+Structures.set("village:taiga/streets/corner_02", [16, 2, 16]);
+Structures.set("village:taiga/streets/corner_03", [4, 2, 4]);
+Structures.set("village:taiga/streets/crossroad_01", [16, 2, 16]);
+Structures.set("village:taiga/streets/crossroad_02", [16, 2, 16]);
+Structures.set("village:taiga/streets/crossroad_04", [4, 2, 5]);
+Structures.set("village:taiga/streets/crossroad_05", [5, 2, 5]);
+Structures.set("village:taiga/streets/crossroad_06", [5, 2, 5]);
+Structures.set("village:taiga/streets/straight_01", [16, 2, 16]);
+Structures.set("village:taiga/streets/straight_02", [16, 2, 16]);
+Structures.set("village:taiga/streets/straight_03", [13, 2, 11]);
+Structures.set("village:taiga/streets/straight_04", [11, 2, 9]);
+Structures.set("village:taiga/streets/straight_05", [20, 2, 17]);
+Structures.set("village:taiga/streets/straight_06", [21, 2, 18]);
+Structures.set("village:taiga/streets/turn_01", [18, 2, 8]);
+Structures.set("village:taiga/town_centers/taiga_meeting_point_1", [22, 3, 18]);
+Structures.set("village:taiga/town_centers/taiga_meeting_point_2", [9, 7, 9]);

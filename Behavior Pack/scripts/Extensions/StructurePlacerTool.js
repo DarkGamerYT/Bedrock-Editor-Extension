@@ -58,6 +58,11 @@ export default (uiSession) => {
             includeEntities: true,
             waterlogBlocks: false,
             removeBlocks: false,
+            offset: {
+                x: 0,
+                y: 0,
+                z: 0
+            }
         }
     );
     
@@ -92,18 +97,25 @@ export default (uiSession) => {
         "vanillaStructure",
         {
             titleAltText: "Vanilla Structure",
-            dropdownItems: Structures.map(
-                (value) => (
-                    {
-                        displayAltText: value,
-                        value,
-                    }
-                ),
-            ),
+            dropdownItems: [...Structures].map((name) => ({ value:name[0], displayAltText: name[0] })),
             onChange: (_obj, _property, _oldValue, _newValue) => {
                 settings.structureName = settings.vanillaStructure;
+                settings.offset = {
+                    x: Math.floor(-(Structures.get(settings.structureName)[0]/2)),
+                    y: 0,
+                    z: Math.floor(-(Structures.get(settings.structureName)[2]/2))
+                };
             },
         },
+    );
+
+    pane.addVec3(
+        settings,
+        "offset",
+        {
+            titleAltText: "Offset",
+            enable: true,
+        }
     );
 
     pane.addDropdown(
@@ -196,11 +208,11 @@ export default (uiSession) => {
                                 "structure load \""
                                 + settings.structureName
                                 + "\" "
-                                + uiSession.extensionContext.cursor.position.x
+                                + (uiSession.extensionContext.cursor.position.x + settings.offset.x)
                                 + " "
-                                + uiSession.extensionContext.cursor.position.y
+                                + (uiSession.extensionContext.cursor.position.y + settings.offset.y)
                                 + " "
-                                + uiSession.extensionContext.cursor.position.z
+                                + (uiSession.extensionContext.cursor.position.z + settings.offset.z)
                                 + " "
                                 + settings.rotation
                                 + " "
