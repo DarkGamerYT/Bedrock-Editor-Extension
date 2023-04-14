@@ -9,20 +9,21 @@ export default (uiSession) => {
             icon: "pack://textures/editor/structure_placer.png?filtering=point",
         },
     );
-    
-    const currentCursorState = uiSession.extensionContext.cursor.getState();
-    currentCursorState.color = new Color(1, 1, 0, 1);
-    currentCursorState.controlMode = Editor.CursorControlMode.KeyboardAndMouse;
-    currentCursorState.targetMode = Editor.CursorTargetMode.Face;
-    currentCursorState.visible = true;
+
     uiSession.scratchStorage = {
-        currentCursorState,
+        currentCursorState: {
+            outlineColor: new Color(1, 1, 0, 1),
+            controlMode: Editor.CursorControlMode.KeyboardAndMouse,
+            targetMode: Editor.CursorTargetMode.Face,
+            visible: true,
+            fixedModeDistance: 5
+        },
     };
     
     tool.onModalToolActivation.subscribe(
         eventData => {
             if (eventData.isActiveTool)
-                uiSession.extensionContext.cursor.setState(uiSession.scratchStorage.currentCursorState);
+                uiSession.extensionContext.cursor.setProperties(uiSession.scratchStorage.currentCursorState);
         },
     );
 
@@ -58,11 +59,6 @@ export default (uiSession) => {
             includeEntities: true,
             waterlogBlocks: false,
             removeBlocks: false,
-            offset: {
-                x: 0,
-                y: 0,
-                z: 0
-            }
         }
     );
     
@@ -87,7 +83,7 @@ export default (uiSession) => {
                 uiSession.scratchStorage.currentCursorState.targetMode = settings.face
                     ? Editor.CursorTargetMode.Face
                     : Editor.CursorTargetMode.Block;
-                uiSession.extensionContext.cursor.setState(uiSession.scratchStorage.currentCursorState);
+                uiSession.extensionContext.cursor.setProperties(uiSession.scratchStorage.currentCursorState);
             },
         }
     );
@@ -97,25 +93,18 @@ export default (uiSession) => {
         "vanillaStructure",
         {
             titleAltText: "Vanilla Structure",
-            dropdownItems: [...Structures].map((name) => ({ value:name[0], displayAltText: name[0] })),
+            dropdownItems: Structures.map(
+                (value) => (
+                    {
+                        displayAltText: value,
+                        value,
+                    }
+                ),
+            ),
             onChange: (_obj, _property, _oldValue, _newValue) => {
                 settings.structureName = settings.vanillaStructure;
-                settings.offset = {
-                    x: Math.floor(-(Structures.get(settings.structureName)[0]/2)),
-                    y: 0,
-                    z: Math.floor(-(Structures.get(settings.structureName)[2]/2))
-                };
             },
         },
-    );
-
-    pane.addVec3(
-        settings,
-        "offset",
-        {
-            titleAltText: "Offset",
-            enable: true,
-        }
     );
 
     pane.addDropdown(
@@ -198,6 +187,7 @@ export default (uiSession) => {
             {
                 actionType: Editor.ActionTypes.MouseRayCastAction,
                 onExecute: (mouseRay, mouseProps) => {
+                    try {
                     if (mouseProps.mouseAction == Editor.MouseActionType.LeftButton) {
                         if (mouseProps.inputType == Editor.MouseInputType.ButtonDown) {
                             uiSession.extensionContext.selectionManager.selection.clear();
@@ -208,11 +198,11 @@ export default (uiSession) => {
                                 "structure load \""
                                 + settings.structureName
                                 + "\" "
-                                + (uiSession.extensionContext.cursor.position.x + settings.offset.x)
+                                + uiSession.extensionContext.cursor.getPosition().x
                                 + " "
-                                + (uiSession.extensionContext.cursor.position.y + settings.offset.y)
+                                + uiSession.extensionContext.cursor.getPosition().y
                                 + " "
-                                + (uiSession.extensionContext.cursor.position.z + settings.offset.z)
+                                + uiSession.extensionContext.cursor.getPosition().z
                                 + " "
                                 + settings.rotation
                                 + " "
@@ -228,6 +218,7 @@ export default (uiSession) => {
                             uiSession.extensionContext.selectionManager.selection.clear();
                         };
                     };
+                    } catch(e) { console.warn(e); };
                 },
             },
         ),

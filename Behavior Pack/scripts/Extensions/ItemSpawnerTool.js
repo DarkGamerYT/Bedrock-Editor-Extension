@@ -9,27 +9,27 @@ export default (uiSession) => {
             icon: "pack://textures/editor/item.png?filtering=point",
         },
     );
-    
-    const currentCursorState = uiSession.extensionContext.cursor.getState();
-    currentCursorState.color = new Color(0, 1, 0, 1);
-    currentCursorState.controlMode = Editor.CursorControlMode.KeyboardAndMouse;
-    currentCursorState.targetMode = Editor.CursorTargetMode.Face;
-    currentCursorState.visible = true;
-    
-    const previewSelection = uiSession.extensionContext.selectionManager.createSelection();
+
+    const previewSelection = uiSession.extensionContext.selectionManager.create();
     previewSelection.visible = true;
-    previewSelection.borderColor = new Color(0, 1, 0, 0.2);
-    previewSelection.fillColor = new Color(0, 1, 0, 0.1);
+    previewSelection.setOutlineColor(new Color(0, 0.5, 0.5, 0.2));
+    previewSelection.setFillColor(new Color(0, 0, 0.5, 0.1));
     
     uiSession.scratchStorage = {
-        currentCursorState,
+        currentCursorState: {
+            outlineColor: new Color(0, 0.5, 0.5, 1),
+            controlMode: Editor.CursorControlMode.KeyboardAndMouse,
+            targetMode: Editor.CursorTargetMode.Face,
+            visible: true,
+            fixedModeDistance: 5
+        },
         previewSelection,
     };
     
     tool.onModalToolActivation.subscribe(
         eventData => {
             if (eventData.isActiveTool)
-                uiSession.extensionContext.cursor.setState(uiSession.scratchStorage.currentCursorState);
+                uiSession.extensionContext.cursor.setProperties(uiSession.scratchStorage.currentCursorState);
         },
     );
     
@@ -67,8 +67,8 @@ export default (uiSession) => {
         "itemType",
         {
             titleAltText: "Item Type",
-            dropdownItems: [...Server.ItemTypes.getAll()].map(
-                ({ id }) => (
+			dropdownItems: [...Server.ItemTypes.getAll()].map(({ id }) => id).sort().map(
+                (id) => (
                     {
                         value: id,
                         displayAltText: id,
@@ -100,7 +100,7 @@ export default (uiSession) => {
         
         const previewSelection = uiSession.scratchStorage.previewSelection;
         const player = uiSession.extensionContext.player;
-        const targetBlock = player.dimension.getBlock(uiSession.extensionContext.cursor.position);
+        const targetBlock = player.dimension.getBlock(uiSession.extensionContext.cursor.getPosition());
         if (!targetBlock) return;
         const location = targetBlock.location;
         const from = {
@@ -109,11 +109,16 @@ export default (uiSession) => {
             z: location.z,
         };
         const to = { x: from.x, y: from.y, z: from.z };
-        const blockVolume = new Editor.BlockVolume(from, to);
-        if (uiSession.scratchStorage.lastVolumePlaced?.equals(blockVolume.boundingBox)) return;
+        const blockVolume = { from, to };
+        if (uiSession.scratchStorage.lastVolumePlaced && Server.BoundingBoxUtils.equals(uiSession.scratchStorage.lastVolumePlaced, Server.BlockVolumeUtils.getBoundingBox(blockVolume))) return;
         
-        previewSelection.pushVolume(Editor.SelectionBlockVolumeAction.add, blockVolume);
-        uiSession.scratchStorage.lastVolumePlaced = blockVolume.boundingBox;
+        previewSelection.pushVolume(
+            {
+                action: Server.CompoundBlockVolumeAction.Add,
+                volume: blockVolume
+            }
+        );
+        uiSession.scratchStorage.lastVolumePlaced = Server.BlockVolumeUtils.getBoundingBox(blockVolume);
     };
     
     tool.registerMouseButtonBinding(

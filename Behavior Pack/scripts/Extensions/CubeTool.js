@@ -11,26 +11,26 @@ export default (uiSession) => {
         },
     );
     
-    const currentCursorState = uiSession.extensionContext.cursor.getState();
-    currentCursorState.color = new Color(1, 1, 0, 1);
-    currentCursorState.controlMode = Editor.CursorControlMode.KeyboardAndMouse;
-    currentCursorState.targetMode = Editor.CursorTargetMode.Block;
-    currentCursorState.visible = true;
-    
-    const previewSelection = uiSession.extensionContext.selectionManager.createSelection();
+    const previewSelection = uiSession.extensionContext.selectionManager.create();
     previewSelection.visible = true;
-    previewSelection.borderColor = new Color(0, 0.5, 0.5, 0.2);
-    previewSelection.fillColor = new Color(0, 0, 0.5, 0.1);
+    previewSelection.setOutlineColor(new Color(0, 0.5, 0.5, 0.2));
+    previewSelection.setFillColor(new Color(0, 0, 0.5, 0.1));
     
     uiSession.scratchStorage = {
-        currentCursorState,
+        currentCursorState: {
+            outlineColor: new Color(1, 1, 0, 1),
+            controlMode: Editor.CursorControlMode.KeyboardAndMouse,
+            targetMode: Editor.CursorTargetMode.Block,
+            visible: true,
+            fixedModeDistance: 5
+        },
         previewSelection,
     };
     
     tool.onModalToolActivation.subscribe(
         eventData => {
             if (eventData.isActiveTool)
-                uiSession.extensionContext.cursor.setState(uiSession.scratchStorage.currentCursorState);
+                uiSession.extensionContext.cursor.setProperties(uiSession.scratchStorage.currentCursorState);
         },
     );
     
@@ -93,7 +93,7 @@ export default (uiSession) => {
                 uiSession.scratchStorage.currentCursorState.targetMode = settings.face
                     ? Editor.CursorTargetMode.Face
                     : Editor.CursorTargetMode.Block;
-                uiSession.extensionContext.cursor.setState(uiSession.scratchStorage.currentCursorState);
+                uiSession.extensionContext.cursor.setProperties(uiSession.scratchStorage.currentCursorState);
             },
         }
     );
@@ -115,7 +115,7 @@ export default (uiSession) => {
         
         const previewSelection = uiSession.scratchStorage.previewSelection;
         const player = uiSession.extensionContext.player;
-        const targetBlock = player.dimension.getBlock(uiSession.extensionContext.cursor.position);
+        const targetBlock = player.dimension.getBlock(uiSession.extensionContext.cursor.getPosition());
         if (!targetBlock) return;
 
         const rotationY = uiSession.extensionContext.player.getRotation().y;
@@ -135,18 +135,28 @@ export default (uiSession) => {
             z: location.z + fromOffset.z,
         };
         const to = { x: from.x + toOffset.x, y: from.y + toOffset.y, z: from.z + toOffset.z };
-        const blockVolume = new Editor.BlockVolume(from, to);
+        const blockVolume = { from, to };
 
-        if (uiSession.scratchStorage.lastVolumePlaced?.equals(blockVolume.boundingBox)) return;
+        if (uiSession.scratchStorage.lastVolumePlaced && Server.BoundingBoxUtils.equals(uiSession.scratchStorage.lastVolumePlaced, Server.BlockVolumeUtils.getBoundingBox(blockVolume))) return;
         
-        previewSelection.pushVolume(Editor.SelectionBlockVolumeAction.add, blockVolume);
-        uiSession.scratchStorage.lastVolumePlaced = blockVolume.boundingBox;
+        previewSelection.pushVolume(
+            {
+                action: Server.CompoundBlockVolumeAction.Add,
+                volume: blockVolume
+            }
+        );
+        uiSession.scratchStorage.lastVolumePlaced = Server.BlockVolumeUtils.getBoundingBox(blockVolume);
         if (settings.hollow &&
             blockVolume.boundingBox.spanX > 2 &&
             blockVolume.boundingBox.spanY > 2 &&
             blockVolume.boundingBox.spanZ > 2) {
-            const subtractBlockVolume = new Editor.BlockVolume({ x: from.x, y: from.y + 1, z: from.z }, { x: to.x, y: to.y - 1, z: to.z });
-            previewSelection.pushVolume(Editor.SelectionBlockVolumeAction.subtract, subtractBlockVolume);
+            const subtractBlockVolume = { from: { x: from.x, y: from.y + 1, z: from.z }, to: { x: to.x, y: to.y - 1, z: to.z } };
+            previewSelection.pushVolume(
+                {
+                    action: Server.CompoundBlockVolumeAction.Subtract,
+                    volume: subtractBlockVolume
+                }
+            );
         };
     };
     
@@ -165,9 +175,15 @@ export default (uiSession) => {
 
                             uiSession.extensionContext.transactionManager.trackBlockChangeSelection(uiSession.scratchStorage.previewSelection);
                             await Editor.executeLargeOperation(uiSession.scratchStorage.previewSelection, blockLocation => {
-                                const block = player.dimension.getBlock(blockLocation);
-                                block.setType(settings.blockType);
-                            }).catch(() => {
+                                if (
+                                    blockLocation.y >= -64
+                                    && blockLocation.y <= 320
+                                ) {
+                                    const block = player.dimension.getBlock(blockLocation);
+                                    block.setType(settings.blockType);
+                                };
+                            }).catch((e) => {
+                                console.warn(e);
                                 uiSession.extensionContext.transactionManager.commitOpenTransaction();
                                 uiSession.scratchStorage?.previewSelection.clear();
                             }).then(() => {

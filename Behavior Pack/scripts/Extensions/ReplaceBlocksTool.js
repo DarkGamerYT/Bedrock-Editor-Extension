@@ -9,15 +9,17 @@ export default (uiSession) => {
             icon: "pack://textures/editor/replace.png?filtering=point",
         },
     );
-    
-    const currentCursorState = uiSession.extensionContext.cursor.getState();
-    currentCursorState.color = new Color(1, 1, 0, 1);
-    currentCursorState.controlMode = Editor.CursorControlMode.KeyboardAndMouse;
-    currentCursorState.targetMode = Editor.CursorTargetMode.Block;
-    currentCursorState.visible = true;
+
     uiSession.scratchStorage = {
-        spawnerCursorState: currentCursorState,
+        currentCursorState: {
+            outlineColor: new Color(1, 1, 0, 1),
+            controlMode: Editor.CursorControlMode.KeyboardAndMouse,
+            targetMode: Editor.CursorTargetMode.Block,
+            visible: true,
+            fixedModeDistance: 5
+        },
     };
+
     let lastAnchorPosition = { x: 0, y: 0, z: 0 };
     
     const pane = uiSession.createPropertyPane(
@@ -48,35 +50,77 @@ export default (uiSession) => {
         const clickLoc = mouseRay.cursorBlockLocation;
         if (!shiftPressed && !ctrlPressed && !altPressed) {
             uiSession.extensionContext.selectionManager.selection.clear();
-            uiSession.extensionContext.selectionManager.selection.pushVolume(Editor.SelectionBlockVolumeAction.add, new Editor.BlockVolume(clickLoc, clickLoc));
+            uiSession.extensionContext.selectionManager.selection.pushVolume(
+                {
+                    action: Server.CompoundBlockVolumeAction.Add,
+                    volume: {
+                        from: clickLoc,
+                        to: clickLoc,
+                    },
+                }
+            );
             lastAnchorPosition = clickLoc;
         } else if (shiftPressed && !ctrlPressed && !altPressed) {
             if (uiSession.extensionContext.selectionManager.selection.isEmpty) {
-                uiSession.extensionContext.selectionManager.selection.pushVolume(Editor.SelectionBlockVolumeAction.add, new Editor.BlockVolume(clickLoc, clickLoc));
+                uiSession.extensionContext.selectionManager.selection.pushVolume(
+                    {
+                        action: Server.CompoundBlockVolumeAction.Add,
+                        volume: {
+                            from: clickLoc,
+                            to: clickLoc,
+                        },
+                    }
+                );
                 lastAnchorPosition = clickLoc;
             } else {
                 const lastAnchorPosition_ = lastAnchorPosition;
                 uiSession.extensionContext.selectionManager.selection.popVolume();
-                const newVolume = new Editor.BlockVolume(lastAnchorPosition_, clickLoc);
-                uiSession.extensionContext.selectionManager.selection.pushVolume(Editor.SelectionBlockVolumeAction.add, newVolume);
+                const newVolume = { from: lastAnchorPosition_, to: clickLoc };
+                uiSession.extensionContext.selectionManager.selection.pushVolume(
+                    {
+                        action: Server.CompoundBlockVolumeAction.Add,
+                        volume: newVolume,
+                    }
+                );
             }
         } else if (ctrlPressed && !shiftPressed && !altPressed) {
-            uiSession.extensionContext.selectionManager.selection.pushVolume(Editor.SelectionBlockVolumeAction.add, new Editor.BlockVolume(clickLoc, clickLoc));
+            uiSession.extensionContext.selectionManager.selection.pushVolume(
+                {
+                    action: Server.CompoundBlockVolumeAction.Add,
+                    volume: {
+                        from: clickLoc,
+                        to: clickLoc,
+                    },
+                }
+            );
             lastAnchorPosition = clickLoc;
         } else if (altPressed && !shiftPressed && !ctrlPressed) {
             if (uiSession.extensionContext.selectionManager.selection.isEmpty) {
-                uiSession.extensionContext.selectionManager.selection.pushVolume(Editor.SelectionBlockVolumeAction.add, new Editor.BlockVolume(clickLoc, clickLoc));
+                uiSession.extensionContext.selectionManager.selection.pushVolume(
+                    {
+                        action: Server.CompoundBlockVolumeAction.Add,
+                        volume: {
+                            from: clickLoc,
+                            to: clickLoc,
+                        },
+                    }
+                );
                 lastAnchorPosition = clickLoc;
             } else {
-                const currentVolume = uiSession.extensionContext.selectionManager.selection.peekLastVolume;
-                const currentBounds = currentVolume.boundingBox;
+                const currentVolume = uiSession.extensionContext.selectionManager.selection.peekLastVolume().volume;
+                const currentBounds = currentVolume.getBoundingBox();
                 const translatedRayLocation = Server.Vector.subtract(new Server.Vector(mouseRay.location.x, mouseRay.location.y, mouseRay.location.z), new Server.Vector(currentBounds.min.x, currentBounds.min.y, currentBounds.min.z));
                 const intersection = true;
                 if (intersection) {
                     const newY = Math.ceil(translatedRayLocation.y) - 1;
-                    const newVolume = new Editor.BlockVolume({ x: currentBounds.min.x, y: currentBounds.min.y, z: currentBounds.min.z }, { x: currentBounds.max.x, y: newY, z: currentBounds.max.z });
+                    const newVolume = { from: { x: currentBounds.min.x, y: currentBounds.min.y, z: currentBounds.min.z }, to: { x: currentBounds.max.x, y: newY, z: currentBounds.max.z } };
                     uiSession.extensionContext.selectionManager.selection.popVolume();
-                    uiSession.extensionContext.selectionManager.selection.pushVolume(Editor.SelectionBlockVolumeAction.add, newVolume);
+                    uiSession.extensionContext.selectionManager.selection.pushVolume(
+                        {
+                            action: Server.CompoundBlockVolumeAction.Add,
+                            volume: newVolume,
+                        }
+                    );
                 }
             }
         }
@@ -86,7 +130,7 @@ export default (uiSession) => {
         {
             actionType: Editor.ActionTypes.NoArgsAction,
             onExecute: () => {
-                const blockLocation = uiSession.extensionContext.cursor.position;
+                const blockLocation = uiSession.extensionContext.cursor.getPosition();
                 const ray = {
                     location: { x: 0, y: 0, z: 0 },
                     direction: new Server.Vector(0, 0, 0),
@@ -102,7 +146,7 @@ export default (uiSession) => {
         {
             actionType: Editor.ActionTypes.NoArgsAction,
             onExecute: () => {
-                const blockLocation = uiSession.extensionContext.cursor.position;
+                const blockLocation = uiSession.extensionContext.cursor.getPosition();
                 const ray = {
                     location: { x: 0, y: 0, z: 0 },
                     direction: new Server.Vector(0, 0, 0),
@@ -118,7 +162,7 @@ export default (uiSession) => {
         {
             actionType: Editor.ActionTypes.NoArgsAction,
             onExecute: () => {
-                const blockLocation = uiSession.extensionContext.cursor.position;
+                const blockLocation = uiSession.extensionContext.cursor.getPosition();
                 const ray = {
                     location: { x: 0, y: 0, z: 0 },
                     direction: new Server.Vector(0, 0, 0),
@@ -153,7 +197,7 @@ export default (uiSession) => {
         if (_oldValue === _newValue) return;
         const selection = uiSession.extensionContext.selectionManager.selection;
         if (!selection.isEmpty) {
-            const lastVolume = selection.peekLastVolume;
+            const lastVolume = Server.BlockVolumeUtils.selection.peekLastVolume().volume;
             if (lastVolume) {
                 const min = {
                     x: settings.origin.x,
@@ -165,9 +209,14 @@ export default (uiSession) => {
                     y: settings.origin.y + settings.size.y - 1,
                     z: settings.origin.z + settings.size.z - 1,
                 };
-                const newVolume = new Editor.BlockVolume(min, max);
+                const newVolume = { from: min, to: max };
                 selection.popVolume();
-                selection.pushVolume(Editor.SelectionBlockVolumeAction.add, newVolume);
+                selection.pushVolume(
+                    {
+                        action: Server.CompoundBlockVolumeAction.Add,
+                        volume: newVolume
+                    }
+                );
             }
         }
     };
@@ -218,7 +267,7 @@ export default (uiSession) => {
                 let sx = 0, sy = 0, sz = 0;
                 const selection = uiSession.extensionContext.selectionManager.selection;
                 if (selection && !selection.isEmpty) {
-                    const bounds = selection.peekLastVolume.boundingBox;
+                    const bounds = selection.peekLastVolume().volume.getBoundingBox();
                     x = bounds.min.x;
                     y = bounds.min.y;
                     z = bounds.min.z;
@@ -269,7 +318,7 @@ export default (uiSession) => {
     tool.onModalToolActivation.subscribe(
         eventData => {
             if (eventData.isActiveTool) {
-                uiSession.extensionContext.cursor.setState(uiSession.scratchStorage.spawnerCursorState);
+                uiSession.extensionContext.cursor.setProperties(uiSession.scratchStorage.currentCursorState);
                 onTickRefresh(uiSession, tool);
             }
         },
@@ -317,9 +366,8 @@ export default (uiSession) => {
                         return;
                     };
 
-                    uiSession.extensionContext.transactionManager.openTransaction("replaceBlock");
-                    const bounds = uiSession.extensionContext.selectionManager.selection.boundingBox;
-                    uiSession.extensionContext.transactionManager.trackBlockChangeArea(bounds.min, bounds.max);
+                    uiSession.extensionContext.transactionManager.openTransaction("BlockReplacer");
+                    uiSession.extensionContext.transactionManager.trackBlockChangeSelection(uiSession.extensionContext.selectionManager.selection);
                     await Editor.executeLargeOperation(uiSession.extensionContext.selectionManager.selection, (blockLocation) => {
                         const block = dimension.getBlock(blockLocation);
                         if (block) {
@@ -327,11 +375,11 @@ export default (uiSession) => {
                             if(block?.typeId == settings.blockType.id) block.setType(settings.replaceWith);
                         };
                     })
-                        .catch(e => {
+                    .catch(e => {
                         console.error(e);
                         uiSession.extensionContext.transactionManager.discardOpenTransaction();
                     })
-                        .then(() => {
+                    .then(() => {
                         uiSession.extensionContext.transactionManager.commitOpenTransaction();
                     });
                 },

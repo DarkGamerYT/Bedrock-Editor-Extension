@@ -9,20 +9,21 @@ export default (uiSession) => {
             icon: "pack://textures/editor/block_modifier.png?filtering=point",
         },
     );
-    
-    const currentCursorState = uiSession.extensionContext.cursor.getState();
-    currentCursorState.color = new Color(1, 1, 0, 1);
-    currentCursorState.controlMode = Editor.CursorControlMode.KeyboardAndMouse;
-    currentCursorState.targetMode = Editor.CursorTargetMode.Block;
-    currentCursorState.visible = true;
+
     uiSession.scratchStorage = {
-        currentCursorState,
+        currentCursorState: {
+            outlineColor: new Color(1, 1, 0, 1),
+            controlMode: Editor.CursorControlMode.KeyboardAndMouse,
+            targetMode: Editor.CursorTargetMode.Block,
+            visible: true,
+            fixedModeDistance: 5
+        },
     };
     
     tool.onModalToolActivation.subscribe(
         eventData => {
             if (eventData.isActiveTool)
-                uiSession.extensionContext.cursor.setState(uiSession.scratchStorage.currentCursorState);
+                uiSession.extensionContext.cursor.setProperties(uiSession.scratchStorage.currentCursorState);
         },
     );
     
@@ -48,7 +49,7 @@ export default (uiSession) => {
                     if (mouseProps.mouseAction == Editor.MouseActionType.LeftButton) {
                         if (mouseProps.inputType == Editor.MouseInputType.ButtonDown) {
                             const player = uiSession.extensionContext.player;
-                            const targetBlock = player.dimension.getBlock(uiSession.extensionContext.cursor.position);
+                            const targetBlock = player.dimension.getBlock(uiSession.extensionContext.cursor.getPosition());
                             const pane = uiSession.createPropertyPane(
                                 {
                                     titleAltText: "Block Modifier",

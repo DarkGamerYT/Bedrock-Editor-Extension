@@ -41,8 +41,6 @@ var BlockSet = class {
   }
 };
 
-// src/index.ts
-import { BlockVolume } from "@minecraft/server-editor";
 var Mesh = class extends BlockSet {
   /**
    * Calculates the smallest amount of BlockVolume objects needed to create a preview for the mesh.
@@ -100,10 +98,10 @@ var Mesh = class extends BlockSet {
             }
           }
           volumes.push(
-            new BlockVolume(
-              { x, y, z },
-              { x: x + extendX, y: y + extendY, z: z + extendZ }
-            )
+            {
+              from: { x, y, z },
+              to: { x: x + extendX, y: y + extendY, z: z + extendZ }
+            }
           );
         }
       }
