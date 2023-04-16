@@ -267,7 +267,7 @@ export default (uiSession) => {
                 let sx = 0, sy = 0, sz = 0;
                 const selection = uiSession.extensionContext.selectionManager.selection;
                 if (selection && !selection.isEmpty) {
-                    const bounds = selection.peekLastVolume().volume.getBoundingBox();
+                    const bounds = Server.BlockVolumeUtils.getBoundingBox(selection.peekLastVolume().volume);
                     x = bounds.min.x;
                     y = bounds.min.y;
                     z = bounds.min.z;
