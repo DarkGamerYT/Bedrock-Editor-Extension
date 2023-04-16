@@ -4,15 +4,11 @@
 		"name": "Editor Extension",
 		"description": "An extension for Editor Mode that adds useful tools.",
 		"uuid": "8d00b185-8ab6-4960-9979-9d43f62b0c33",
-		"version": [
-			1,
-			0,
-			0
-		],
+		"version": "0.1.2-alpha",
 		"min_engine_version": [
 			1,
-			19,
-			80
+			20,
+			0
 		]
 	},
 	"modules": [
