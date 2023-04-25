@@ -4,7 +4,7 @@
 		"name": "Editor Extension",
 		"description": "An extension for Editor Mode that adds useful tools.",
 		"uuid": "8d00b185-8ab6-4960-9979-9d43f62b0c33",
-		"version": "0.1.2-alpha",
+		"version": "0.1.3-alpha",
 		"min_engine_version": [
 			1,
 			20,
