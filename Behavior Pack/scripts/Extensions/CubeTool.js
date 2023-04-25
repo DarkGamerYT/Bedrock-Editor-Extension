@@ -119,17 +119,21 @@ export default (uiSession) => {
         const isEven = settings.size % 2 === 0;
         if (isEven) fromOffset = Server.Vector.add( fromOffset, Server.Vector.up );
         const location = targetBlock.location;
+        const from = {
+            x: location.x + fromOffset.x,
+            y: location.y + fromOffset.y,
+            z: location.z + fromOffset.z,
+        };
+
+        const to = {
+            x: from.x + toOffset.x,
+            y: from.y + toOffset.y,
+            z: from.z + toOffset.z
+        };
+        
         const blockVolume = {
-            from: {
-                x: location.x + fromOffset.x,
-                y: location.y + fromOffset.y,
-                z: location.z + fromOffset.z,
-            },
-            to: {
-                x: from.x + toOffset.x,
-                y: from.y + toOffset.y,
-                z: from.z + toOffset.z
-            },
+            from,
+            to,
         };
 
         if (
