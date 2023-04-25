@@ -12,12 +12,12 @@ export default (uiSession) => {
 
     const previewSelection = uiSession.extensionContext.selectionManager.create();
     previewSelection.visible = true;
-    previewSelection.setOutlineColor(new Color(0, 0.5, 0.5, 0.2));
-    previewSelection.setFillColor(new Color(0, 0, 0.5, 0.1));
+    previewSelection.setOutlineColor( new Color( 0, 0.5, 0.5, 0.2 ) );
+    previewSelection.setFillColor( new Color( 0, 0, 0.5, 0.1 ) );
     
     uiSession.scratchStorage = {
         currentCursorState: {
-            outlineColor: new Color(0, 0.5, 0.5, 1),
+            outlineColor: new Color( 0, 0.5, 0.5, 1 ),
             controlMode: Editor.CursorControlMode.KeyboardAndMouse,
             targetMode: Editor.CursorTargetMode.Face,
             visible: true,
@@ -29,7 +29,7 @@ export default (uiSession) => {
     tool.onModalToolActivation.subscribe(
         eventData => {
             if (eventData.isActiveTool)
-                uiSession.extensionContext.cursor.setProperties(uiSession.scratchStorage.currentCursorState);
+                uiSession.extensionContext.cursor.setProperties( uiSession.scratchStorage.currentCursorState );
         },
     );
     
@@ -39,7 +39,7 @@ export default (uiSession) => {
             {
                 actionType: Editor.ActionTypes.NoArgsAction,
                 onExecute: () => {
-                    uiSession.toolRail.setSelectedOptionId(tool.id, true);
+                    uiSession.toolRail.setSelectedOptionId( tool.id, true );
                 },
             },
         ),
@@ -61,13 +61,39 @@ export default (uiSession) => {
             amount: 1,
         },
     );
-    
+
+    const notAllowedItems = new Set(
+        [
+            ...Server.MinecraftBlockTypes.getAllBlockTypes()
+        ].map(
+            ({ id }) => id
+        ),
+    );
+    const items = [
+        ...Server.ItemTypes.getAll(),
+    ].map(
+        ({ id }) => id,
+    ).reduce(
+        ( e, id ) => {
+            return (
+                (
+                    notAllowedItems.has( id )
+                    || e.push( id )
+                ),
+                e
+            );
+        },
+        [],
+    ).sort(
+        (e, id) => e.localeCompare( id ),
+    );
+
     pane.addDropdown(
         settings,
         "itemType",
         {
             titleAltText: "Item Type",
-			dropdownItems: [...Server.ItemTypes.getAll()].map(({ id }) => id).sort().map(
+			dropdownItems: items.map(
                 (id) => (
                     {
                         value: id,
@@ -91,7 +117,6 @@ export default (uiSession) => {
     );
     
     tool.bindPropertyPane(pane);
-    
     const onExecuteBrush = () => {
         if (!uiSession.scratchStorage?.previewSelection) {
             console.error('Item Spawner storage was not initialized.');
@@ -133,11 +158,11 @@ export default (uiSession) => {
                         } else if (mouseProps.inputType == Editor.MouseInputType.ButtonUp) {
                             await Editor.executeLargeOperation(uiSession.scratchStorage.previewSelection, blockLocation => {
                                 const player = uiSession.extensionContext.player;
-                                const targetBlock = player.dimension.getBlock(blockLocation);
+                                const targetBlock = player.dimension.getBlock( blockLocation );
                                 
-                                if(targetBlock) {
+                                if (targetBlock) {
                                     const item = player.dimension.spawnItem(
-                                        new Server.ItemStack(settings.itemType, settings.amount),
+                                        new Server.ItemStack( settings.itemType, settings.amount ),
                                         {
                                             x: targetBlock.x + 0.5,
                                             y: targetBlock.y,
@@ -145,13 +170,17 @@ export default (uiSession) => {
                                         },
                                     );
                                 };
-                            }).catch(() => {
-                                uiSession.extensionContext.transactionManager.commitOpenTransaction();
-                                uiSession.scratchStorage?.previewSelection.clear();
-                            }).then(() => {
-                                uiSession.extensionContext.transactionManager.commitOpenTransaction();
-                                uiSession.scratchStorage?.previewSelection.clear();
-                            });
+                            }).catch(
+                                () => {
+                                    uiSession.extensionContext.transactionManager.commitOpenTransaction();
+                                    uiSession.scratchStorage?.previewSelection.clear();
+                                },
+                            ).then(
+                                () => {
+                                    uiSession.extensionContext.transactionManager.commitOpenTransaction();
+                                    uiSession.scratchStorage?.previewSelection.clear();
+                                },
+                            );
                         };
                     };
                 },

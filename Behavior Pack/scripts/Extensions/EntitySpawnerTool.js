@@ -17,7 +17,7 @@ export default (uiSession) => {
     
     uiSession.scratchStorage = {
         currentCursorState: {
-            outlineColor: new Color(0, 1, 0, 1),
+            outlineColor: new Color( 0, 1, 0, 1 ),
             controlMode: Editor.CursorControlMode.KeyboardAndMouse,
             targetMode: Editor.CursorTargetMode.Face,
             visible: true,
@@ -29,7 +29,7 @@ export default (uiSession) => {
     tool.onModalToolActivation.subscribe(
         eventData => {
             if (eventData.isActiveTool)
-                uiSession.extensionContext.cursor.setProperties(uiSession.scratchStorage.currentCursorState);
+                uiSession.extensionContext.cursor.setProperties( uiSession.scratchStorage.currentCursorState );
         },
     );
     
@@ -39,7 +39,7 @@ export default (uiSession) => {
             {
                 actionType: Editor.ActionTypes.NoArgsAction,
                 onExecute: () => {
-                    uiSession.toolRail.setSelectedOptionId(tool.id, true);
+                    uiSession.toolRail.setSelectedOptionId( tool.id, true );
                 },
             },
         ),
@@ -65,35 +65,74 @@ export default (uiSession) => {
     pane.addString(
         settings,
         "nameTag",
-        {
-            titleAltText: "Name Tag",
-        },
+        { titleAltText: "Name Tag" },
     );
-    
+
+    const notAllowedEntities = new Set(
+        [
+            "minecraft:agent",
+            "minecraft:area_effect_cloud",
+            "minecraft:dragon_fireball",
+            "minecraft:egg",
+            "minecraft:ender_pearl",
+            "minecraft:eye_of_ender_signal",
+            "minecraft:fireball",
+            "minecraft:fireworks_rocket",
+            "minecraft:fishing_hook",
+            "minecraft:lingering_potion",
+            "minecraft:llama_spit",
+            "minecraft:player",
+            "minecraft:shulker_bullet",
+            "minecraft:small_fireball",
+            "minecraft:snowball",
+            "minecraft:splash_potion",
+            "minecraft:thrown_trident",
+            "minecraft:tripod_camera",
+            "minecraft:villager",
+            "minecraft:xp_bottle",
+        ],
+    );
+
+    const entities = [
+        ...Server.EntityTypes.getAll(),
+    ].map(
+        ({ id }) => id,
+    ).reduce(
+        ( e, id ) => {
+            return (
+                (
+                    notAllowedEntities.has( id )
+                    || e.push( id )
+                ),
+                e
+            );
+        },
+        [],
+    ).sort(
+        (e, id) => e.localeCompare( id ),
+    );
+
     pane.addDropdown(
         settings,
         "entityType",
         {
             titleAltText: "Entity Type",
-            dropdownItems: [...Server.EntityTypes.getAll()].map(({ id }) => id).sort().map(
+            dropdownItems: entities.map(
                 (id) => (
                     {
                         value: id,
                         displayAltText: id,
-                        displayStringId: "entity." + id.replace("minecraft:", "") + ".name",
+                        displayStringId: "entity." + id.replace( "minecraft:", "" ) + ".name",
                     }
                 ),
             ),
         },
     );
     
-    tool.bindPropertyPane(pane);
+    tool.bindPropertyPane( pane );
     
     const onExecuteBrush = () => {
-        if (!uiSession.scratchStorage?.previewSelection) {
-            console.error('Entity Spawner storage was not initialized.');
-            return;
-        };
+        if (!uiSession.scratchStorage?.previewSelection) return console.error( "Entity Spawner storage was not initialized." );
         
         const previewSelection = uiSession.scratchStorage.previewSelection;
         const player = uiSession.extensionContext.player;
@@ -107,7 +146,7 @@ export default (uiSession) => {
         };
         const to = { x: from.x, y: from.y, z: from.z };
         const blockVolume = { from, to };
-        if (uiSession.scratchStorage.lastVolumePlaced && Server.BoundingBoxUtils.equals(uiSession.scratchStorage.lastVolumePlaced, Server.BlockVolumeUtils.getBoundingBox(blockVolume))) return;
+        if (uiSession.scratchStorage.lastVolumePlaced && Server.BoundingBoxUtils.equals( uiSession.scratchStorage.lastVolumePlaced, Server.BlockVolumeUtils.getBoundingBox( blockVolume ) )) return;
 
         previewSelection.pushVolume(
             {
@@ -115,7 +154,8 @@ export default (uiSession) => {
                 volume: blockVolume
             }
         );
-        uiSession.scratchStorage.lastVolumePlaced = Server.BlockVolumeUtils.getBoundingBox(blockVolume);
+
+        uiSession.scratchStorage.lastVolumePlaced = Server.BlockVolumeUtils.getBoundingBox( blockVolume );
     };
     
     tool.registerMouseButtonBinding(
@@ -130,9 +170,9 @@ export default (uiSession) => {
                         } else if (mouseProps.inputType == Editor.MouseInputType.ButtonUp) {
                             await Editor.executeLargeOperation(uiSession.scratchStorage.previewSelection, blockLocation => {
                                 const player = uiSession.extensionContext.player;
-                                const targetBlock = player.dimension.getBlock(blockLocation);
+                                const targetBlock = player.dimension.getBlock( blockLocation );
                                 
-                                if(targetBlock) {
+                                if (targetBlock) {
                                     const entity = player.dimension.spawnEntity(
                                         settings.entityType,
                                         {
@@ -144,13 +184,17 @@ export default (uiSession) => {
 
                                     entity.nameTag = settings.nameTag;
                                 };
-                            }).catch(() => {
-                                uiSession.extensionContext.transactionManager.commitOpenTransaction();
-                                uiSession.scratchStorage?.previewSelection.clear();
-                            }).then(() => {
-                                uiSession.extensionContext.transactionManager.commitOpenTransaction();
-                                uiSession.scratchStorage?.previewSelection.clear();
-                            });
+                            }).catch(
+                                () => {
+                                    uiSession.extensionContext.transactionManager.commitOpenTransaction();
+                                    uiSession.scratchStorage?.previewSelection.clear();
+                                },
+                            ).then(
+                                () => {
+                                    uiSession.extensionContext.transactionManager.commitOpenTransaction();
+                                    uiSession.scratchStorage?.previewSelection.clear();
+                                },
+                            );
                         };
                     };
                 },

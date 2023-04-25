@@ -1,7 +1,7 @@
 import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
 import { Color } from "../utils";
-export default (uiSession) => {
+export default ( uiSession ) => {
     const tool = uiSession.toolRail.addTool(
         {
             displayString: "Block Modifier",
@@ -12,7 +12,7 @@ export default (uiSession) => {
 
     uiSession.scratchStorage = {
         currentCursorState: {
-            outlineColor: new Color(1, 1, 0, 1),
+            outlineColor: new Color( 1, 1, 0, 1 ),
             controlMode: Editor.CursorControlMode.KeyboardAndMouse,
             targetMode: Editor.CursorTargetMode.Block,
             visible: true,
@@ -23,7 +23,7 @@ export default (uiSession) => {
     tool.onModalToolActivation.subscribe(
         eventData => {
             if (eventData.isActiveTool)
-                uiSession.extensionContext.cursor.setProperties(uiSession.scratchStorage.currentCursorState);
+                uiSession.extensionContext.cursor.setProperties( uiSession.scratchStorage.currentCursorState );
         },
     );
     
@@ -33,7 +33,7 @@ export default (uiSession) => {
             {
                 actionType: Editor.ActionTypes.NoArgsAction,
                 onExecute: () => {
-                    uiSession.toolRail.setSelectedOptionId(tool.id, true);
+                    uiSession.toolRail.setSelectedOptionId( tool.id, true );
                 },
             },
         ),
@@ -45,11 +45,11 @@ export default (uiSession) => {
         uiSession.actionManager.createAction(
             {
                 actionType: Editor.ActionTypes.MouseRayCastAction,
-                onExecute: async (mouseRay, mouseProps) => {
+                onExecute: ( mouseRay, mouseProps ) => {
                     if (mouseProps.mouseAction == Editor.MouseActionType.LeftButton) {
                         if (mouseProps.inputType == Editor.MouseInputType.ButtonDown) {
                             const player = uiSession.extensionContext.player;
-                            const targetBlock = player.dimension.getBlock(uiSession.extensionContext.cursor.getPosition());
+                            const targetBlock = player.dimension.getBlock( uiSession.extensionContext.cursor.getPosition() );
                             const pane = uiSession.createPropertyPane(
                                 {
                                     titleAltText: "Block Modifier",
@@ -63,15 +63,15 @@ export default (uiSession) => {
                                     blockType: targetBlock.typeId,
                                     location: targetBlock.location,
                                     waterlogged: targetBlock.isWaterlogged,
-                                    weirdo_direction: targetBlock.permutation.getProperty("weirdo_direction"),
-                                    direction: targetBlock.permutation.getProperty("direction"),
-                                    lever_direction: targetBlock.permutation.getProperty("lever_direction"),
-                                    brushed_progress: targetBlock.permutation.getProperty("brushed_progress"),
-                                    growth: targetBlock.permutation.getProperty("growth"),
-                                    redstone_signal: targetBlock.permutation.getProperty("redstone_signal"),
-                                    repeater_delay: targetBlock.permutation.getProperty("repeater_delay"),
-                                    rail_direction: targetBlock.permutation.getProperty("rail_direction"),
-                                    damage: targetBlock.permutation.getProperty("damage"),
+                                    weirdo_direction: targetBlock.permutation.getState("weirdo_direction"),
+                                    direction: targetBlock.permutation.getState("direction"),
+                                    lever_direction: targetBlock.permutation.getState("lever_direction"),
+                                    brushed_progress: targetBlock.permutation.getState("brushed_progress"),
+                                    growth: targetBlock.permutation.getState("growth"),
+                                    redstone_signal: targetBlock.permutation.getState("redstone_signal"),
+                                    repeater_delay: targetBlock.permutation.getState("repeater_delay"),
+                                    rail_direction: targetBlock.permutation.getState("rail_direction"),
+                                    damage: targetBlock.permutation.getState("damage"),
                                 },
                             );
                         
@@ -96,26 +96,26 @@ export default (uiSession) => {
                                 }
                             );
                             
-                            if(Server.MinecraftBlockTypes.get(targetBlock.typeId).canBeWaterlogged) {
+                            if (Server.MinecraftBlockTypes.get( targetBlock.typeId ).canBeWaterlogged) {
                                 pane.addBool(
                                     settings,
                                     "waterlogged",
                                     {
                                         titleAltText: "Waterlogged",
-                                        onChange: (_obj, _property, _oldValue, _newValue) => {
+                                        onChange: ( _obj, _property, _oldValue, _newValue ) => {
                                             targetBlock.isWaterlogged = settings.waterlogged;
                                         },
                                     }
                                 );
                             };
 
-                            if(targetBlock.permutation.getProperty("lever_direction")) {
+                            if (targetBlock.permutation.getState( "lever_direction" )) {
                                 pane.addDropdown(
                                     settings,
                                     "lever_direction",
                                     {
                                         titleAltText: "Lever Direction",
-                                        dropdownItems: Server.BlockProperties.get("lever_direction").validValues.map(
+                                        dropdownItems: Server.BlockProperties.get( "lever_direction" ).validValues.map(
                                             (value) => (
                                                 {
                                                     displayAltText: value,
@@ -123,21 +123,23 @@ export default (uiSession) => {
                                                 }
                                             ),
                                         ),
-                                        onChange: (_obj, _property, _oldValue, _newValue) => {
-                                            const blockPermutation = Server.BlockPermutation.resolve(
-                                                targetBlock.typeId,
-                                                {
-                                                    lever_direction: settings.lever_direction,
-                                                },
-                                            );
+                                        onChange: ( _obj, _property, _oldValue, _newValue ) => {
+                                            try {
+                                                const blockPermutation = Server.BlockPermutation.resolve(
+                                                    targetBlock.typeId,
+                                                    { lever_direction: settings.lever_direction },
+                                                );
 
-                                            targetBlock.setPermutation(blockPermutation);
+                                                targetBlock.setPermutation( blockPermutation );
+                                            } catch(e) {
+                                                pane._sendDestroyMessage();
+                                            };
                                         },
                                     }
                                 );
                             };
                             
-                            if(targetBlock.permutation.getProperty("redstone_signal") != undefined) {
+                            if (targetBlock.permutation.getState( "redstone_signal" ) != undefined) {
                                 pane.addNumber(
                                     settings,
                                     "redstone_signal",
@@ -146,21 +148,23 @@ export default (uiSession) => {
                                         min: 0,
                                         max: 15,
                                         showSlider: true,
-                                        onChange: (_obj, _property, _oldValue, _newValue) => {
-                                            const blockPermutation = Server.BlockPermutation.resolve(
-                                                targetBlock.typeId,
-                                                {
-                                                    redstone_signal: settings.redstone_signal,
-                                                },
-                                            );
-                                            
-                                            targetBlock.setPermutation(blockPermutation);
+                                        onChange: ( _obj, _property, _oldValue, _newValue ) => {
+                                            try {
+                                                const blockPermutation = Server.BlockPermutation.resolve(
+                                                    targetBlock.typeId,
+                                                    { redstone_signal: settings.redstone_signal },
+                                                );
+                                                
+                                                targetBlock.setPermutation( blockPermutation );
+                                            } catch(e) {
+                                                pane._sendDestroyMessage();
+                                            };
                                         },
                                     }
                                 );
                             };
 
-                            if(targetBlock.permutation.getProperty("repeater_delay") != undefined) {
+                            if (targetBlock.permutation.getState( "repeater_delay" ) != undefined) {
                                 pane.addNumber(
                                     settings,
                                     "repeater_delay",
@@ -169,48 +173,50 @@ export default (uiSession) => {
                                         min: 0,
                                         max: 3,
                                         showSlider: true,
-                                        onChange: (_obj, _property, _oldValue, _newValue) => {
-                                            const blockPermutation = Server.BlockPermutation.resolve(
-                                                targetBlock.typeId,
-                                                {
-                                                    repeater_delay: settings.repeater_delay,
-                                                },
-                                            );
-                                            
-                                            targetBlock.setPermutation(blockPermutation);
+                                        onChange: ( _obj, _property, _oldValue, _newValue ) => {
+                                            try {
+                                                const blockPermutation = Server.BlockPermutation.resolve(
+                                                    targetBlock.typeId,
+                                                    { repeater_delay: settings.repeater_delay },
+                                                );
+                                                
+                                                targetBlock.setPermutation( blockPermutation );
+                                            } catch(e) {
+                                                pane._sendDestroyMessage();
+                                            };
                                         },
                                     }
                                 );
                             };
 
-                            if(
-                                targetBlock.permutation.getProperty("weirdo_direction") != undefined
-                                || targetBlock.permutation.getProperty("direction") != undefined
+                            if (
+                                targetBlock.permutation.getState( "weirdo_direction" ) != undefined
+                                || targetBlock.permutation.getState( "direction" ) != undefined
                             ) {
                                 pane.addNumber(
                                     settings,
-                                    targetBlock.permutation.getProperty("weirdo_direction") != undefined ? "weirdo_direction" :"direction",
+                                    targetBlock.permutation.getState( "weirdo_direction" ) != undefined ? "weirdo_direction" :"direction",
                                     {
                                         titleAltText: "Direction",
                                         min: 0,
                                         max: 3,
                                         showSlider: true,
-                                        onChange: (_obj, _property, _oldValue, _newValue) => {
+                                        onChange: ( _obj, _property, _oldValue, _newValue ) => {
                                             try {
-                                                let direction = targetBlock.permutation.getProperty("weirdo_direction") != undefined ? { weirdo_direction: settings.weirdo_direction } : { direction: settings.direction };
+                                                let direction = targetBlock.permutation.getState( "weirdo_direction" ) != undefined ? { weirdo_direction: settings.weirdo_direction } : { direction: settings.direction };
                                                 const blockPermutation = Server.BlockPermutation.resolve(
                                                     targetBlock.typeId,
                                                     direction,
                                                 );
                                                 
-                                                targetBlock.setPermutation(blockPermutation);
+                                                targetBlock.setPermutation( blockPermutation );
                                             } catch(e) {};
                                         },
                                     }
                                 );
                             };
 
-                            if(targetBlock.permutation.getProperty("brushed_progress") != undefined) {
+                            if (targetBlock.permutation.getState( "brushed_progress" ) != undefined) {
                                 pane.addNumber(
                                     settings,
                                     "brushed_progress",
@@ -219,21 +225,23 @@ export default (uiSession) => {
                                         min: 0,
                                         max: 3,
                                         showSlider: true,
-                                        onChange: (_obj, _property, _oldValue, _newValue) => {
-                                            const blockPermutation = Server.BlockPermutation.resolve(
-                                                targetBlock.typeId,
-                                                {
-                                                    brushed_progress: settings.brushed_progress,
-                                                },
-                                            );
-                                            
-                                            targetBlock.setPermutation(blockPermutation);
+                                        onChange: ( _obj, _property, _oldValue, _newValue ) => {
+                                            try {
+                                                const blockPermutation = Server.BlockPermutation.resolve(
+                                                    targetBlock.typeId,
+                                                    { brushed_progress: settings.brushed_progress },
+                                                );
+                                                
+                                                targetBlock.setPermutation( blockPermutation );
+                                            } catch(e) {
+                                                pane._sendDestroyMessage();
+                                            };
                                         },
                                     }
                                 );
                             };
 
-                            if(targetBlock.permutation.getProperty("growth") != undefined) {
+                            if (targetBlock.permutation.getState( "growth" ) != undefined) {
                                 pane.addNumber(
                                     settings,
                                     "growth",
@@ -242,21 +250,23 @@ export default (uiSession) => {
                                         min: 0,
                                         max: 7,
                                         showSlider: true,
-                                        onChange: (_obj, _property, _oldValue, _newValue) => {
-                                            const blockPermutation = Server.BlockPermutation.resolve(
-                                                targetBlock.typeId,
-                                                {
-                                                    growth: settings.growth,
-                                                },
-                                            );
-                                            
-                                            targetBlock.setPermutation(blockPermutation);
+                                        onChange: ( _obj, _property, _oldValue, _newValue ) => {
+                                            try {
+                                                const blockPermutation = Server.BlockPermutation.resolve(
+                                                    targetBlock.typeId,
+                                                    { growth: settings.growth },
+                                                );
+                                                
+                                                targetBlock.setPermutation( blockPermutation );  
+                                            } catch(e) {
+                                                pane._sendDestroyMessage();
+                                            };
                                         },
                                     }
                                 );
                             };
 
-                            if(targetBlock.permutation.getProperty("rail_direction") != undefined) {
+                            if (targetBlock.permutation.getState( "rail_direction" ) != undefined) {
                                 pane.addNumber(
                                     settings,
                                     "rail_direction",
@@ -265,27 +275,29 @@ export default (uiSession) => {
                                         min: 0,
                                         max: 9,
                                         showSlider: true,
-                                        onChange: (_obj, _property, _oldValue, _newValue) => {
-                                            const blockPermutation = Server.BlockPermutation.resolve(
-                                                targetBlock.typeId,
-                                                {
-                                                    rail_direction: settings.rail_direction,
-                                                },
-                                            );
-                                            
-                                            targetBlock.setPermutation(blockPermutation);
+                                        onChange: ( _obj, _property, _oldValue, _newValue ) => {
+                                            try {
+                                                const blockPermutation = Server.BlockPermutation.resolve(
+                                                    targetBlock.typeId,
+                                                    { rail_direction: settings.rail_direction },
+                                                );
+                                                
+                                                targetBlock.setPermutation( blockPermutation );
+                                            } catch(e) {
+                                                pane._sendDestroyMessage();
+                                            };
                                         },
                                     }
                                 );
                             };
 
-                            if(targetBlock.permutation.getProperty("damage")) {
+                            if (targetBlock.permutation.getState( "damage" )) {
                                 pane.addDropdown(
                                     settings,
                                     "damage",
                                     {
                                         titleAltText: "Damage",
-                                        dropdownItems: Server.BlockProperties.get("damage").validValues.map(
+                                        dropdownItems: Server.BlockProperties.get( "damage" ).validValues.map(
                                             (value) => (
                                                 {
                                                     displayAltText: value,
@@ -293,22 +305,24 @@ export default (uiSession) => {
                                                 }
                                             ),
                                         ),
-                                        onChange: (_obj, _property, _oldValue, _newValue) => {
-                                            const blockPermutation = Server.BlockPermutation.resolve(
-                                                targetBlock.typeId,
-                                                {
-                                                    damage: settings.damage,
-                                                },
-                                            );
-
-                                            targetBlock.setPermutation(blockPermutation);
+                                        onChange: ( _obj, _property, _oldValue, _newValue ) => {
+                                            try {
+                                                const blockPermutation = Server.BlockPermutation.resolve(
+                                                    targetBlock.typeId,
+                                                    { damage: settings.damage },
+                                                );
+    
+                                                targetBlock.setPermutation( blockPermutation );
+                                            } catch(e) {
+                                                pane._sendDestroyMessage();
+                                            };
                                         },
                                     }
                                 );
                             };
 
-                            tool.bindPropertyPane(pane);
-                            pane.update(true);
+                            tool.bindPropertyPane( pane );
+                            pane.update( true );
                         };
                     };
                 },

@@ -1,8 +1,8 @@
 import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
-import { Color } from "../utils";
+import { Color, PriorityQueue } from "../utils";
 import { Mesh } from "../mesh";
-export default (uiSession) => {
+export default ( uiSession ) => {
     const tool = uiSession.toolRail.addTool(
         {
             displayString: "Sphere (CTRL + SHIFT + S)",
@@ -13,12 +13,12 @@ export default (uiSession) => {
 
     const previewSelection = uiSession.extensionContext.selectionManager.create();
     previewSelection.visible = true;
-    previewSelection.setOutlineColor(new Color(0, 0.5, 0.5, 0.2));
-    previewSelection.setFillColor(new Color(0, 0, 0.5, 0.1));
+    previewSelection.setOutlineColor( new Color( 0, 0.5, 0.5, 0.2 ) );
+    previewSelection.setFillColor( new Color( 0, 0, 0.5, 0.1 ) );
     
     uiSession.scratchStorage = {
         currentCursorState: {
-            outlineColor: new Color(1, 1, 0, 1),
+            outlineColor: new Color( 1, 1, 0, 1 ),
             controlMode: Editor.CursorControlMode.KeyboardAndMouse,
             targetMode: Editor.CursorTargetMode.Block,
             visible: true,
@@ -28,9 +28,9 @@ export default (uiSession) => {
     };
     
     tool.onModalToolActivation.subscribe(
-        eventData => {
-            if (eventData.isActiveTool)
-                uiSession.extensionContext.cursor.setProperties(uiSession.scratchStorage.currentCursorState);
+        (data) => {
+            if (data.isActiveTool)
+                uiSession.extensionContext.cursor.setProperties( uiSession.scratchStorage.currentCursorState );
         },
     );
     
@@ -40,7 +40,7 @@ export default (uiSession) => {
             {
                 actionType: Editor.ActionTypes.NoArgsAction,
                 onExecute: () => {
-                    uiSession.toolRail.setSelectedOptionId(tool.id, true);
+                    uiSession.toolRail.setSelectedOptionId( tool.id, true );
                 },
             },
         ),
@@ -49,9 +49,7 @@ export default (uiSession) => {
     );
     
     const pane = uiSession.createPropertyPane(
-        {
-            titleAltText: "Sphere",
-        },
+        { titleAltText: "Sphere" },
     );
     
     const settings = Editor.createPaneBindingObject(
@@ -74,44 +72,42 @@ export default (uiSession) => {
             showSlider: true,
         }
     );
+    
     pane.addBool(
         settings,
-        "hollow", {
-            titleAltText: "Hollow",
-        }
+        "hollow",
+        { titleAltText: "Hollow" }
     );
-    pane.addBool(settings, "face", {
-        titleAltText: "Face Mode",
-        onChange: (_obj, _property, _oldValue, _newValue) => {
-            if (uiSession.scratchStorage === undefined) {
-                console.error('Sphere storage was not initialized.');
-                return;
-            }
-            uiSession.scratchStorage.currentCursorState.targetMode = settings.face
-                ? Editor.CursorTargetMode.Face
-                : Editor.CursorTargetMode.Block;
-            uiSession.extensionContext.cursor.setProperties(uiSession.scratchStorage.currentCursorState);
+
+    pane.addBool(
+        settings,
+        "face",
+        {
+            titleAltText: "Face Mode",
+            onChange: ( _obj, _property, _oldValue, _newValue ) => {
+                if (uiSession.scratchStorage == undefined) return console.error( "Sphere storage was not initialized." );
+                uiSession.scratchStorage.currentCursorState.targetMode = settings.face
+                    ? Editor.CursorTargetMode.Face
+                    : Editor.CursorTargetMode.Block;
+                uiSession.extensionContext.cursor.setProperties( uiSession.scratchStorage.currentCursorState );
+            },
         },
-    });
+    );
+
     pane.addBlockPicker(
         settings,
         "blockType",
-        {
-            titleAltText: "Block Type",
-        }
+        { titleAltText: "Block Type" }
     );
     
-    tool.bindPropertyPane(pane);
+    tool.bindPropertyPane( pane );
     
     const onExecuteBrush = () => {
-        if (!uiSession.scratchStorage?.previewSelection) {
-            console.error('Brush storage was not initialized.');
-            return;
-        };
+        if (!uiSession.scratchStorage?.previewSelection) return console.error( "Brush storage was not initialized." );
         
         const previewSelection = uiSession.scratchStorage.previewSelection;
         const player = uiSession.extensionContext.player;
-        const targetBlock = player.dimension.getBlock(uiSession.extensionContext.cursor.getPosition());
+        const targetBlock = player.dimension.getBlock( uiSession.extensionContext.cursor.getPosition() );
         if (!targetBlock) return;
         const location = targetBlock.location;
         if (
@@ -120,7 +116,7 @@ export default (uiSession) => {
             && uiSession.scratchStorage.lastCursorPosition?.z == uiSession.extensionContext.cursor.getPosition().z
         ) return;
         
-        const sphere = drawSphere(location.x, location.y, location.z, settings.size, settings.hollow);
+        const sphere = drawSphere( location.x, location.y, location.z, settings.size, settings.hollow );
         for (const blockVolume of sphere.calculateVolumes()) {
             previewSelection.pushVolume(
                 {
@@ -137,31 +133,45 @@ export default (uiSession) => {
         uiSession.actionManager.createAction(
             {
                 actionType: Editor.ActionTypes.MouseRayCastAction,
-                onExecute: async (mouseRay, mouseProps) => {
+                onExecute: async ( mouseRay, mouseProps ) => {
                     if (mouseProps.mouseAction == Editor.MouseActionType.LeftButton) {
                         if (mouseProps.inputType == Editor.MouseInputType.ButtonDown) {
-                            uiSession.extensionContext.transactionManager.openTransaction("sphereTool");
+                            uiSession.extensionContext.transactionManager.openTransaction( "sphereTool" );
                             uiSession.scratchStorage.previewSelection.clear();
                             onExecuteBrush();
                         } else if (mouseProps.inputType == Editor.MouseInputType.ButtonUp) {
                             const player = uiSession.extensionContext.player;
 
-                            uiSession.extensionContext.transactionManager.trackBlockChangeSelection(uiSession.scratchStorage.previewSelection);
-                            await Editor.executeLargeOperation(uiSession.scratchStorage.previewSelection, blockLocation => {
-                                if (
-                                    blockLocation.y >= -64
-                                    && blockLocation.y <= 320
-                                ) {
-                                    const block = player.dimension.getBlock(blockLocation);
-                                    block.setType(settings.blockType);
-                                };
-                            }).catch(() => {
-                                uiSession.extensionContext.transactionManager.commitOpenTransaction();
-                                uiSession.scratchStorage?.previewSelection.clear();
-                            }).then(() => {
-                                uiSession.extensionContext.transactionManager.commitOpenTransaction();
-                                uiSession.scratchStorage?.previewSelection.clear();
-                            });
+                            uiSession.extensionContext.transactionManager.trackBlockChangeSelection( uiSession.scratchStorage.previewSelection );
+                            const pq = new PriorityQueue(
+                                (a, b) => a.x - b.x && a.y - b.y && a.z - b.z
+                            );
+                            
+                            await Editor.executeLargeOperation(
+                                uiSession.scratchStorage.previewSelection,
+                                (blockLocation) => pq.enqueue( blockLocation ),
+                            ).catch(
+                                () => {
+                                    uiSession.extensionContext.transactionManager.commitOpenTransaction();
+                                    uiSession.scratchStorage?.previewSelection.clear();
+                                },
+                            ).then(
+                                () => {
+                                    while (!pq.isEmpty()) {
+                                        const blockLocation = pq.dequeue();
+                                        if (
+                                            blockLocation.y >= -64
+                                            && blockLocation.y <= 320
+                                        ) {
+                                            const block = player.dimension.getBlock( blockLocation );
+                                            block.setType(settings.blockType);
+                                        };
+                                    };
+
+                                    uiSession.extensionContext.transactionManager.commitOpenTransaction();
+                                    uiSession.scratchStorage?.previewSelection.clear();
+                                },
+                            );
                         };
                     };
                 },
@@ -173,7 +183,7 @@ export default (uiSession) => {
         uiSession.actionManager.createAction(
             {
                 actionType: Editor.ActionTypes.MouseRayCastAction,
-                onExecute: (mouseRay, mouseProps) => {
+                onExecute: ( mouseRay, mouseProps ) => {
                     if (mouseProps.inputType === Editor.MouseInputType.Drag) onExecuteBrush();
                 },
             },
@@ -181,14 +191,20 @@ export default (uiSession) => {
     );
 };
 
-function drawSphere(x, y, z, radius, hollow = false) {
+const drawSphere = ( x, y, z, radius, hollow = false ) => {
 	const mesh = new Mesh();
 	for (let xOffset = -radius; xOffset <= radius; xOffset++) {
 		for (let yOffset = -radius; yOffset <= radius; yOffset++) {
 			for (let zOffset = -radius; zOffset <= radius; zOffset++) {
-				let distance = Math.sqrt(xOffset * xOffset + yOffset * yOffset + zOffset * zOffset);
+				let distance = Math.sqrt( xOffset * xOffset + yOffset * yOffset + zOffset * zOffset );
 
-				if (distance <= radius && (!hollow || distance >= radius - 1)) {
+				if (
+                    distance <= radius
+                    && (
+                        !hollow
+                        || distance >= radius - 1
+                    )
+                ) {
 					mesh.add(
 						{
 							x: x + xOffset,
