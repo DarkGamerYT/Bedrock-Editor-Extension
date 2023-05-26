@@ -1,0 +1,44 @@
+{
+	"format_version": 2,
+	"header": {
+		"name": "Editor Extension",
+		"description": "An extension for Editor Mode that adds useful tools.",
+		"uuid": "b84c3196-9f1b-462b-95e7-84c8590ccd72",
+		"version": "0.1.4-alpha",
+		"min_engine_version": [
+			1,
+			20,
+			10
+		]
+	},
+	"modules": [
+		{
+			"type": "script",
+			"uuid": "a49f13e3-96b1-4ba4-b868-5fada2b7171d",
+			"version": [
+				1,
+				0,
+				0
+			],
+			"language": "javascript",
+			"entry": "scripts/index.js"
+		}
+	],
+	"capabilities": [
+		"editorExtension"
+	],
+	"dependencies": [
+		{
+			"module_name": "@minecraft/server",
+			"version": "1.4.0-beta"
+		},
+		{
+			"module_name": "@minecraft/server-editor",
+			"version": "0.1.0-beta"
+		},
+		{
+			"module_name": "@minecraft/server-editor-bindings",
+			"version": "0.1.0-beta"
+		}
+	]
+}
