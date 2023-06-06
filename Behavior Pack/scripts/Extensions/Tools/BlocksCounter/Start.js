@@ -1,12 +1,12 @@
 import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
 import { Color } from "../../../utils";
-export const Start = (uiSession) => {
+export const Start = (/** @type {import("@minecraft/server-editor").IPlayerUISession} */ uiSession) => {
     uiSession.log.debug( `Initializing ${uiSession.extensionContext.extensionName} extension` );
     const tool = uiSession.toolRail.addTool(
         {
-            displayAltText: "Blocks Counter",
-            tooltipAltText: "",
+            displayString: "Blocks Counter",
+            tooltip: "",
             icon: "pack://textures/editor/blocks_counter.png?filtering=point",
         },
     );
@@ -29,7 +29,7 @@ export const Start = (uiSession) => {
         },
     );
 
-    const settings = Editor.bindDataSource(
+    const settings = Editor.createPaneBindingObject(
         pane,
         {
             origin: {
@@ -197,7 +197,7 @@ export const Start = (uiSession) => {
         if (_oldValue === _newValue) return;
         const selection = uiSession.extensionContext.selectionManager.selection;
         if (!selection.isEmpty) {
-            const lastVolume = Server.BlockVolumeUtils.selection.peekLastVolume().volume;
+            const lastVolume = selection.peekLastVolume().volume;
             if (lastVolume) {
                 const min = settings.origin;
                 const max = {
@@ -224,7 +224,7 @@ export const Start = (uiSession) => {
             titleAltText: "Transform",
         }
     );
-    const originPropertyItem = subPaneTransform.addVector3(
+    const originPropertyItem = subPaneTransform.addVec3(
         settings,
         "origin",
         {
@@ -236,7 +236,7 @@ export const Start = (uiSession) => {
             onChange: onOriginOrSizeChange,
         }
     );
-    const sizePropertyItem = subPaneTransform.addVector3(
+    const sizePropertyItem = subPaneTransform.addVec3(
         settings,
         "size",
         {
@@ -369,7 +369,7 @@ export const Start = (uiSession) => {
                                 { titleAltText: "Blocks" },
                             );
                         
-                            const newSettings = Editor.bindDataSource(
+                            const newSettings = Editor.createPaneBindingObject(
                                 newPane,
                                 {},
                             );

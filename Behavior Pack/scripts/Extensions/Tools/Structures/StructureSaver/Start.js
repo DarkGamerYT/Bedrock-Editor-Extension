@@ -1,12 +1,12 @@
 import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
 import { Color } from "../../../../utils";
-export const Start = (uiSession) => {
+export const Start = (/** @type {import("@minecraft/server-editor").IPlayerUISession} */ uiSession) => {
     uiSession.log.debug(`Initializing ${uiSession.extensionContext.extensionName} extension`);
     const tool = uiSession.toolRail.addTool(
         {
-            displayAltText: "Structure Saver (CTRL + SHIFT + P)",
-            tooltipAltText: "",
+            displayString: "Structure Saver (CTRL + SHIFT + P)",
+            tooltip: "",
             icon: "pack://textures/editor/structure_saver.png?filtering=point",
         },
     );
@@ -30,7 +30,7 @@ export const Start = (uiSession) => {
         },
     );
 
-    const settings = Editor.bindDataSource(
+    const settings = Editor.createPaneBindingObject(
         pane,
         {
             origin: {
@@ -226,7 +226,7 @@ export const Start = (uiSession) => {
             titleAltText: "Transform",
         }
     );
-    const originPropertyItem = subPaneTransform.addVector3(
+    const originPropertyItem = subPaneTransform.addVec3(
         settings,
         "origin",
         {
@@ -238,8 +238,7 @@ export const Start = (uiSession) => {
             onChange: onOriginOrSizeChange,
         }
     );
-
-    const sizePropertyItem = subPaneTransform.addVector3(
+    const sizePropertyItem = subPaneTransform.addVec3(
         settings,
         "size",
         {

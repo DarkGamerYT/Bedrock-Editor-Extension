@@ -1,4 +1,4 @@
-import * as _minecraft_server_wrapper__WEBPACK_IMPORTED_MODULE_0__ from '@minecraft/server'
+import * as Server from "@minecraft/server";
 
 /**
  * Direction
@@ -15,6 +15,7 @@ var Direction;
     Direction[Direction["Up"] = 4] = "Up";
     Direction[Direction["Down"] = 5] = "Down";
 })(Direction || (Direction = {}));
+
 /**
  * directionLookup
  * @private
@@ -24,13 +25,14 @@ var Direction;
  * it down.  I blame Tom's dodgy code, tbh.
  */
 const directionLookup = {
-    [Direction.Forward]: _minecraft_server_wrapper__WEBPACK_IMPORTED_MODULE_0__.Vector.forward,
-    [Direction.Right]: _minecraft_server_wrapper__WEBPACK_IMPORTED_MODULE_0__.Vector.left,
-    [Direction.Back]: _minecraft_server_wrapper__WEBPACK_IMPORTED_MODULE_0__.Vector.back,
-    [Direction.Left]: _minecraft_server_wrapper__WEBPACK_IMPORTED_MODULE_0__.Vector.right,
-    [Direction.Up]: _minecraft_server_wrapper__WEBPACK_IMPORTED_MODULE_0__.Vector.up,
-    [Direction.Down]: _minecraft_server_wrapper__WEBPACK_IMPORTED_MODULE_0__.Vector.down,
+    [Direction.Forward]: Server.Vector.forward,
+    [Direction.Right]: Server.Vector.left,
+    [Direction.Back]: Server.Vector.back,
+    [Direction.Left]: Server.Vector.right,
+    [Direction.Up]: Server.Vector.up,
+    [Direction.Down]: Server.Vector.down,
 };
+
 /**
  * getRotationCorrectedDirection
  * @beta
@@ -39,16 +41,20 @@ const directionLookup = {
  *  (Generally Player view vector Y component)
  */
 function getRotationCorrectedDirection(rotationY, realDirection) {
-    if (realDirection === Direction.Up || realDirection === Direction.Down) {
+    if (
+        realDirection === Direction.Up
+        || realDirection === Direction.Down
+    ) {
         // Up and Down are ALWAY up and down
         return realDirection;
-    }
+    };
     // 405 is the amount to do a full circle to remove negative rotations
     // Plus 45Â° to put the end of the first quadrant at 45 degrees.
     // Modulo to lock to [0, 360], then divide to convert to [0, 1, 2, 3] indices
     const directionQuadrant = Math.floor(((rotationY + 405 + realDirection * 90) % 360) / 90);
     return directionQuadrant;
-}
+};
+
 /**
  * getRotationCorrectedDirectionVector
  * @beta
@@ -59,7 +65,8 @@ function getRotationCorrectedDirection(rotationY, realDirection) {
 function getRotationCorrectedDirectionVector(rotationY, realDirection) {
     const relativeDirection = getRotationCorrectedDirection(rotationY, realDirection);
     return directionLookup[relativeDirection];
-}
+};
+
 /**
  * getDirectionVector
  * @beta
@@ -68,7 +75,8 @@ function getRotationCorrectedDirectionVector(rotationY, realDirection) {
  */
 function getDirectionVector(direction) {
     return directionLookup[direction];
-}
+};
+
 /**
  * getScaledDirectionVector
  * @beta
@@ -81,7 +89,7 @@ function getScaledDirectionVector(direction, scale) {
     vec.y = vec.y * scale;
     vec.z = vec.z * scale;
     return vec;
-}
+};
 
 export {
     Direction,
@@ -89,4 +97,4 @@ export {
     getRotationCorrectedDirection,
     getRotationCorrectedDirectionVector,
     getScaledDirectionVector
-}
+};

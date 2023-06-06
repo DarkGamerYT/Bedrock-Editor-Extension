@@ -1,12 +1,12 @@
 import * as Editor from "@minecraft/server-editor";
 import { Color } from "../../../../utils";
 import { Structures } from "../Structures";
-export const Start = (uiSession) => {
+export const Start = (/** @type {import("@minecraft/server-editor").IPlayerUISession} */ uiSession) => {
     uiSession.log.debug(`Initializing ${uiSession.extensionContext.extensionName} extension`);
     const tool = uiSession.toolRail.addTool(
         {
-            displayAltText: "Structure Placer (CTRL + P)",
-            tooltipAltText: "Left mouse click to place a structure",
+            displayString: "Structure Placer (CTRL + P)",
+            tooltip: "Left mouse click to place a structure",
             icon: "pack://textures/editor/structure_placer.png?filtering=point",
         },
     );
@@ -49,7 +49,7 @@ export const Start = (uiSession) => {
         },
     );
     
-    const settings = Editor.bindDataSource(
+    const settings = Editor.createPaneBindingObject(
         pane,
         {
             structureName: "",
@@ -219,7 +219,7 @@ export const Start = (uiSession) => {
                             uiSession.extensionContext.selectionManager.selection.clear();
                         };
                     };
-                    } catch(e) { uiSession.log.warn(e); };
+                    } catch(e) { uiSession.log.warning(e); };
                 },
             },
         ),

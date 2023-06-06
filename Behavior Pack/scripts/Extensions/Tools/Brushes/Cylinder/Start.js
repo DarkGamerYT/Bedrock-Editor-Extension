@@ -2,12 +2,12 @@ import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
 import { Color, PriorityQueue } from "../../../../utils";
 import { Mesh } from "../Mesh";
-export const Start = ( uiSession ) => {
+export const Start = (/** @type {import("@minecraft/server-editor").IPlayerUISession} */ uiSession) => {
     uiSession.log.debug( `Initializing ${uiSession.extensionContext.extensionName} extension` );
     const tool = uiSession.toolRail.addTool(
         {
-            displayAltText: "Cylinder (CTRL + SHIFT + C)",
-            tooltipAltText: "Left mouse click or drag-to-paint",
+            displayString: "Cylinder (CTRL + SHIFT + C)",
+            tooltip: "Left mouse click or drag-to-paint",
             icon: "pack://textures/editor/cylinder.png?filtering=point",
         },
     );
@@ -53,7 +53,7 @@ export const Start = ( uiSession ) => {
         { titleAltText: "Cylinder" },
     );
     
-    const settings = Editor.bindDataSource(
+    const settings = Editor.createPaneBindingObject(
         pane,
         {
             size: 3,
@@ -177,7 +177,7 @@ export const Start = ( uiSession ) => {
                                             && blockLocation.y <= 320
                                         ) {
                                             const block = player.dimension.getBlock( blockLocation );
-                                            if (block) block.setType(settings.blockType);
+                                            block.setType(settings.blockType);
                                         };
                                     };
 

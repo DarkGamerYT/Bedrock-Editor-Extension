@@ -1,12 +1,12 @@
 import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
 import { Color } from "../../../utils";
-export const Start = ( uiSession ) => {
+export const Start = (/** @type {import("@minecraft/server-editor").IPlayerUISession} */ uiSession) => {
     uiSession.log.debug( `Initializing ${uiSession.extensionContext.extensionName} extension` );
     const tool = uiSession.toolRail.addTool(
         {
-            displayAltText: "Block Modifier",
-            tooltipAltText: "",
+            displayString: "Block Modifier",
+            tooltip: "",
             icon: "pack://textures/editor/block_modifier.png?filtering=point",
         },
     );
@@ -26,6 +26,20 @@ export const Start = ( uiSession ) => {
             if (eventData.isActiveTool)
                 uiSession.extensionContext.cursor.setProperties( uiSession.scratchStorage.currentCursorState );
         },
+    );
+    
+    uiSession.inputManager.registerKeyBinding(
+        Editor.EditorInputContext.GlobalToolMode,
+        uiSession.actionManager.createAction(
+            {
+                actionType: Editor.ActionTypes.NoArgsAction,
+                onExecute: () => {
+                    uiSession.toolRail.setSelectedOptionId( tool.id, true );
+                },
+            },
+        ),
+        Editor.KeyboardKey.KEY_E,
+        Editor.InputModifier.Control,
     );
     
     tool.registerMouseButtonBinding(
@@ -54,7 +68,7 @@ const blockModifier = ( uiSession, tool, player, location ) => {
         },
     );
     
-    const settings = Editor.bindDataSource(
+    const settings = Editor.createPaneBindingObject(
         pane,
         {
             blockType: targetBlock.typeId,
@@ -82,7 +96,7 @@ const blockModifier = ( uiSession, tool, player, location ) => {
         },
     );
 
-    pane.addVector3(
+    pane.addVec3(
         settings,
         "location",
         {

@@ -2,12 +2,12 @@ import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
 import * as EditorUtilities from "../../../../editor-utilities";
 import { Color, PriorityQueue } from "../../../../utils";
-export const Start = (uiSession) => {
+export const Start = (/** @type {import("@minecraft/server-editor").IPlayerUISession} */ uiSession) => {
     uiSession.log.debug( `Initializing ${uiSession.extensionContext.extensionName} extension` );
     const tool = uiSession.toolRail.addTool(
         {
-            displayAltText: "Cube (CTRL + B)",
-            tooltipAltText: "Left mouse click or drag-to-paint",
+            displayString: "Cube (CTRL + B)",
+            tooltip: "Left mouse click or drag-to-paint",
             icon: "pack://textures/editor/Cube.png?filtering=point",
         },
     );
@@ -53,7 +53,7 @@ export const Start = (uiSession) => {
         { titleAltText: "Cube" },
     );
     
-    const settings = Editor.bindDataSource(
+    const settings = Editor.createPaneBindingObject(
         pane,
         {
             size: 3,
@@ -211,7 +211,7 @@ export const Start = (uiSession) => {
                                             && blockLocation.y <= 320
                                         ) {
                                             const block = player.dimension.getBlock( blockLocation );
-                                            if (block) block.setType(settings.blockType);
+                                            block.setType(settings.blockType);
                                         };
                                     };
 

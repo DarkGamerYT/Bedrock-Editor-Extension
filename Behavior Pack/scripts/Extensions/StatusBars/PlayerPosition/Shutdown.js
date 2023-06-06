@@ -1,5 +1,5 @@
 import * as Server from "@minecraft/server";
-export const Shutdown = (uiSession) => {
+export const Shutdown = (/** @type {import("@minecraft/server-editor").IPlayerUISession} */ uiSession) => {
     if (
         uiSession.scratchStorage
         && uiSession.scratchStorage.latestRunId !== -1
