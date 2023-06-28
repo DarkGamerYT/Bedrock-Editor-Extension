@@ -4,11 +4,11 @@
 		"name": "Editor Extension",
 		"description": "An extension for Editor Mode that adds useful tools.",
 		"uuid": "b84c3196-9f1b-462b-95e7-84c8590ccd72",
-		"version": "0.1.4-alpha",
+		"version": "0.1.6-alpha",
 		"min_engine_version": [
 			1,
 			20,
-			10
+			20
 		]
 	},
 	"modules": [
@@ -30,7 +30,7 @@
 	"dependencies": [
 		{
 			"module_name": "@minecraft/server",
-			"version": "1.4.0-beta"
+			"version": "1.5.0-beta"
 		},
 		{
 			"module_name": "@minecraft/server-editor",
