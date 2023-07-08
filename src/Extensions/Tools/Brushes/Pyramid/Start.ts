@@ -1,6 +1,6 @@
 import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
-import { Color, PriorityQueue } from "../../../../utils";
+import { Color, stringFromException } from "../../../../utils";
 import { Mesh } from "../Mesh";
 type ExtensionStorage = {
     currentCursorState: {
@@ -62,7 +62,7 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             hollow: false,
             face: false,
             blockType: Server.MinecraftBlockTypes.stone,
-        }
+        },
     );
 
     pane.addNumber(
@@ -71,15 +71,15 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
         {
             titleAltText: "Brush Size",
             min: 1,
-            max: 16,
+            max: 12,
             showSlider: true,
-        }
+        },
     );
     
     pane.addBool(
         settings,
         "hollow",
-        { titleAltText: "Hollow" }
+        { titleAltText: "Hollow" },
     );
     
     pane.addBool(
@@ -96,6 +96,8 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             },
         },
     );
+
+    pane.addDivider();
 
     pane.addBlockPicker(
         settings,
@@ -118,19 +120,48 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             && uiSession.scratchStorage.lastCursorPosition?.y == uiSession.extensionContext.cursor.getPosition().y
             && uiSession.scratchStorage.lastCursorPosition?.z == uiSession.extensionContext.cursor.getPosition().z
         ) return;
-
+        
         const pyramid = drawPyramid( location, settings.size, settings.hollow );
         for (const blockVolume of pyramid.calculateVolumes()) {
-            previewSelection.pushVolume(
-                {
-                    action: Server.CompoundBlockVolumeAction.Add,
-                    volume: blockVolume
-                }
-            );
+            if (
+                (
+                    blockVolume.from.y >= -64
+                    && blockVolume.from.y <= 320
+                )
+                || (
+                    blockVolume.to.y >= -64
+                    && blockVolume.to.y <= 320
+                )
+            ) {
+                previewSelection.pushVolume(
+                    {
+                        action: Server.CompoundBlockVolumeAction.Add,
+                        volume: blockVolume
+                    }
+                );
+            };
         };
 
         uiSession.scratchStorage.lastCursorPosition = uiSession.extensionContext.cursor.getPosition();
     };
+
+    tool.registerMouseWheelBinding(
+        uiSession.actionManager.createAction(
+            {
+                actionType: Editor.ActionTypes.MouseRayCastAction,
+                onExecute: async ( mouseRay, mouseProps ) => {
+                    if (
+                        mouseProps.inputType == Editor.MouseInputType.WheelOut
+                        && settings.size < 12
+                    ) settings.size++;
+                    else if (
+                        mouseProps.inputType == Editor.MouseInputType.WheelIn
+                        && settings.size > 1
+                    ) settings.size--;
+                },
+            },
+        ),
+    );
     
     tool.registerMouseButtonBinding(
         uiSession.actionManager.createAction(
@@ -145,14 +176,31 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
                         } else if (mouseProps.inputType == Editor.MouseInputType.ButtonUp) {
                             const player = uiSession.extensionContext.player;
 
-                            uiSession.extensionContext.transactionManager.trackBlockChangeSelection( uiSession.scratchStorage.previewSelection );
-                            const pq = new PriorityQueue(
-                                (a, b) => a.x - b.x && a.y - b.y && a.z - b.z
-                            );
-                            
+                            try {
+                                uiSession.extensionContext.transactionManager.trackBlockChangeSelection(uiSession.scratchStorage.previewSelection);
+                            } catch (e) {
+                                uiSession.log.warning( `Unable to execute brush. ${stringFromException(e)}` );
+                                uiSession.extensionContext.transactionManager.discardOpenTransaction();
+                                return;
+                            };
+
                             await Editor.executeLargeOperation(
                                 uiSession.scratchStorage.previewSelection,
-                                (blockLocation) => pq.enqueue( blockLocation ),
+                                (blockLocation) => {
+                                    if (
+                                        blockLocation.y >= -64
+                                        && blockLocation.y <= 320
+                                    ) {
+                                        Server.system.run(
+                                            async function runnable() {
+                                                const block = player.dimension.getBlock( blockLocation );
+                                                if (block) {
+                                                    block.setType( settings.blockType );
+                                                };
+                                            },
+                                        );
+                                    };
+                                },
                             ).catch(
                                 () => {
                                     uiSession.extensionContext.transactionManager.commitOpenTransaction();
@@ -160,17 +208,6 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
                                 },
                             ).then(
                                 () => {
-                                    while (!pq.isEmpty()) {
-                                        const blockLocation = pq.dequeue();
-                                        if (
-                                            blockLocation.y >= -64
-                                            && blockLocation.y <= 320
-                                        ) {
-                                            const block = player.dimension.getBlock( blockLocation );
-                                            if (block) block.setType(settings.blockType);
-                                        };
-                                    };
-
                                     uiSession.extensionContext.transactionManager.commitOpenTransaction();
                                     uiSession.scratchStorage?.previewSelection.clear();
                                 },
@@ -192,45 +229,42 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             },
         ),
     );
+
+    return [];
 };
 
-const drawPyramid = ( location, size, hollow ) => {
+const drawPyramid = (
+    location: Server.Vector3,
+    size: number,
+    hollow: boolean = false
+) => {
     const mesh = new Mesh();
-  
-    let startX = location.x - Math.floor((size) / 2);
-    let startY = location.y;
-    let startZ = location.z - Math.floor((size) / 2);
-  
-    for (var y = 0; y < size; y++) {
-        const layerSize = size - y;
-  
-        for (var x = 0; x < layerSize; x++) {
-            for (var z = 0; z < layerSize; z++) {
-                let blockX = startX + x;
-                let blockY = startY + y;
-                let blockZ = startZ + z;
+    const pyramidBase = size * 2 - 1;
+    const halfBase = Math.floor(pyramidBase / 2);
+
+    for (let y = 0; y < size; y++) {
+        const layerOffset = halfBase - y;
+
+        for (let x = -layerOffset; x <= layerOffset; x++) {
+            for (let z = -layerOffset; z <= layerOffset; z++) {
+                const absX = location.x + x;
+                const absY = location.y + y;
+                const absZ = location.z + z;
 
                 if (
                     hollow
-                    && x > 0
-                    && x < layerSize - 1
-                    && z > 0
-                    && z < layerSize - 1
+                    && y > 0
+                    && y < size - 1
+                    && x > -layerOffset
+                    && x < layerOffset
+                    && z > -layerOffset
+                    && z < layerOffset
                 ) continue;
-            
-                mesh.add({ x: blockX, y: blockY, z: blockZ });
 
-                blockX = startX - x;
-                mesh.add({ x: blockX, y: blockY, z: blockZ });
-
-                blockZ = startZ - z;
-                mesh.add({ x: blockX, y: blockY, z: blockZ });
-
-                blockX = startX + x;
-                mesh.add({ x: blockX, y: blockY, z: blockZ });
+                mesh.add({ x: absX, y: absY, z: absZ })
             };
         };
     };
-    
+
     return mesh;
 };

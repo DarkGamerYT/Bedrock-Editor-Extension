@@ -1,7 +1,7 @@
 import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
 import * as EditorUtilities from "../../../../editor-utilities";
-import { Color, PriorityQueue } from "../../../../utils";
+import { Color, stringFromException } from "../../../../utils";
 type ExtensionStorage = {
     currentCursorState: {
         outlineColor: Color,
@@ -94,6 +94,7 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
         "hollow",
         { titleAltText: "Hollow" },
     );
+
     pane.addBool(
         settings,
         "face",
@@ -108,6 +109,9 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             },
         },
     );
+
+    pane.addDivider();
+
     pane.addBlockPicker(
         settings,
         "blockType",
@@ -152,9 +156,10 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             to,
         };
 
+        const bounds = Server.BlockVolumeUtils.getBoundingBox( blockVolume );
         if (
             uiSession.scratchStorage.lastVolumePlaced
-            && Server.BoundingBoxUtils.equals( uiSession.scratchStorage.lastVolumePlaced, Server.BlockVolumeUtils.getBoundingBox( blockVolume ) )
+            && Server.BoundingBoxUtils.equals( uiSession.scratchStorage.lastVolumePlaced, bounds )
         ) return;
         
         previewSelection.pushVolume(
@@ -164,8 +169,8 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             },
         );
 
-        uiSession.scratchStorage.lastVolumePlaced = Server.BlockVolumeUtils.getBoundingBox( blockVolume );
-        const boundSize = Server.BoundingBoxUtils.getSpan(Server.BlockVolumeUtils.getBoundingBox( blockVolume ));
+        uiSession.scratchStorage.lastVolumePlaced = bounds;
+        const boundSize = Server.BoundingBoxUtils.getSpan( bounds );
         if (
             settings.hollow
             && boundSize.x > 2
@@ -174,14 +179,14 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
         ) {
             const subtractBlockVolume = {
                 from: {
-                    x: from.x,
+                    x: from.x + relativeDirection.x,
                     y: from.y + 1,
-                    z: from.z,
+                    z: from.z + relativeDirection.z
                 },
                 to: {
-                    x: to.x,
+                    x: to.x - relativeDirection.x,
                     y: to.y - 1,
-                    z: to.z,
+                    z: to.z - relativeDirection.z
                 },
             };
             
@@ -194,6 +199,24 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
         };
     };
     
+    tool.registerMouseWheelBinding(
+        uiSession.actionManager.createAction(
+            {
+                actionType: Editor.ActionTypes.MouseRayCastAction,
+                onExecute: async ( mouseRay, mouseProps ) => {
+                    if (
+                        mouseProps.inputType == Editor.MouseInputType.WheelOut
+                        && settings.size < 16
+                    ) settings.size++;
+                    else if (
+                        mouseProps.inputType == Editor.MouseInputType.WheelIn
+                        && settings.size > 1
+                    ) settings.size--;
+                },
+            },
+        ),
+    );
+
     tool.registerMouseButtonBinding(
         uiSession.actionManager.createAction(
             {
@@ -207,14 +230,32 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
                         } else if (mouseProps.inputType == Editor.MouseInputType.ButtonUp) {
                             const player = uiSession.extensionContext.player;
 
-                            uiSession.extensionContext.transactionManager.trackBlockChangeSelection( uiSession.scratchStorage.previewSelection );
-                            const pq = new PriorityQueue(
-                                (a, b) => a.x - b.x && a.y - b.y && a.z - b.z
-                            );
+                            try {
+                                uiSession.extensionContext.transactionManager.trackBlockChangeSelection(uiSession.scratchStorage.previewSelection);
+                            } catch (e) {
+                                uiSession.log.warning( `Unable to execute brush. ${stringFromException(e)}` );
+                                uiSession.extensionContext.transactionManager.discardOpenTransaction();
+                                return;
+                            };
 
+                            uiSession.extensionContext.transactionManager.trackBlockChangeSelection( uiSession.scratchStorage.previewSelection );
                             await Editor.executeLargeOperation(
                                 uiSession.scratchStorage.previewSelection,
-                                (blockLocation) => pq.enqueue( blockLocation ),
+                                (blockLocation) => {
+                                    if (
+                                        blockLocation.y >= -64
+                                        && blockLocation.y <= 320
+                                    ) {
+                                        Server.system.run(
+                                            async function runnable() {
+                                                const block = player.dimension.getBlock( blockLocation );
+                                                if (block) {
+                                                    block.setType( settings.blockType );
+                                                };
+                                            },
+                                        );
+                                    };
+                                },
                             ).catch(
                                 () => {
                                     uiSession.extensionContext.transactionManager.commitOpenTransaction();
@@ -222,17 +263,6 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
                                 },
                             ).then(
                                 () => {
-                                    while (!pq.isEmpty()) {
-                                        const blockLocation = pq.dequeue();
-                                        if (
-                                            blockLocation.y >= -64
-                                            && blockLocation.y <= 320
-                                        ) {
-                                            const block = player.dimension.getBlock( blockLocation );
-                                            if (block) block.setType(settings.blockType);
-                                        };
-                                    };
-
                                     uiSession.extensionContext.transactionManager.commitOpenTransaction();
                                     uiSession.scratchStorage?.previewSelection.clear();
                                 },

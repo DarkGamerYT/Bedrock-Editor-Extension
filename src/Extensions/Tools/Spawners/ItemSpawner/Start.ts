@@ -76,31 +76,17 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
         },
     );
 
-    const notAllowedItems = new Set(
-        [
-            ...Server.MinecraftBlockTypes.getAllBlockTypes()
-        ].map(
-            ({ id }) => id
+    const blocks = new Set([...Server.MinecraftBlockTypes.getAllBlockTypes()].map(({ id }) => id))
+    const items = [...Server.ItemTypes.getAll()].map(({ id }) => id).reduce(
+        ( e, id ) => (
+            (
+                blocks.has( id )
+                || e.push( id )
+            ),
+            e
         ),
-    );
-    const items = [
-        ...Server.ItemTypes.getAll(),
-    ].map(
-        ({ id }) => id,
-    ).reduce(
-        ( e, id ) => {
-            return (
-                (
-                    notAllowedItems.has( id )
-                    || e.push( id )
-                ),
-                e
-            );
-        },
         [],
-    ).sort(
-        (e, id) => e.localeCompare( id ),
-    );
+    ).sort(( e, id ) => e.localeCompare( id ));
 
     pane.addDropdown(
         settings,
@@ -159,6 +145,35 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
         );
         uiSession.scratchStorage.lastVolumePlaced = Server.BlockVolumeUtils.getBoundingBox(blockVolume);
     };
+
+    tool.registerMouseWheelBinding(
+        uiSession.actionManager.createAction(
+            {
+                actionType: Editor.ActionTypes.MouseRayCastAction,
+                onExecute: async ( mouseRay, mouseProps ) => {
+                    if (mouseProps.modifiers.ctrl) {
+                        if (
+                            mouseProps.inputType == Editor.MouseInputType.WheelOut
+                            && settings.amount + 8 < 64
+                        ) settings.amount += 8;
+                        else if (
+                            mouseProps.inputType == Editor.MouseInputType.WheelIn
+                            && settings.amount - 8 > 1
+                        ) settings.amount -= 8;
+                    } else {
+                        if (
+                            mouseProps.inputType == Editor.MouseInputType.WheelOut
+                            && settings.amount < 64
+                        ) settings.amount++;
+                        else if (
+                            mouseProps.inputType == Editor.MouseInputType.WheelIn
+                            && settings.amount > 1
+                        ) settings.amount--;
+                    };
+                },
+            },
+        ),
+    );
     
     tool.registerMouseButtonBinding(
         uiSession.actionManager.createAction(

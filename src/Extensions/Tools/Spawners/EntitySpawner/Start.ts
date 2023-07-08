@@ -76,12 +76,6 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
         },
     );
 
-    pane.addString(
-        settings,
-        "nameTag",
-        { titleAltText: "Name Tag" },
-    );
-
     const notAllowedEntities = new Set(
         [
             "minecraft:agent",
@@ -107,24 +101,16 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
         ],
     );
 
-    const entities = [
-        ...Server.EntityTypes.getAll(),
-    ].map(
-        ({ id }) => id,
-    ).reduce(
-        ( e, id ) => {
-            return (
-                (
-                    notAllowedEntities.has( id )
-                    || e.push( id )
-                ),
-                e
-            );
-        },
+    const entities = [...Server.EntityTypes.getAll()].map(({ id }) => id).reduce(
+        ( e, id ) => (
+            (
+                notAllowedEntities.has( id )
+                || e.push( id )
+            ),
+            e
+        ),
         [],
-    ).sort(
-        (e, id) => e.localeCompare( id ),
-    );
+    ).sort(( e, id ) => e.localeCompare( id ));
 
     pane.addDropdown(
         settings,
@@ -136,12 +122,17 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
                     {
                         value: id,
                         displayAltText: id,
-                        displayStringId: "",
-                        displayAltTextId: "entity." + id.replace( "minecraft:", "" ) + ".name",
+                        displayStringId: "entity." + id.replace( "minecraft:", "" ) + ".name",
                     }
                 ),
             ),
         },
+    );
+
+    pane.addString(
+        settings,
+        "nameTag",
+        { titleAltText: "Name Tag" },
     );
     
     tool.bindPropertyPane( pane );

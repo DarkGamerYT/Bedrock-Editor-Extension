@@ -5,6 +5,6 @@ export default (uiSession: import("@minecraft/server-editor").IPlayerUISession) 
             icon: "pack://textures/editor/divider.png?filtering=point",
         },
     );
-
+    
     return [];
 };

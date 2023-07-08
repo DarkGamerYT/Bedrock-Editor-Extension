@@ -39,7 +39,7 @@ const directionLookup = {
  * Convert a given absolute Direction enum to one which is relative to the specified Y rotation
  *  (Generally Player view vector Y component)
  */
-function getRotationCorrectedDirection(rotationY: number, realDirection: Direction) {
+function getRotationCorrectedDirection( rotationY: number, realDirection: Direction ) {
     if (
         realDirection === Direction.Up
         || realDirection === Direction.Down
@@ -61,8 +61,8 @@ function getRotationCorrectedDirection(rotationY: number, realDirection: Directi
  * Convert a given absolute Direction enum to a direction vector which is relative to the Y rotation
  *  (Generally Player view vector Y component)
  */
-function getRotationCorrectedDirectionVector(rotationY: number, realDirection: Direction) {
-    const relativeDirection = getRotationCorrectedDirection(rotationY, realDirection);
+function getRotationCorrectedDirectionVector( rotationY: number, realDirection: Direction ): Server.Vector3 {
+    const relativeDirection = getRotationCorrectedDirection( rotationY, realDirection );
     return directionLookup[relativeDirection];
 };
 
@@ -72,7 +72,7 @@ function getRotationCorrectedDirectionVector(rotationY: number, realDirection: D
  * @remarks
  * Return a unit vector for a given Direction
  */
-function getDirectionVector(direction) {
+function getDirectionVector( direction: Direction ): Server.Vector3 {
     return directionLookup[direction];
 };
 
@@ -82,8 +82,8 @@ function getDirectionVector(direction) {
  * @remarks
  * Return a scaled vector for a given Direction
  */
-function getScaledDirectionVector(direction: number, scale: number) {
-    const vec = getDirectionVector(direction);
+function getScaledDirectionVector( direction: number, scale: number ) {
+    const vec = getDirectionVector( direction );
     vec.x = vec.x * scale;
     vec.y = vec.y * scale;
     vec.z = vec.z * scale;
@@ -95,5 +95,5 @@ export {
     getDirectionVector,
     getRotationCorrectedDirection,
     getRotationCorrectedDirectionVector,
-    getScaledDirectionVector
+    getScaledDirectionVector,
 };

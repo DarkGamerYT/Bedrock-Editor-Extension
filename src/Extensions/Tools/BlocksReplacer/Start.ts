@@ -333,8 +333,8 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
         eventData => {
             if (eventData.isActiveTool) {
                 uiSession.extensionContext.cursor.setProperties(uiSession.scratchStorage.currentCursorState);
-                onTickRefresh(uiSession, tool);
-            }
+                onTickRefresh( uiSession, tool );
+            };
         },
     );
     
@@ -344,7 +344,7 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             {
                 actionType: Editor.ActionTypes.NoArgsAction,
                 onExecute: () => {
-                    uiSession.toolRail.setSelectedOptionId(tool.id, true);
+                    uiSession.toolRail.setSelectedOptionId( tool.id, true );
                 },
             },
         ),
@@ -355,17 +355,13 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
     pane.addBlockPicker(
         settings,
         "blockType",
-        {
-            titleAltText: "Block Type",
-        },
+        { titleAltText: "Block Type" },
     );
     
     pane.addBlockPicker(
         settings,
         "replaceWith",
-        {
-            titleAltText: "Replace With",
-        },
+        { titleAltText: "Replace With" },
     );
 
     pane.addButton(

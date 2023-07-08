@@ -1,6 +1,6 @@
 import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
-import { Color, PriorityQueue } from "../../../../utils";
+import { Color, stringFromException } from "../../../../utils";
 import { Mesh } from "../Mesh";
 type ExtensionStorage = {
     currentCursorState: {
@@ -77,7 +77,7 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             hollow: false,
             face: false,
             blockType: Server.MinecraftBlockTypes.stone,
-        }
+        },
     );
 
     pane.addNumber(
@@ -88,7 +88,7 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             min: 1,
             max: 16,
             showSlider: true,
-        }
+        },
     );
 
     pane.addNumber(
@@ -97,15 +97,15 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
         {
             titleAltText: "Height",
             min: 1,
-            max: 16,
+            max: 8,
             showSlider: true,
-        }
+        },
     );
     
     pane.addBool(
         settings,
         "hollow",
-        { titleAltText: "Hollow" }
+        { titleAltText: "Hollow" },
     );
     
     pane.addBool(
@@ -122,6 +122,8 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             },
         },
     );
+
+    pane.addDivider();
 
     pane.addBlockPicker(
         settings,
@@ -145,18 +147,58 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             && uiSession.scratchStorage.lastCursorPosition?.z == uiSession.extensionContext.cursor.getPosition().z
         ) return;
 
-        const cylinder = drawCylinder( location.x, location.y, location.z, settings.size, settings.height, settings.hollow );
+        const cylinder = drawCylinder( location, settings.size, settings.height, settings.hollow );
         for (const blockVolume of cylinder.calculateVolumes()) {
-            previewSelection.pushVolume(
-                {
-                    action: Server.CompoundBlockVolumeAction.Add,
-                    volume: blockVolume
-                }
-            );
+            if (
+                (
+                    blockVolume.from.y >= -64
+                    && blockVolume.from.y <= 320
+                )
+                || (
+                    blockVolume.to.y >= -64
+                    && blockVolume.to.y <= 320
+                )
+            ) {
+                previewSelection.pushVolume(
+                    {
+                        action: Server.CompoundBlockVolumeAction.Add,
+                        volume: blockVolume
+                    }
+                );
+            };
         };
 
         uiSession.scratchStorage.lastCursorPosition = uiSession.extensionContext.cursor.getPosition();
     };
+
+    tool.registerMouseWheelBinding(
+        uiSession.actionManager.createAction(
+            {
+                actionType: Editor.ActionTypes.MouseRayCastAction,
+                onExecute: async ( mouseRay, mouseProps ) => {
+                    if (mouseProps.modifiers.ctrl) {
+                        if (
+                            mouseProps.inputType == Editor.MouseInputType.WheelOut
+                            && settings.height < 8
+                        ) settings.height++;
+                        else if (
+                            mouseProps.inputType == Editor.MouseInputType.WheelIn
+                            && settings.height > 1
+                        ) settings.height--;
+                    } else {
+                        if (
+                            mouseProps.inputType == Editor.MouseInputType.WheelOut
+                            && settings.size < 16
+                        ) settings.size++;
+                        else if (
+                            mouseProps.inputType == Editor.MouseInputType.WheelIn
+                            && settings.size > 1
+                        ) settings.size--;
+                    };
+                },
+            },
+        ),
+    );
     
     tool.registerMouseButtonBinding(
         uiSession.actionManager.createAction(
@@ -171,14 +213,31 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
                         } else if (mouseProps.inputType == Editor.MouseInputType.ButtonUp) {
                             const player = uiSession.extensionContext.player;
 
-                            uiSession.extensionContext.transactionManager.trackBlockChangeSelection( uiSession.scratchStorage.previewSelection );
-                            const pq = new PriorityQueue(
-                                (a, b) => a.x - b.x && a.y - b.y && a.z - b.z
-                            );
-                            
+                            try {
+                                uiSession.extensionContext.transactionManager.trackBlockChangeSelection(uiSession.scratchStorage.previewSelection);
+                            } catch (e) {
+                                uiSession.log.warning( `Unable to execute brush. ${stringFromException(e)}` );
+                                uiSession.extensionContext.transactionManager.discardOpenTransaction();
+                                return;
+                            };
+
                             await Editor.executeLargeOperation(
                                 uiSession.scratchStorage.previewSelection,
-                                (blockLocation) => pq.enqueue( blockLocation ),
+                                (blockLocation) => {
+                                    if (
+                                        blockLocation.y >= -64
+                                        && blockLocation.y <= 320
+                                    ) {
+                                        Server.system.run(
+                                            async function runnable() {
+                                                const block = player.dimension.getBlock( blockLocation );
+                                                if (block) {
+                                                    block.setType( settings.blockType );
+                                                };
+                                            },
+                                        );
+                                    };
+                                },
                             ).catch(
                                 () => {
                                     uiSession.extensionContext.transactionManager.commitOpenTransaction();
@@ -186,17 +245,6 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
                                 },
                             ).then(
                                 () => {
-                                    while (!pq.isEmpty()) {
-                                        const blockLocation = pq.dequeue();
-                                        if (
-                                            blockLocation.y >= -64
-                                            && blockLocation.y <= 320
-                                        ) {
-                                            const block = player.dimension.getBlock( blockLocation );
-                                            if (block) block.setType(settings.blockType);
-                                        };
-                                    };
-
                                     uiSession.extensionContext.transactionManager.commitOpenTransaction();
                                     uiSession.scratchStorage?.previewSelection.clear();
                                 },
@@ -222,12 +270,17 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
     return [];
 };
 
-const drawCylinder = ( x, y, z, radius, height, hollow = false ) => {
+const drawCylinder = (
+    location: Server.Vector3,
+    radius: number,
+    height: number,
+    hollow: boolean = false,
+) => {
 	const mesh = new Mesh();
 	for (let i = 0; i < height; i++) {
-		let centerX = x;
-		let centerY = y + i;
-		let centerZ = z;
+		let centerX = location.x;
+		let centerY = location.y + i;
+		let centerZ = location.z;
 
 		for (let j = -radius; j <= radius; j++) {
 			for (let k = -radius; k <= radius; k++) {
