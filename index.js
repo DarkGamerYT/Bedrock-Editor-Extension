@@ -1,7 +1,7 @@
 const fs = require( "node:fs" );
 const crypto = require( "node:crypto" );
 
-const addonVersion = "0.1.6-alpha";
+const addonVersion = "0.1.7-alpha";
 const mcVersion = [ 1, 20, 20 ];
 const uuids = {
     resourcePack: "8d00b185-8ab6-4960-9979-9d43f62b0c33",
