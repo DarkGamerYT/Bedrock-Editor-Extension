@@ -4,7 +4,7 @@
         "name": "Editor Extension",
         "description": "An extension for Editor Mode that adds useful tools.",
         "uuid": "8d00b185-8ab6-4960-9979-9d43f62b0c33",
-        "version": "0.1.6-alpha",
+        "version": "0.1.7-alpha",
         "min_engine_version": [
             1,
             20,
@@ -14,7 +14,7 @@
     "modules": [
         {
             "type": "resources",
-            "uuid": "7dac4e2d-db33-4f32-b298-56d403ca6edd",
+            "uuid": "81d4e171-ec52-4a3c-a9de-c2cebd2be6eb",
             "version": [
                 1,
                 0,
@@ -25,7 +25,7 @@
     "dependencies": [
         {
             "uuid": "b84c3196-9f1b-462b-95e7-84c8590ccd72",
-            "version": "0.1.6-alpha"
+            "version": "0.1.7-alpha"
         }
     ]
 }
