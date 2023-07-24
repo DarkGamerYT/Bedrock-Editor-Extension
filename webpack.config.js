@@ -5,7 +5,7 @@ module.exports = {
 	target: [ "es2020" ],
 	entry: "./src/index.ts",
 	output: {
-		path: path.resolve( __dirname, "./build/Behavior Pack/scripts" ),
+		path: path.resolve( __dirname, "./build/packs/Behavior Pack/scripts" ),
 		filename: "index.js",
 		chunkFormat: "commonjs",
 	},

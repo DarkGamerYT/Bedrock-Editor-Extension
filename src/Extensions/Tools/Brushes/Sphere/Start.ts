@@ -1,5 +1,6 @@
 import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
+import * as VanillaData from "@minecraft/vanilla-data";
 import { Color, stringFromException } from "../../../../utils";
 import { Mesh } from "../Mesh";
 type ExtensionStorage = {
@@ -15,7 +16,7 @@ type ExtensionStorage = {
     lastCursorPosition?: Server.Vector3,
 };
 
-export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISession<ExtensionStorage>) => {
+export const Start = ( uiSession: Editor.IPlayerUISession<ExtensionStorage> ) => {
     uiSession.log.debug( `Initializing ${uiSession.extensionContext.extensionName} extension` );
     const tool = uiSession.toolRail.addTool(
         {
@@ -36,15 +37,16 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             controlMode: Editor.CursorControlMode.KeyboardAndMouse,
             targetMode: Editor.CursorTargetMode.Block,
             visible: true,
-            fixedModeDistance: 5
+            fixedModeDistance: 5,
         },
         previewSelection,
     };
     
     tool.onModalToolActivation.subscribe(
         (data) => {
-            if (data.isActiveTool)
+            if (data.isActiveTool) {
                 uiSession.extensionContext.cursor.setProperties( uiSession.scratchStorage.currentCursorState );
+            };
         },
     );
     
@@ -75,8 +77,8 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             size: 3,
             hollow: false,
             face: false,
-            blockType: Server.MinecraftBlockTypes.stone,
-        }
+            blockType: VanillaData.MinecraftBlockTypes.Stone,
+        },
     );
 
     pane.addNumber(
@@ -87,38 +89,30 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             min: 1,
             max: 10,
             showSlider: true,
-        }
+        },
     );
     
-    pane.addBool(
-        settings,
-        "hollow",
-        { titleAltText: "Hollow" }
-    );
-
+    pane.addBool( settings, "hollow", { titleAltText: "Hollow" } );
     pane.addBool(
         settings,
         "face",
         {
             titleAltText: "Face Mode",
-            onChange: ( _obj, _property, _oldValue, _newValue ) => {
+            onChange: () => {
                 if (uiSession.scratchStorage == undefined) return uiSession.log.error( "Sphere storage was not initialized." );
-                uiSession.scratchStorage.currentCursorState.targetMode = settings.face
+                uiSession.scratchStorage.currentCursorState.targetMode = (
+                    settings.face
                     ? Editor.CursorTargetMode.Face
-                    : Editor.CursorTargetMode.Block;
+                    : Editor.CursorTargetMode.Block
+                );
+                
                 uiSession.extensionContext.cursor.setProperties( uiSession.scratchStorage.currentCursorState );
             },
         },
     );
 
     pane.addDivider();
-
-    pane.addBlockPicker(
-        settings,
-        "blockType",
-        { titleAltText: "Block Type" }
-    );
-    
+    pane.addBlockPicker( settings, "blockType", { titleAltText: "Block Type" } );
     tool.bindPropertyPane( pane );
     
     const onExecuteBrush = () => {
@@ -136,7 +130,9 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
         ) return;
         
         const sphere = drawSphere( location, settings.size, settings.hollow );
-        for (const blockVolume of sphere.calculateVolumes()) {
+        const volumes = sphere.calculateVolumes();
+        for (let i = 0; i < volumes.length; i++) {
+            const blockVolume = volumes[i];
             if (
                 (
                     blockVolume.from.y >= -64
@@ -150,8 +146,8 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
                 previewSelection.pushVolume(
                     {
                         action: Server.CompoundBlockVolumeAction.Add,
-                        volume: blockVolume
-                    }
+                        volume: blockVolume,
+                    },
                 );
             };
         };
@@ -164,14 +160,16 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             {
                 actionType: Editor.ActionTypes.MouseRayCastAction,
                 onExecute: async ( mouseRay, mouseProps ) => {
-                    if (
-                        mouseProps.inputType == Editor.MouseInputType.WheelOut
-                        && settings.size < 10
-                    ) settings.size++;
-                    else if (
-                        mouseProps.inputType == Editor.MouseInputType.WheelIn
-                        && settings.size > 1
-                    ) settings.size--;
+                    if (mouseProps.mouseAction === Editor.MouseActionType.Wheel) {
+                        if (
+                            mouseProps.inputType === Editor.MouseInputType.WheelOut
+                            && settings.size < 10
+                        ) settings.size++;
+                        else if (
+                            mouseProps.inputType === Editor.MouseInputType.WheelIn
+                            && settings.size > 1
+                        ) settings.size--;
+                    };
                 },
             },
         ),
@@ -182,16 +180,16 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             {
                 actionType: Editor.ActionTypes.MouseRayCastAction,
                 onExecute: async ( mouseRay, mouseProps ) => {
-                    if (mouseProps.mouseAction == Editor.MouseActionType.LeftButton) {
-                        if (mouseProps.inputType == Editor.MouseInputType.ButtonDown) {
+                    if (mouseProps.mouseAction === Editor.MouseActionType.LeftButton) {
+                        if (mouseProps.inputType === Editor.MouseInputType.ButtonDown) {
                             uiSession.extensionContext.transactionManager.openTransaction( "sphereTool" );
                             uiSession.scratchStorage.previewSelection.clear();
                             onExecuteBrush();
-                        } else if (mouseProps.inputType == Editor.MouseInputType.ButtonUp) {
+                        } else if (mouseProps.inputType === Editor.MouseInputType.ButtonUp) {
                             const player = uiSession.extensionContext.player;
 
                             try {
-                                uiSession.extensionContext.transactionManager.trackBlockChangeSelection(uiSession.scratchStorage.previewSelection);
+                                uiSession.extensionContext.transactionManager.trackBlockChangeSelection( uiSession.scratchStorage.previewSelection );
                             } catch (e) {
                                 uiSession.log.warning( `Unable to execute brush. ${stringFromException(e)}` );
                                 uiSession.extensionContext.transactionManager.discardOpenTransaction();
@@ -269,7 +267,7 @@ const drawSphere = (
 							x: location.x + xOffset,
 							y: location.y + yOffset,
 							z: location.z + zOffset,
-						}
+						},
 					);
 				};
 			};

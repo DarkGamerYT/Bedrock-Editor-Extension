@@ -9,47 +9,50 @@ class BlockSet {
   };
 
   add( pos: Server.Vector3 ) {
-    this.positions.set(this.getKey(pos), true);
-    this.updateBounds(pos);
+    this.positions.set( this.getKey(pos), true );
+    this.updateBounds( pos );
   };
 
   remove( pos: Server.Vector3 ) {
-    this.positions.delete(this.getKey(pos));
+    this.positions.delete( this.getKey( pos ) );
     this.updateBounds();
   };
 
   has( pos: Server.Vector3 ) {
-    return this.positions.has(this.getKey(pos));
+    return this.positions.has( this.getKey( pos ) );
   };
 
   getKey( pos: Server.Vector3 ) {
     return `${pos.x}:${pos.y}:${pos.z}`;
   };
 
-  updateBounds(pos?: Server.Vector3) {
+  updateBounds( pos?: Server.Vector3 ) {
     if (!pos) {
       this.min = undefined;
       this.max = undefined;
       return;
     };
 
-    if (!this.min || !this.max) {
+    if (
+      !this.min
+      || !this.max
+    ) {
       this.min = { x: pos.x, y: pos.y, z: pos.z };
       this.max = { x: pos.x, y: pos.y, z: pos.z };
       return;
     };
 
     this.min = {
-      x: Math.min(this.min.x, pos.x),
-      y: Math.min(this.min.y, pos.y),
-      z: Math.min(this.min.z, pos.z)
+      x: Math.min( this.min.x, pos.x ),
+      y: Math.min( this.min.y, pos.y ),
+      z: Math.min( this.min.z, pos.z ),
     };
     
     this.max = {
-      x: Math.max(this.max.x, pos.x),
-      y: Math.max(this.max.y, pos.y),
-      z: Math.max(this.max.z, pos.z)
-    };;
+      x: Math.max( this.max.x, pos.x ),
+      y: Math.max( this.max.y, pos.y ),
+      z: Math.max( this.max.z, pos.z ),
+    };
   }
 };
 
@@ -80,8 +83,8 @@ class Mesh extends BlockSet {
           for (let posX = x + 1; posX <= this.max.x; posX++) {
             const pos = { x: posX, y, z };
             if (
-              !this.has(pos)
-              || visited.has(pos)
+              !this.has( pos )
+              || visited.has( pos )
             ) break;
             
             extendX++;
@@ -91,8 +94,9 @@ class Mesh extends BlockSet {
               for (let posX = x; posX <= x + extendX; posX++) {
                 const pos = { x: posX, y, z: posZ };
                 if (
-                  !this.has(pos)
-                  || visited.has(pos)) break zloop;
+                  !this.has( pos )
+                  || visited.has( pos )
+                ) break zloop;
               };
 
               extendZ++;
@@ -103,8 +107,8 @@ class Mesh extends BlockSet {
                 for (let posZ = z; posZ <= z + extendZ; posZ++) {
                   const pos = { x: posX, y: posY, z: posZ };
                   if (
-                    !this.has(pos)
-                    || visited.has(pos)
+                    !this.has( pos )
+                    || visited.has( pos )
                   ) break yloop;
                 };
               };
@@ -115,15 +119,29 @@ class Mesh extends BlockSet {
           for (let posX = x; posX <= x + extendX; posX++) {
             for (let posY = y; posY <= y + extendY; posY++) {
               for (let posZ = z; posZ <= z + extendZ; posZ++) {
-                visited.add({ x: posX, y: posY, z: posZ });
+                visited.add(
+                  {
+                    x: posX,
+                    y: posY,
+                    z: posZ,
+                  },
+                );
               };
             };
           };
 
           volumes.push(
             {
-              from: { x, y, z },
-              to: { x: x + extendX, y: y + extendY, z: z + extendZ }
+              from: {
+                x,
+                y,
+                z,
+              },
+              to: {
+                x: x + extendX,
+                y: y + extendY,
+                z: z + extendZ,
+              },
             },
           );
         };

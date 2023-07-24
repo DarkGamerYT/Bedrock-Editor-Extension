@@ -39,7 +39,7 @@ const directionLookup = {
  * Convert a given absolute Direction enum to one which is relative to the specified Y rotation
  *  (Generally Player view vector Y component)
  */
-function getRotationCorrectedDirection( rotationY: number, realDirection: Direction ) {
+const getRotationCorrectedDirection = ( rotationY: number, realDirection: Direction ) => {
     if (
         realDirection === Direction.Up
         || realDirection === Direction.Down
@@ -50,7 +50,7 @@ function getRotationCorrectedDirection( rotationY: number, realDirection: Direct
     // 405 is the amount to do a full circle to remove negative rotations
     // Plus 45Â° to put the end of the first quadrant at 45 degrees.
     // Modulo to lock to [0, 360], then divide to convert to [0, 1, 2, 3] indices
-    const directionQuadrant = Math.floor(((rotationY + 405 + realDirection * 90) % 360) / 90);
+    const directionQuadrant = Math.floor( ((rotationY + 405 + realDirection * 90) % 360) / 90 );
     return directionQuadrant;
 };
 
@@ -61,9 +61,9 @@ function getRotationCorrectedDirection( rotationY: number, realDirection: Direct
  * Convert a given absolute Direction enum to a direction vector which is relative to the Y rotation
  *  (Generally Player view vector Y component)
  */
-function getRotationCorrectedDirectionVector( rotationY: number, realDirection: Direction ): Server.Vector3 {
+const getRotationCorrectedDirectionVector = ( rotationY: number, realDirection: Direction ): Server.Vector3 => {
     const relativeDirection = getRotationCorrectedDirection( rotationY, realDirection );
-    return directionLookup[relativeDirection];
+    return directionLookup[ relativeDirection ];
 };
 
 /**
@@ -72,9 +72,7 @@ function getRotationCorrectedDirectionVector( rotationY: number, realDirection: 
  * @remarks
  * Return a unit vector for a given Direction
  */
-function getDirectionVector( direction: Direction ): Server.Vector3 {
-    return directionLookup[direction];
-};
+const getDirectionVector = ( direction: Direction ): Server.Vector3 => directionLookup[ direction ];
 
 /**
  * getScaledDirectionVector
@@ -82,11 +80,12 @@ function getDirectionVector( direction: Direction ): Server.Vector3 {
  * @remarks
  * Return a scaled vector for a given Direction
  */
-function getScaledDirectionVector( direction: number, scale: number ) {
+const getScaledDirectionVector = ( direction: number, scale: number ) => {
     const vec = getDirectionVector( direction );
     vec.x = vec.x * scale;
     vec.y = vec.y * scale;
     vec.z = vec.z * scale;
+    
     return vec;
 };
 

@@ -3,7 +3,8 @@ export class Color {
     green: number;
     blue: number;
     alpha: number;
-    constructor(red: number, green: number, blue: number, alpha: number) {
+    
+    constructor( red: number, green: number, blue: number, alpha: number ) {
         this.red = red;
         this.green = green;
         this.blue = blue;
@@ -11,7 +12,7 @@ export class Color {
     };
 };
 
-export function stringFromException( e: any ): string {
+export const stringFromException = ( e: any ): string => {
     if (typeof e === "string") return e;
     else if (
         typeof e === "object"

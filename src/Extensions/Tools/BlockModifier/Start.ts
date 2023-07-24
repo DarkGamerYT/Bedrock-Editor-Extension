@@ -1,5 +1,6 @@
 import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
+import * as VanillaData from "@minecraft/vanilla-data";
 import { Color } from "../../../utils";
 type ExtensionStorage = {
     currentCursorState: {
@@ -11,7 +12,7 @@ type ExtensionStorage = {
     },
 };
 
-export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISession<ExtensionStorage>) => {
+export const Start = ( uiSession: Editor.IPlayerUISession<ExtensionStorage> ) => {
     uiSession.log.debug( `Initializing ${uiSession.extensionContext.extensionName} extension` );
     const tool = uiSession.toolRail.addTool(
         {
@@ -27,14 +28,15 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             controlMode: Editor.CursorControlMode.KeyboardAndMouse,
             targetMode: Editor.CursorTargetMode.Block,
             visible: true,
-            fixedModeDistance: 5
+            fixedModeDistance: 5,
         },
     };
     
     tool.onModalToolActivation.subscribe(
         eventData => {
-            if (eventData.isActiveTool)
+            if (eventData.isActiveTool) {
                 uiSession.extensionContext.cursor.setProperties( uiSession.scratchStorage.currentCursorState );
+            };
         },
     );
     
@@ -45,8 +47,7 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
                 onExecute: ( mouseRay, mouseProps ) => {
                     if (mouseProps.mouseAction == Editor.MouseActionType.LeftButton) {
                         if (mouseProps.inputType == Editor.MouseInputType.ButtonDown) {
-                            const player = uiSession.extensionContext.player;
-                            blockModifier( uiSession, tool, player, uiSession.extensionContext.cursor.getPosition() );
+                            blockModifier( uiSession, tool, uiSession.extensionContext.player, uiSession.extensionContext.cursor.getPosition() );
                         };
                     };
                 },
@@ -57,7 +58,7 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
     return [];
 };
 
-const blockModifier = ( uiSession: import("@minecraft/server-editor").IPlayerUISession<ExtensionStorage>, tool: import("@minecraft/server-editor").IModalTool, player: Server.Player, location: Server.Vector3 ) => {
+const blockModifier = ( uiSession: Editor.IPlayerUISession<ExtensionStorage>, tool: Editor.IModalTool, player: Server.Player, location: Server.Vector3 ) => {
     const targetBlock = player.dimension.getBlock( location );
     const pane = uiSession.createPropertyPane(
         {
@@ -71,18 +72,18 @@ const blockModifier = ( uiSession: import("@minecraft/server-editor").IPlayerUIS
         pane,
         {
             blockType: targetBlock.typeId,
-            newBlockType: Server.MinecraftBlockTypes.stone,
+            newBlockType: VanillaData.MinecraftBlockTypes.Stone,
             location: targetBlock.location,
             waterlogged: targetBlock.isWaterlogged,
-            weirdo_direction: targetBlock.permutation.getState("weirdo_direction"),
-            direction: targetBlock.permutation.getState("direction"),
-            lever_direction: targetBlock.permutation.getState("lever_direction"),
-            brushed_progress: targetBlock.permutation.getState("brushed_progress"),
-            growth: targetBlock.permutation.getState("growth"),
-            redstone_signal: targetBlock.permutation.getState("redstone_signal"),
-            repeater_delay: targetBlock.permutation.getState("repeater_delay"),
-            rail_direction: targetBlock.permutation.getState("rail_direction"),
-            damage: targetBlock.permutation.getState("damage"),
+            weirdo_direction: targetBlock.permutation.getState( "weirdo_direction" ),
+            direction: targetBlock.permutation.getState( "direction" ),
+            lever_direction: targetBlock.permutation.getState( "lever_direction" ),
+            brushed_progress: targetBlock.permutation.getState( "brushed_progress" ),
+            growth: targetBlock.permutation.getState( "growth" ),
+            redstone_signal: targetBlock.permutation.getState( "redstone_signal" ),
+            repeater_delay: targetBlock.permutation.getState( "repeater_delay" ),
+            rail_direction: targetBlock.permutation.getState( "rail_direction" ),
+            damage: targetBlock.permutation.getState( "damage" ),
         },
     );
 
@@ -104,45 +105,40 @@ const blockModifier = ( uiSession: import("@minecraft/server-editor").IPlayerUIS
             minX: Number.MIN_SAFE_INTEGER,
             minY: Number.MIN_SAFE_INTEGER,
             minZ: Number.MIN_SAFE_INTEGER,
-        }
+        },
     );
 
     pane.addDivider();
-
-    pane.addBlockPicker(
-        settings,
-        "newBlockType",
-        { titleAltText: "Block Type" },
-    );
-
+    pane.addBlockPicker( settings, "newBlockType", { titleAltText: "Block Type" } );
     pane.addButton(
         uiSession.actionManager.createAction(
             {
                 actionType: Editor.ActionTypes.NoArgsAction,
                 onExecute: async () => {
                     (<any>pane).dispose();
+
                     targetBlock.setType( settings.newBlockType );
-                    if (settings.newBlockType.id != "minecraft:air") blockModifier( uiSession, tool, player, location );
+                    if (settings.newBlockType != "minecraft:air") {
+                        blockModifier( uiSession, tool, player, location );
+                    };
                 },
             },
         ),
-        {
-            titleAltText: "Change Type",
-        }
+        { titleAltText: "Change Type" },
     );
 
     pane.addDivider();
     
-    if (Server.MinecraftBlockTypes.get( targetBlock.typeId ).canBeWaterlogged) {
+    if (Server.BlockTypes.get( targetBlock.typeId ).canBeWaterlogged) {
         pane.addBool(
             settings,
             "waterlogged",
             {
                 titleAltText: "Waterlogged",
-                onChange: ( _obj, _property, _oldValue, _newValue ) => {
+                onChange: () => {
                     targetBlock.isWaterlogged = settings.waterlogged;
                 },
-            }
+            },
         );
     };
 
@@ -161,14 +157,11 @@ const blockModifier = ( uiSession: import("@minecraft/server-editor").IPlayerUIS
                         }
                     ),
                 ) as Editor.IDropdownItem[],
-                onChange: ( _obj, _property, _oldValue, _newValue ) => {
+                onChange: () => {
                     try {
-                        const blockPermutation = Server.BlockPermutation.resolve(
-                            targetBlock.typeId,
-                            { lever_direction: settings.lever_direction },
+                        targetBlock.setPermutation(
+                            Server.BlockPermutation.resolve( targetBlock.typeId, { lever_direction: settings.lever_direction } ),
                         );
-
-                        targetBlock.setPermutation( blockPermutation );
                     } catch(e) {
                         (<any>pane).dispose();
                     };
@@ -186,14 +179,11 @@ const blockModifier = ( uiSession: import("@minecraft/server-editor").IPlayerUIS
                 min: 0,
                 max: 15,
                 showSlider: true,
-                onChange: ( _obj, _property, _oldValue, _newValue ) => {
+                onChange: () => {
                     try {
-                        const blockPermutation = Server.BlockPermutation.resolve(
-                            targetBlock.typeId,
-                            { redstone_signal: settings.redstone_signal },
+                        targetBlock.setPermutation(
+                            Server.BlockPermutation.resolve( targetBlock.typeId, { redstone_signal: settings.redstone_signal } ),
                         );
-
-                        targetBlock.setPermutation( blockPermutation );
                     } catch(e) {
                         (<any>pane).dispose();
                     };
@@ -211,14 +201,11 @@ const blockModifier = ( uiSession: import("@minecraft/server-editor").IPlayerUIS
                 min: 0,
                 max: 3,
                 showSlider: true,
-                onChange: ( _obj, _property, _oldValue, _newValue ) => {
+                onChange: () => {
                     try {
-                        const blockPermutation = Server.BlockPermutation.resolve(
-                            targetBlock.typeId,
-                            { repeater_delay: settings.repeater_delay },
+                        targetBlock.setPermutation(
+                            Server.BlockPermutation.resolve( targetBlock.typeId, { repeater_delay: settings.repeater_delay } ),
                         );
-
-                        targetBlock.setPermutation( blockPermutation );
                     } catch(e) {
                         (<any>pane).dispose();
                     };
@@ -233,21 +220,27 @@ const blockModifier = ( uiSession: import("@minecraft/server-editor").IPlayerUIS
     ) {
         pane.addNumber(
             settings,
-            targetBlock.permutation.getState( "weirdo_direction" ) != undefined ? "weirdo_direction" :"direction",
+            (
+                targetBlock.permutation.getState( "weirdo_direction" ) != undefined
+                ? "weirdo_direction"
+                : "direction"
+            ),
             {
                 titleAltText: "Direction",
                 min: 0,
                 max: 3,
                 showSlider: true,
-                onChange: ( _obj, _property, _oldValue, _newValue ) => {
+                onChange: () => {
                     try {
-                        let direction = targetBlock.permutation.getState( "weirdo_direction" ) != undefined ? { weirdo_direction: settings.weirdo_direction } : { direction: settings.direction };
-                        const blockPermutation = Server.BlockPermutation.resolve(
-                            targetBlock.typeId,
-                            direction,
+                        let direction = (
+                            targetBlock.permutation.getState( "weirdo_direction" ) != undefined
+                            ? { weirdo_direction: settings.weirdo_direction }
+                            : { direction: settings.direction }
                         );
 
-                        targetBlock.setPermutation( blockPermutation );
+                        targetBlock.setPermutation(
+                            Server.BlockPermutation.resolve( targetBlock.typeId, direction ),
+                        );
                     } catch(e) {};
                 },
             }
@@ -263,14 +256,11 @@ const blockModifier = ( uiSession: import("@minecraft/server-editor").IPlayerUIS
                 min: 0,
                 max: 3,
                 showSlider: true,
-                onChange: ( _obj, _property, _oldValue, _newValue ) => {
+                onChange: () => {
                     try {
-                        const blockPermutation = Server.BlockPermutation.resolve(
-                            targetBlock.typeId,
-                            { brushed_progress: settings.brushed_progress },
+                        targetBlock.setPermutation(
+                            Server.BlockPermutation.resolve( targetBlock.typeId, { brushed_progress: settings.brushed_progress } ),
                         );
-
-                        targetBlock.setPermutation( blockPermutation );
                     } catch(e) {
                         (<any>pane).dispose();
                     };
@@ -288,14 +278,11 @@ const blockModifier = ( uiSession: import("@minecraft/server-editor").IPlayerUIS
                 min: 0,
                 max: 7,
                 showSlider: true,
-                onChange: ( _obj, _property, _oldValue, _newValue ) => {
+                onChange: () => {
                     try {
-                        const blockPermutation = Server.BlockPermutation.resolve(
-                            targetBlock.typeId,
-                            { growth: settings.growth },
-                        );
-
-                        targetBlock.setPermutation( blockPermutation );  
+                        targetBlock.setPermutation(
+                            Server.BlockPermutation.resolve( targetBlock.typeId, { growth: settings.growth } ),
+                        );  
                     } catch(e) {
                         (<any>pane).dispose();
                     };
@@ -313,14 +300,11 @@ const blockModifier = ( uiSession: import("@minecraft/server-editor").IPlayerUIS
                 min: 0,
                 max: 9,
                 showSlider: true,
-                onChange: ( _obj, _property, _oldValue, _newValue ) => {
+                onChange: () => {
                     try {
-                        const blockPermutation = Server.BlockPermutation.resolve(
-                            targetBlock.typeId,
-                            { rail_direction: settings.rail_direction },
+                        targetBlock.setPermutation(
+                            Server.BlockPermutation.resolve( targetBlock.typeId, { rail_direction: settings.rail_direction } ),
                         );
-
-                        targetBlock.setPermutation( blockPermutation );
                     } catch(e) {
                         (<any>pane).dispose();
                     };
@@ -344,14 +328,11 @@ const blockModifier = ( uiSession: import("@minecraft/server-editor").IPlayerUIS
                         }
                     ),
                 ) as Editor.IDropdownItem[],
-                onChange: ( _obj, _property, _oldValue, _newValue ) => {
+                onChange: () => {
                     try {
-                        const blockPermutation = Server.BlockPermutation.resolve(
-                            targetBlock.typeId,
-                            { damage: settings.damage },
+                        targetBlock.setPermutation(
+                            Server.BlockPermutation.resolve( targetBlock.typeId, { damage: settings.damage } ),
                         );
-                            
-                        targetBlock.setPermutation( blockPermutation );
                     } catch(e) {
                         (<any>pane).dispose();
                     };

@@ -23,7 +23,13 @@
 		"skipLibCheck": true,
 		"sourceMap": false
 	},
-	"include": ["src/**/*"],
-	"exclude": ["lib", "build", "node_modules"],
+	"include": [
+		"src/**/*"
+	],
+	"exclude": [
+		"lib",
+		"build",
+		"node_modules"
+	],
 	"compileOnSave": false
 }

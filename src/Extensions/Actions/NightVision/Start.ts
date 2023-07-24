@@ -1,6 +1,6 @@
 import * as Editor from "@minecraft/server-editor";
 import * as VanillaData from "@minecraft/vanilla-data";
-export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISession) => {
+export const Start = ( uiSession: Editor.IPlayerUISession ) => {
     const menu = uiSession.createMenu({ name: "Night Vision" });
     
     menu.addItem(

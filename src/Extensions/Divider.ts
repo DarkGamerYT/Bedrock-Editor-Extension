@@ -1,4 +1,4 @@
-export default (uiSession: import("@minecraft/server-editor").IPlayerUISession) => {
+export default ( uiSession: import( "@minecraft/server-editor" ).IPlayerUISession ) => {
     uiSession.toolRail.addTool(
         {
             displayAltText: "Divider",

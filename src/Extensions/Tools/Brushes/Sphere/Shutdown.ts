@@ -14,4 +14,6 @@ type ExtensionStorage = {
     lastCursorPosition?: Server.Vector3,
 };
 
-export const Shutdown = (uiSession: import("@minecraft/server-editor").IPlayerUISession<ExtensionStorage>) => uiSession.log.debug( `Shutting down ${uiSession.extensionContext.extensionName} extension` );
+export const Shutdown = ( uiSession: Editor.IPlayerUISession<ExtensionStorage> ) => {
+    uiSession.log.debug( `Shutting down ${uiSession.extensionContext.extensionName} extension` );
+};

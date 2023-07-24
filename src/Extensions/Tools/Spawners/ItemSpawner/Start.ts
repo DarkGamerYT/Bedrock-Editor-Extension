@@ -1,5 +1,6 @@
 import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
+import * as VanillaData from "@minecraft/vanilla-data";
 import { Color } from "../../../../utils";
 type ExtensionStorage = {
     currentCursorState: {
@@ -13,7 +14,7 @@ type ExtensionStorage = {
     lastVolumePlaced?: Server.BoundingBox,
 };
 
-export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISession<ExtensionStorage>) => {
+export const Start = ( uiSession: Editor.IPlayerUISession<ExtensionStorage> ) => {
     uiSession.log.debug( `Initializing ${uiSession.extensionContext.extensionName} extension` );
     const tool = uiSession.toolRail.addTool(
         {
@@ -34,15 +35,16 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             controlMode: Editor.CursorControlMode.KeyboardAndMouse,
             targetMode: Editor.CursorTargetMode.Face,
             visible: true,
-            fixedModeDistance: 5
+            fixedModeDistance: 5,
         },
         previewSelection,
     };
     
     tool.onModalToolActivation.subscribe(
-        eventData => {
-            if (eventData.isActiveTool)
+        (eventData) => {
+            if (eventData.isActiveTool) {
                 uiSession.extensionContext.cursor.setProperties( uiSession.scratchStorage.currentCursorState );
+            };
         },
     );
     
@@ -71,13 +73,13 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
     const settings = Editor.bindDataSource(
         pane,
         {
-            itemType: Server.MinecraftItemTypes.diamondSword.id,
+            itemType: VanillaData.MinecraftItemTypes.DiamondSword,
             amount: 1,
         },
     );
 
-    const blocks = new Set([...Server.MinecraftBlockTypes.getAllBlockTypes()].map(({ id }) => id))
-    const items = [...Server.ItemTypes.getAll()].map(({ id }) => id).reduce(
+    const blocks = new Set([ ...Server.BlockTypes.getAll() ].map(({ id }) => id))
+    const items = [ ...Server.ItemTypes.getAll() ].map(({ id }) => id).reduce(
         ( e, id ) => (
             (
                 blocks.has( id )
@@ -113,37 +115,36 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
             min: 1,
             max: 64,
             showSlider: true,
-        }
+        },
     );
     
-    tool.bindPropertyPane(pane);
+    tool.bindPropertyPane( pane );
+    
     const onExecuteBrush = () => {
         if (!uiSession.scratchStorage?.previewSelection) {
-            uiSession.log.error('Item Spawner storage was not initialized.');
+            uiSession.log.error( "Item Spawner storage was not initialized." );
             return;
         };
         
         const previewSelection = uiSession.scratchStorage.previewSelection;
         const player = uiSession.extensionContext.player;
-        const targetBlock = player.dimension.getBlock(uiSession.extensionContext.cursor.getPosition());
+        const targetBlock = player.dimension.getBlock( uiSession.extensionContext.cursor.getPosition() );
         if (!targetBlock) return;
-        const location = targetBlock.location;
-        const from = {
-            x: location.x,
-            y: location.y,
-            z: location.z,
+
+        const blockVolume = {
+            from: targetBlock.location,
+            to: targetBlock.location,
         };
-        const to = { x: from.x, y: from.y, z: from.z };
-        const blockVolume = { from, to };
-        if (uiSession.scratchStorage.lastVolumePlaced && Server.BoundingBoxUtils.equals(uiSession.scratchStorage.lastVolumePlaced, Server.BlockVolumeUtils.getBoundingBox(blockVolume))) return;
         
+        if (uiSession.scratchStorage.lastVolumePlaced && Server.BoundingBoxUtils.equals( uiSession.scratchStorage.lastVolumePlaced, Server.BlockVolumeUtils.getBoundingBox( blockVolume ) )) return;
         previewSelection.pushVolume(
             {
                 action: Server.CompoundBlockVolumeAction.Add,
-                volume: blockVolume
-            }
+                volume: blockVolume,
+            },
         );
-        uiSession.scratchStorage.lastVolumePlaced = Server.BlockVolumeUtils.getBoundingBox(blockVolume);
+
+        uiSession.scratchStorage.lastVolumePlaced = Server.BlockVolumeUtils.getBoundingBox( blockVolume );
     };
 
     tool.registerMouseWheelBinding(
@@ -185,21 +186,24 @@ export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISes
                             uiSession.scratchStorage.previewSelection.clear();
                             onExecuteBrush();
                         } else if (mouseProps.inputType == Editor.MouseInputType.ButtonUp) {
-                            await Editor.executeLargeOperation(uiSession.scratchStorage.previewSelection, blockLocation => {
-                                const player = uiSession.extensionContext.player;
-                                const targetBlock = player.dimension.getBlock( blockLocation );
-                                
-                                if (targetBlock) {
-                                    const item = player.dimension.spawnItem(
-                                        new Server.ItemStack( settings.itemType, settings.amount ),
-                                        {
-                                            x: targetBlock.x + 0.5,
-                                            y: targetBlock.y,
-                                            z: targetBlock.z + 0.5,
-                                        },
-                                    );
-                                };
-                            }).catch(
+                            await Editor.executeLargeOperation(
+                                uiSession.scratchStorage.previewSelection,
+                                (blockLocation) => {
+                                    const player = uiSession.extensionContext.player;
+                                    const targetBlock = player.dimension.getBlock( blockLocation );
+                                    
+                                    if (targetBlock) {
+                                        const item = player.dimension.spawnItem(
+                                            new Server.ItemStack( settings.itemType, settings.amount ),
+                                            {
+                                                x: targetBlock.x + 0.5,
+                                                y: targetBlock.y,
+                                                z: targetBlock.z + 0.5,
+                                            },
+                                        );
+                                    };
+                                },
+                            ).catch(
                                 () => {
                                     uiSession.extensionContext.transactionManager.commitOpenTransaction();
                                     uiSession.scratchStorage?.previewSelection.clear();

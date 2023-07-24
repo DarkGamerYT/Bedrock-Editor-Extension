@@ -1,6 +1,6 @@
 import * as Editor from "@minecraft/server-editor";
 import * as Server from "@minecraft/server";
-export const Start = (uiSession: import("@minecraft/server-editor").IPlayerUISession) => {
+export const Start = ( uiSession: Editor.IPlayerUISession ) => {
     const menu = uiSession.createMenu({ name: "World Settings" });
     const weather = menu.addItem({ name: "Weather" });
     weather.addItem(
