@@ -1,6 +1,5 @@
 import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
-import * as VanillaData from "@minecraft/vanilla-data";
 import { Color } from "../../../utils";
 type ExtensionStorage = {
     currentCursorState: {
@@ -53,8 +52,8 @@ export const Start = ( uiSession: Editor.IPlayerUISession<ExtensionStorage> ) =>
                 y: 0,
                 z: 0,
             },
-            blockType: VanillaData.MinecraftBlockTypes.Stone,
-            replaceWith: VanillaData.MinecraftBlockTypes.Stone,
+            blockType: "minecraft:stone",
+            replaceWith: "minecraft:stone",
         },
     );
 

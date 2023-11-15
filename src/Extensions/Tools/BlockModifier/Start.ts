@@ -1,6 +1,5 @@
 import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
-import * as VanillaData from "@minecraft/vanilla-data";
 import { Color } from "../../../utils";
 type ExtensionStorage = {
     currentCursorState: {
@@ -72,7 +71,7 @@ const blockModifier = ( uiSession: Editor.IPlayerUISession<ExtensionStorage>, to
         pane,
         {
             blockType: targetBlock.typeId,
-            newBlockType: VanillaData.MinecraftBlockTypes.Stone,
+            newBlockType: "minecraft:stone",
             location: targetBlock.location,
             waterlogged: targetBlock.isWaterlogged,
             weirdo_direction: targetBlock.permutation.getState( "weirdo_direction" ),

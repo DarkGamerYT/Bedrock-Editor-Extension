@@ -1,6 +1,5 @@
 import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
-import * as VanillaData from "@minecraft/vanilla-data";
 import { Color } from "../../../../utils";
 type ExtensionStorage = {
     currentCursorState: {
@@ -73,7 +72,7 @@ export const Start = ( uiSession: Editor.IPlayerUISession<ExtensionStorage> ) =>
     const settings = Editor.bindDataSource(
         pane,
         {
-            itemType: VanillaData.MinecraftItemTypes.DiamondSword,
+            itemType: "minecraft:diamond_sword",
             amount: 1,
         },
     );

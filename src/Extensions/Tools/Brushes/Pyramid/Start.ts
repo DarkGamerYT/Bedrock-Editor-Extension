@@ -1,6 +1,5 @@
 import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
-import * as VanillaData from "@minecraft/vanilla-data";
 import { Color, stringFromException } from "../../../../utils";
 import { Mesh } from "../Mesh";
 type ExtensionStorage = {
@@ -63,7 +62,7 @@ export const Start = ( uiSession: Editor.IPlayerUISession<ExtensionStorage> ) =>
             size: 6,
             hollow: false,
             face: false,
-            blockType: VanillaData.MinecraftBlockTypes.Stone,
+            blockType: "minecraft:stone",
         },
     );
 

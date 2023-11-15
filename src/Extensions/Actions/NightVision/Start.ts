@@ -1,5 +1,4 @@
 import * as Editor from "@minecraft/server-editor";
-import * as VanillaData from "@minecraft/vanilla-data";
 export const Start = ( uiSession: Editor.IPlayerUISession ) => {
     const menu = uiSession.createMenu({ name: "Night Vision" });
     
@@ -8,7 +7,7 @@ export const Start = ( uiSession: Editor.IPlayerUISession ) => {
         uiSession.actionManager.createAction(
             {
                 actionType: Editor.ActionTypes.NoArgsAction,
-                onExecute: () => uiSession.extensionContext.player.addEffect( VanillaData.MinecraftEffectTypes.NightVision, 20000000, { amplifier: 1, showParticles: false } ),
+                onExecute: () => uiSession.extensionContext.player.addEffect( "night_vision", 20000000, { amplifier: 1, showParticles: false } ),
             },
         ),
     );
@@ -18,7 +17,7 @@ export const Start = ( uiSession: Editor.IPlayerUISession ) => {
         uiSession.actionManager.createAction(
             {
                 actionType: Editor.ActionTypes.NoArgsAction,
-                onExecute: () => uiSession.extensionContext.player.removeEffect( VanillaData.MinecraftEffectTypes.NightVision ),
+                onExecute: () => uiSession.extensionContext.player.removeEffect( "night_vision" ),
             },
         ),
     );

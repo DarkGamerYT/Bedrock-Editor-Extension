@@ -5,9 +5,9 @@ const archiver = require( "archiver" );
 const addon = {
     name: "Editor Extension",
     description: "An extension for Editor Mode that adds useful tools.",
-    version: "0.1.8-alpha",
+    version: [ 0, 2, 0 ],
 };
-const mcVersion = [ 1, 20, 20 ];
+const mcVersion = [ 1, 20, 50 ];
 const uuids = {
     resourcePack: "8d00b185-8ab6-4960-9979-9d43f62b0c33",
     behaviorPack: "b84c3196-9f1b-462b-95e7-84c8590ccd72",
@@ -18,7 +18,7 @@ const dependencies = {
         { uuid: uuids.behaviorPack, version: addon.version },
     ],
     behaviorPack: [
-        { module_name: "@minecraft/server", version: "1.5.0-beta" },
+        { module_name: "@minecraft/server", version: "1.8.0-beta" },
         { module_name: "@minecraft/server-editor", version: "0.1.0-beta" },
         { module_name: "@minecraft/server-editor-bindings", version: "0.1.0-beta" },
         { uuid: uuids.resourcePack, version: addon.version },

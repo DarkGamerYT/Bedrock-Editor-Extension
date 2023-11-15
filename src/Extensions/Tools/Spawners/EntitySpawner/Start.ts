@@ -1,6 +1,5 @@
 import * as Server from "@minecraft/server";
 import * as Editor from "@minecraft/server-editor";
-import * as VanillaData from "@minecraft/vanilla-data";
 import { Color } from "../../../../utils";
 type ExtensionStorage = {
     currentCursorState: {
@@ -74,7 +73,7 @@ export const Start = ( uiSession: Editor.IPlayerUISession<ExtensionStorage> ) =>
         pane,
         {
             nameTag: "",
-            entityType: VanillaData.MinecraftEntityTypes.Creeper,
+            entityType: "minecraft:creeper",
         },
     );
 
