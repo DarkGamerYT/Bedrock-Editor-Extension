@@ -1,4 +1,5 @@
 const fs = require( "node:fs" );
+const path = require( "node:path" );
 const crypto = require( "node:crypto" );
 const archiver = require( "archiver" );
 
@@ -7,18 +8,16 @@ const addon = {
     description: "An extension for Editor Mode that adds useful tools.",
     version: [ 0, 2, 0 ],
 };
-const mcVersion = [ 1, 20, 50 ];
+const mcVersion = [ 1, 20, 60 ];
 const uuids = {
     resourcePack: "8d00b185-8ab6-4960-9979-9d43f62b0c33",
     behaviorPack: "b84c3196-9f1b-462b-95e7-84c8590ccd72",
 };
 
 const dependencies = {
-    resourcePack: [
-        { uuid: uuids.behaviorPack, version: addon.version },
-    ],
+    resourcePack: [{ uuid: uuids.behaviorPack, version: addon.version }],
     behaviorPack: [
-        { module_name: "@minecraft/server", version: "1.8.0-beta" },
+        { module_name: "@minecraft/server", version: "1.9.0-beta" },
         { module_name: "@minecraft/server-editor", version: "0.1.0-beta" },
         { module_name: "@minecraft/server-editor-bindings", version: "0.1.0-beta" },
         { uuid: uuids.resourcePack, version: addon.version },
@@ -46,9 +45,7 @@ const dependencies = {
                     },
                 ],
                 dependencies: dependencies.resourcePack,
-            },
-            null,
-            4,
+            }, null, 4,
         ),
     );
     
@@ -74,19 +71,22 @@ const dependencies = {
                     },
                 ],
                 dependencies: dependencies.behaviorPack,
-            },
-            null,
-            4,
+            }, null, 4,
         ),
     );
 
     try {
-        await fs.rmSync( __dirname + "/build/Editor Extension.mceditoraddon" );
+        await fs.rmSync(path.join( __dirname, "build/Editor Extension.mceditoraddon" ));
     } catch {};
 
-    const output = fs.createWriteStream( __dirname + "/build/Editor Extension.mceditoraddon" );
+    const output = fs.createWriteStream(path.join( __dirname, "build/Editor Extension.mceditoraddon" ));
     const archive = archiver( "zip" );
     archive.pipe( output );
-    archive.directory( __dirname + "/build/packs", false );
-    archive.finalize();
+    archive.directory(path.join( __dirname, "build/packs" ), false);
+    await archive.finalize();
+
+    try {
+        await fs.rmSync(path.join( __dirname, "build/packs/Behavior Pack/manifest.json" ));
+        await fs.rmSync(path.join( __dirname, "build/packs/Resource Pack/manifest.json" ));
+    } catch {};
 })();

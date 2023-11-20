@@ -9,12 +9,8 @@ module.exports = {
 		filename: "index.js",
 		chunkFormat: "commonjs",
 	},
-	resolve: {
-		extensions: [ ".ts", ".tsx", ".js" ],
-	},
-	experiments: {
-		outputModule: true,
-	},
+	resolve: { extensions: [ ".ts", ".tsx", ".js" ] },
+	experiments: { outputModule: true },
 	externalsType: "module",
 	externals: {
 		"@minecraft/server": "@minecraft/server",
@@ -25,23 +21,12 @@ module.exports = {
 		"@minecraft/server-gametest": "@minecraft/server-gametest",
 		"@minecraft/server-editor-bindings": "@minecraft/server-editor-bindings",
 	},
-	module: {
-		rules: [
-			{
-				test: /\.tsx?$/,
-				loader: "ts-loader",
-			},
-		],
-	},
+	module: { rules: [{ test: /\.tsx?$/, loader: "ts-loader" }] },
 	plugins: [
-		new TerserPlugin(
-			{
-				terserOptions: {
-			  		output: {
-						comments: false,
-			  		},
-				},
+		new TerserPlugin({
+			terserOptions: {
+			  	output: { comments: false },
 			},
-		),
+		}),
 	],
 };
