@@ -14,7 +14,7 @@ type ExtensionStorage = {
 
 const areLocationsEqual = ( a: Server.Vector3, b: Server.Vector3 ) => a.x === b.x && a.y === b.y && a.z === b.z;
 export const Start = ( uiSession: Editor.IPlayerUISession<ExtensionStorage> ) => {
-    uiSession.log.debug( `Initializing ${uiSession.extensionContext.extensionName} extension` );
+    uiSession.log.debug( `Initializing ${uiSession.extensionContext.extensionInfo.name} extension` );
     uiSession.scratchStorage = {
         isDisposed: false,
         latestRunId: -1

@@ -12,7 +12,7 @@ type ExtensionStorage = {
 };
 
 export const Start = ( uiSession: Editor.IPlayerUISession<ExtensionStorage> ) => {
-    uiSession.log.debug( `Initializing ${uiSession.extensionContext.extensionName} extension` );
+    uiSession.log.debug( `Initializing ${uiSession.extensionContext.extensionInfo.name} extension` );
     const tool = uiSession.toolRail.addTool(
         {
             displayAltText: "Structure Placer (CTRL + P)",
@@ -95,7 +95,7 @@ export const Start = ( uiSession: Editor.IPlayerUISession<ExtensionStorage> ) =>
         },
     );
 
-    pane.addDropdown(
+    /*pane.addDropdown(
         settings,
         "vanillaStructure",
         {
@@ -113,7 +113,7 @@ export const Start = ( uiSession: Editor.IPlayerUISession<ExtensionStorage> ) =>
                 settings.structureName = settings.vanillaStructure;
             },
         },
-    );
+    );*/
 
     const rotations = [
         "0_degrees",

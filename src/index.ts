@@ -1,5 +1,4 @@
 import * as Editor from "@minecraft/server-editor";
-import Divider from "./Extensions/Divider";
 //Tools
 import * as PyramidBrush from "./Extensions/Tools/Brushes/Pyramid/index";
 import * as CylinderBrush from "./Extensions/Tools/Brushes/Cylinder/index";
@@ -13,25 +12,20 @@ import * as BlocksCounter from "./Extensions/Tools/BlocksCounter/index";
 import * as BlockModifier from "./Extensions/Tools/BlockModifier/index";
 import * as BlocksReplacer from "./Extensions/Tools/BlocksReplacer/index";
 //Brushes
-Editor.registerEditorExtension( "PyramidBrush", PyramidBrush.Start, PyramidBrush.Shutdown );
-Editor.registerEditorExtension( "CylinderBrush", CylinderBrush.Start, CylinderBrush.Shutdown );
-Editor.registerEditorExtension( "SphereBrush", SphereBrush.Start, SphereBrush.Shutdown );
-Editor.registerEditorExtension( "CubeBrush", CubeBrush.Start, CubeBrush.Shutdown );
-//Divider
-Editor.registerEditorExtension( "divider_", Divider, () => {} );
+Editor.registerEditorExtension( "PyramidBrush", PyramidBrush.Start, PyramidBrush.Shutdown, { toolGroupId: "brushes" } );
+Editor.registerEditorExtension( "CylinderBrush", CylinderBrush.Start, CylinderBrush.Shutdown, { toolGroupId: "brushes" } );
+Editor.registerEditorExtension( "SphereBrush", SphereBrush.Start, SphereBrush.Shutdown, { toolGroupId: "brushes" } );
+Editor.registerEditorExtension( "CubeBrush", CubeBrush.Start, CubeBrush.Shutdown, { toolGroupId: "brushes" } );
 //Structures
-Editor.registerEditorExtension( "StructurePlacer", StructurePlacer.Start, StructurePlacer.Shutdown );
-Editor.registerEditorExtension( "StructureSaver", StructureSaver.Start, StructureSaver.Shutdown );
-//Divider
-Editor.registerEditorExtension( "divider__", Divider, () => {} );
+Editor.registerEditorExtension( "StructurePlacer", StructurePlacer.Start, StructurePlacer.Shutdown, { toolGroupId: "structures" } );
+Editor.registerEditorExtension( "StructureSaver", StructureSaver.Start, StructureSaver.Shutdown, { toolGroupId: "structures" } );
 //Spawners
-Editor.registerEditorExtension( "EntitySpawner", EntitySpawner.Start, EntitySpawner.Shutdown );
-Editor.registerEditorExtension( "ItemSpawner", ItemSpawner.Start, ItemSpawner.Shutdown );
-//Divider
-Editor.registerEditorExtension( "_divider_", Divider, () => {} );
-Editor.registerEditorExtension( "BlocksCounter", BlocksCounter.Start, BlocksCounter.Shutdown );
-Editor.registerEditorExtension( "BlockModifier", BlockModifier.Start, BlockModifier.Shutdown );
-Editor.registerEditorExtension( "BlocksReplacer", BlocksReplacer.Start, BlocksReplacer.Shutdown );
+//Editor.registerEditorExtension( "EntitySpawner", EntitySpawner.Start, EntitySpawner.Shutdown, { toolGroupId: "spawners" } );
+//Editor.registerEditorExtension( "ItemSpawner", ItemSpawner.Start, ItemSpawner.Shutdown, { toolGroupId: "spawners" } );
+//Extras
+Editor.registerEditorExtension( "BlocksCounter", BlocksCounter.Start, BlocksCounter.Shutdown, { toolGroupId: "extras" } );
+Editor.registerEditorExtension( "BlockModifier", BlockModifier.Start, BlockModifier.Shutdown, { toolGroupId: "extras" } );
+Editor.registerEditorExtension( "BlocksReplacer", BlocksReplacer.Start, BlocksReplacer.Shutdown, { toolGroupId: "extras" } );
 
 //Actions
 import * as NightVision from "./Extensions/Actions/NightVision/index";

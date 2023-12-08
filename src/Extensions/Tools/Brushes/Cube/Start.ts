@@ -15,7 +15,7 @@ type ExtensionStorage = {
 };
 
 export const Start = ( uiSession: Editor.IPlayerUISession<ExtensionStorage> ) => {
-    uiSession.log.debug( `Initializing ${uiSession.extensionContext.extensionName} extension` );
+    uiSession.log.debug( `Initializing ${uiSession.extensionContext.extensionInfo.name} extension` );
     const tool = uiSession.toolRail.addTool(
         {
             displayAltText: "Cube (CTRL + B)",

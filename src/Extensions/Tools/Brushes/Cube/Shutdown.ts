@@ -14,5 +14,5 @@ type ExtensionStorage = {
 };
 
 export const Shutdown = ( uiSession: Editor.IPlayerUISession<ExtensionStorage> ) => {
-    uiSession.log.debug( `Shutting down ${uiSession.extensionContext.extensionName} extension` );
+    uiSession.log.debug( `Shutting down ${uiSession.extensionContext.extensionInfo.name} extension` );
 };

@@ -13,5 +13,5 @@ export const Shutdown = ( uiSession: import( "@minecraft/server-editor" ).IPlaye
         Server.system.clearRun( uiSession.scratchStorage.latestRunId );
     };
     
-    uiSession.log.debug( `Shutting down ${uiSession.extensionContext.extensionName} extension` );
+    uiSession.log.debug( `Shutting down ${uiSession.extensionContext.extensionInfo.name} extension` );
 };
